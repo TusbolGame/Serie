@@ -13,4 +13,8 @@ class Update extends Model {
     protected $fillable = [
         'type', 'finished_at'
     ];
+
+    public function apiUpdate() {
+        return $this->hasMany(ApiUpdate::class);
+    }
 }

@@ -11,16 +11,16 @@ class Episode extends Model {
      * @var array
      */
     protected $fillable = [
-        'show_id', 'season_id', 'episode_number', 'episode_code', 'airing_at', 'title',
+        'uuid', 'show_id', 'season_id', 'episode_number', 'episode_code', 'airing_at', 'title',
         'api_id', 'api_link', 'synopsis', 'screenshot'
     ];
 
     public function show() {
-        return $this->hasOne(Show::class);
+        return $this->belongsTo(Show::class);
     }
 
     public function season() {
-        return $this->hasOne(Season::class);
+        return $this->belongsTo(Season::class);
     }
 
     public function videoView() {

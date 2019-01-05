@@ -13,4 +13,8 @@ class VideoQuality extends Model {
     protected $fillable = [
         'name', 'code', 'priority'
     ];
+
+    public function torrent() {
+        return $this->belongsTo(Torrent::class);
+    }
 }

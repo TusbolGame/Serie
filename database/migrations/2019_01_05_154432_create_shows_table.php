@@ -29,7 +29,7 @@ class CreateShowsTable extends Migration {
             $table->integer('status_id')->unsigned()->nullable()->index();
             $table->string('timezone', 50)->nullable();
             $table->string('banner', 80);
-            $table->string('poster', 80);
+            $table->integer('show_poster_id')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('network_id')->references('id')->on('networks')

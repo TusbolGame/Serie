@@ -32,6 +32,14 @@ class Show extends Model {
         return $this->hasMany(Season::class);
     }
 
+    public function episode() {
+        return $this->hasMany(Episode::class);
+    }
+
+    public function apiUpdate() {
+        return $this->hasMany(ApiUpdate::class);
+    }
+
     public function showPoster() {
         return $this->hasMany(ShowPoster::class);
     }

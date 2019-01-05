@@ -13,6 +13,7 @@ class CreateEpisodesTable extends Migration {
     public function up() {
         Schema::create('episodes', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid');
             $table->integer('show_id')->unsigned()->nullable()->index();
             $table->integer('season_id')->unsigned()->nullable()->index();
             $table->integer('episode_number')->nullable()->index();

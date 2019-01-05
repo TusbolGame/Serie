@@ -15,7 +15,7 @@ class CreateApiUpdatesTable extends Migration {
             $table->increments('id');
             $table->integer('show_id');
             $table->integer('update_id');
-            $table->dateTime('api_updated_at');
+            $table->dateTime('api_update_at');
             $table->timestamps();
         });
     }
