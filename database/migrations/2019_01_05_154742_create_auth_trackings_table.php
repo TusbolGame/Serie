@@ -19,12 +19,10 @@ class CreateAuthTrackingsTable extends Migration {
             $table->text('useragent')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')
-                ->references('id')->on('users')
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade');
 
-            $table->foreign('type_id')
-                ->references('id')->on('auth_types')
+            $table->foreign('type_id')->references('id')->on('auth_types')
                 ->onUpdate('cascade');
         });
     }

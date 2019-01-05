@@ -23,14 +23,15 @@ class UserTableSeeder extends Seeder {
 
     public function run() {
         DB::table('users')->delete();
-        Wallpapers\User::create([
+        \App\User::create([
             'name' => 'ivan',
             'email' => 'ivan.zuanella@gmail.com',
-            'email_verified_at' => 'NULL',
+            'email_verified_at' => NULL,
             'password' => '$2y$07$mZ3StKt6PkWcJOpER4hyHO2e789C29za3zsEff8C.V/cUvlcYx7o2',
             'firstname' => 'Ivan',
             'lastname' => 'Zuanella',
             'privileges' => 100,
+            'role' => 100,
             'timezone' => 'Europe/Rome',
             'created_at' => '2018-12-29 17:32:04',
             'updated_at' => '2018-12-29 17:32:04',
@@ -41,7 +42,7 @@ class UserTableSeeder extends Seeder {
 class AuthTypeTableSeeder extends Seeder {
     public function run() {
         DB::table('auth_types')->delete();
-        Wallpapers\AuthType::create([
+        \App\AuthType::create([
                 'name' => 'login',
                 'created_at' => '2018-12-31 10:03:34',
                 'updated_at' => '2018-12-30 10:03:34',
@@ -66,7 +67,7 @@ class AuthTypeTableSeeder extends Seeder {
 class AuthTrackingTableSeeder extends Seeder {
     public function run() {
         DB::table('auth_trackings')->delete();
-        Wallpapers\AuthTracking::create([
+        \App\AuthTracking::create([
                 'user_id' => '1',
                 'type_id' => '1',
                 'ip' => '::1',
@@ -115,10 +116,12 @@ class NetworkTableSeeder extends Seeder {
 
     public function run() {
         DB::table('networks')->delete();
-        Wallpapers\Network::create([
+        \App\Network::create([
             'name' => 'No Network Available',
-            'country' => '',
+            'type' => NULL,
+            'country' => NULL,
             'link' => NULL,
+            'banner' => NULL,
         ]);
     }
 }
@@ -127,7 +130,7 @@ class StatusTableSeeder extends Seeder {
 
     public function run() {
         DB::table('statuses')->delete();
-        Wallpapers\Status::create([
+        \App\Status::create([
             'name' => 'Ended',
         ]);
 
@@ -147,7 +150,7 @@ class ContentRatingTableSeeder extends Seeder {
 
     public function run() {
         DB::table('content_ratings')->delete();
-        Wallpapers\ContentRating::create([
+        \App\ContentRating::create([
             'name' => 'No rating',
             'description' => 'There is no rating.',
             'icon' => NULL,
@@ -198,7 +201,7 @@ class ContentRatingTableSeeder extends Seeder {
 class BookmarkTypeTableSeeder extends Seeder {
     public function run() {
         DB::table('bookmark_types')->delete();
-        Wallpapers\BookmarkType::create([
+        \App\BookmarkType::create([
                 'name' => 'manual',
                 'created_at' => '2018-12-31 13:05:51',
                 'updated_at' => '2018-12-31 13:05:51',
@@ -231,7 +234,7 @@ class BookmarkTypeTableSeeder extends Seeder {
 class VideoQualitiesTableSeeder extends Seeder {
     public function run() {
         DB::table('video_qualities')->delete();
-        Wallpapers\VideoQualities::create([
+        \App\VideoQuality::create([
                 'name' => '4k',
                 'code' => '2160p',
                 'priority' => '0',

@@ -21,7 +21,8 @@ class CreateSeasonsTable extends Migration {
             $table->timestamps();
 
             $table->foreign('show_id')->references('id')->on('shows')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

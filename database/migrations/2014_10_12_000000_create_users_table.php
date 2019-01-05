@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration {
             $table->string('firstname', 40);
             $table->string('lastname', 100);
             $table->integer('privileges')->index();
+            $table->integer('role')->index();
             $table->string('timezone')->index();
             $table->rememberToken();
             $table->timestamps();
@@ -31,8 +32,7 @@ class CreateUsersTable extends Migration {
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('users');
     }
 }

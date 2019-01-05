@@ -19,14 +19,15 @@ class CreateTorrentsTable extends Migration {
             $table->bigInteger('file_size');
             $table->boolean('used');
             $table->boolean('deleted');
-            $table->smallInteger('video_quality_id')->unsigned()->nullable()->index();
+            $table->integer('video_quality_id')->unsigned()->nullable()->index();
             $table->dateTime('started_at');
             $table->dateTime('finished_at');
             $table->dateTime('converted_at');
             $table->timestamps();
 
             $table->foreign('episode_id')->references('id')->on('episodes')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('video_quality_id')->references('id')->on('video_qualities')
                 ->onUpdate('cascade');
         });

@@ -22,7 +22,7 @@ class CreateApiUpdatesTable extends Migration {
         Schema::create('api_update_show', function (Blueprint $table) {
             $table->integer('show_id');
             $table->integer('api_update_id');
-            $table->primary(['', 'show_id']);
+            $table->primary(['api_update_id', 'show_id']);
             $table->timestamps();
         });
     }

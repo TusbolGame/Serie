@@ -17,6 +17,11 @@ class CreateRatingsTable extends Migration {
             $table->integer('show_id')->unsigned()->nullable()->unsigned();
             $table->integer('value')->index();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade');
+            $table->foreign('show_id')->references('id')->on('shows')
+                ->onUpdate('cascade');
         });
     }
 

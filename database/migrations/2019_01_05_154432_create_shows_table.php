@@ -14,7 +14,7 @@ class CreateShowsTable extends Migration {
         Schema::create('shows', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid');
-            $table->text('name')->unique();
+            $table->text('name');
             $table->text('alternative_name')->nullable();
             $table->integer('api_id')->unsigned()->unique();
             $table->text('api_link');

@@ -19,8 +19,9 @@ class CreateVideoViewsTable extends Migration
             $table->dateTime('ended_at')->index();
             $table->timestamps();
 
-            $table->foreign('video_id')->references('id')->on('videos')
-                ->onUpdate('cascade');
+            $table->foreign('episode_id')->references('id')->on('episodes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade');
         });

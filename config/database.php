@@ -32,7 +32,7 @@ return [
     */
 
     'connections' => [
-        'Wallpapers' => [
+        'Serie' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),

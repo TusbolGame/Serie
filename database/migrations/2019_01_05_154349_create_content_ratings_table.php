@@ -14,8 +14,8 @@ class CreateContentRatingsTable extends Migration {
         Schema::create('content_ratings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 20)->index();
-            $table->text('description');
-            $table->string('icon', 30);
+            $table->text('description')->nullable();
+            $table->string('icon', 30)->nullable();
             $table->timestamps();
         });
     }
