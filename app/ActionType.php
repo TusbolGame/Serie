@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AuthType extends Model {
+class ActionType extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name', 'group'
     ];
 
-    public function authTrackings() {
-        return $this->hasMany(AuthTracking::class, 'type_id');
+    public function streamAction() {
+        return $this->hasMany(Action::class);
     }
 }

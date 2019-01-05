@@ -15,8 +15,8 @@ class CreateShowsTable extends Migration {
             $table->increments('id');
             $table->text('name')->unique();
             $table->text('alternative_name')->nullable();
+            $table->integer('api_id')->unsigned()->unique();
             $table->text('api_link');
-            $table->integer('tvmaze_id')->unsigned()->unique();
             $table->integer('rating')->unsigned()->nullable();
             $table->text('imdb_link')->nullable();
             $table->decimal('imdb_vote', 3, 1)->nullable();

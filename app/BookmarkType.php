@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AuthType extends Model {
+class BookmarkType extends Model {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
     ];
 
-    public function authTrackings() {
-        return $this->hasMany(AuthTracking::class, 'type_id');
+    public function bookmark() {
+        return $this->hasMany(Bookmark::class);
     }
 }

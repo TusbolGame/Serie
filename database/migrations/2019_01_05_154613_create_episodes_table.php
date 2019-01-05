@@ -4,18 +4,31 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEpisodesTable extends Migration
-{
+class CreateEpisodesTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('episodes', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('show_id')->unsigned()->nullable()->index();
+            $table->integer('season_id')->unsigned()->nullable()->index();
+            $table->integer('episode_number')->nullable()->index();
+            $table->string('episode_code', 20);
+            $table->dateTime('airing_at')->nullable()->index();
+            $table->text('title')->nullable();
+            $table->integer('api_id')->unsigned();
+            $table->text('api_link');
+            $table->text('synopsis')->nullable();
+            $table->string('screenshot', 80)->nullable();
             $table->timestamps();
+
+            $table->foreign('show_id')->references('id')->on('shows')
+                ->onUpdate('cascade');
+            $table->foreign('season_id')->references('id')->on('seasons')
+                ->onUpdate('cascade');
         });
     }
 
@@ -24,8 +37,7 @@ class CreateEpisodesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('episodes');
     }
 }

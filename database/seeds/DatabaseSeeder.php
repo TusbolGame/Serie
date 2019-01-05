@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder {
         $this->call(NetworkTableSeeder::class);
         $this->call(StatusTableSeeder::class);
         $this->call(ContentRatingTableSeeder::class);
+        $this->call(BookmarkTypeTableSeeder::class);
     }
 }
 
@@ -50,6 +51,10 @@ class AuthTypeTableSeeder extends Seeder {
         DB::table('auth_types')->insert([
                 [
                     'name' => 'logout',
+                    'created_at' => '2018-12-30 10:03:34',
+                    'updated_at' => '2018-12-30 10:03:34',
+                ],[
+                    'name' => 'admin',
                     'created_at' => '2018-12-30 10:03:34',
                     'updated_at' => '2018-12-30 10:03:34',
                 ]
@@ -187,5 +192,38 @@ class ContentRatingTableSeeder extends Seeder {
                 'icon' => NULL,
             ]
         ]);
+    }
+}
+
+class BookmarkTypeTableSeeder extends Seeder {
+    public function run() {
+        DB::table('bookmark_types')->delete();
+        Wallpapers\BookmarkType::create([
+                'name' => 'manual',
+                'created_at' => '2018-12-31 13:05:51',
+                'updated_at' => '2018-12-31 13:05:51',
+            ]
+        );
+
+        DB::table('bookmark_types')->insert([
+                [
+                    'name' => 'pause',
+                    'created_at' => '2018-12-31 23:11:21',
+                    'updated_at' => '2018-12-31 23:11:21',
+                ],[
+                    'name' => 'soft',
+                    'created_at' => '2018-12-31 13:06:07',
+                    'updated_at' => '2018-12-31 13:06:07',
+                ],[
+                    'name' => 'hard',
+                    'created_at' => '2018-12-31 13:06:37',
+                    'updated_at' => '2018-12-31 13:06:37',
+                ],[
+                    'name' => 'seek',
+                    'created_at' => '2018-12-31 13:06:46',
+                    'updated_at' => '2018-12-31 13:06:46',
+                ]
+            ]
+        );
     }
 }

@@ -11,7 +11,7 @@ class Show extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'alternative_name', 'api_link', 'tvmaze_id', 'rating', 'imdb_link',
+        'name', 'alternative_name', 'api_id', 'api_link', 'rating', 'imdb_link',
         'imdb_vote', 'description', 'language', 'network_id', 'running_time', 'content_rating_id',
         'status_id', 'timezone', 'banner', 'poster'
     ];
