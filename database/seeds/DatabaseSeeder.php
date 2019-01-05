@@ -227,3 +227,36 @@ class BookmarkTypeTableSeeder extends Seeder {
         );
     }
 }
+
+class VideoQualitiesTableSeeder extends Seeder {
+    public function run() {
+        DB::table('video_qualities')->delete();
+        Wallpapers\VideoQualities::create([
+                'name' => '4k',
+                'code' => '2160p',
+                'priority' => '0',
+            ]
+        );
+
+        DB::table('video_qualities')->insert([
+                [
+                    'name' => '2k',
+                    'code' => '1440p',
+                    'priority' => '1',
+                ],[
+                    'name' => 'Full HD',
+                    'code' => '1080p',
+                    'priority' => '2',
+                ],[
+                    'name' => 'HD',
+                    'code' => '720p',
+                    'priority' => '3',
+                ],[
+                    'name' => 'SD',
+                    'code' => '480p',
+                    'priority' => '4',
+                ]
+            ]
+        );
+    }
+}

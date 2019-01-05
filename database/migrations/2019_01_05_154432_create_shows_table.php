@@ -13,6 +13,7 @@ class CreateShowsTable extends Migration {
     public function up() {
         Schema::create('shows', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid');
             $table->text('name')->unique();
             $table->text('alternative_name')->nullable();
             $table->integer('api_id')->unsigned()->unique();
