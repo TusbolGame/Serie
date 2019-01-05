@@ -18,6 +18,13 @@ class CreateApiUpdatesTable extends Migration {
             $table->dateTime('api_update_at');
             $table->timestamps();
         });
+
+        Schema::create('api_update_show', function (Blueprint $table) {
+            $table->integer('show_id');
+            $table->integer('api_update_id');
+            $table->primary(['', 'show_id']);
+            $table->timestamps();
+        });
     }
 
     /**

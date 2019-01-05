@@ -17,6 +17,13 @@ class CreateGenresTable extends Migration {
             $table->string('image', 40);
             $table->timestamps();
         });
+
+        Schema::create('genre_show', function (Blueprint $table) {
+            $table->integer('genre_id')->unsigned()->nullable();
+            $table->integer('show_id')->unsigned()->nullable();
+            $table->primary(['genre_id', 'show_id']);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -26,5 +33,6 @@ class CreateGenresTable extends Migration {
      */
     public function down() {
         Schema::dropIfExists('genres');
+        Schema::dropIfExists('genre_show');
     }
 }

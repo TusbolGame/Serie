@@ -14,7 +14,7 @@ class Genre extends Model {
         'name', 'image'
     ];
 
-    public function show() {
-        return $this->belongsTo(Show::class);
+    public function shows() {
+        return $this->belongsToMany(Show::class);
     }
 }

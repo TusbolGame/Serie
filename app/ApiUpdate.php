@@ -15,7 +15,7 @@ class ApiUpdate extends Model {
     ];
 
     public function show() {
-        return $this->belongsTo(Show::class);
+        return $this->belongsToMany(Show::class);
     }
 
     public function update() {

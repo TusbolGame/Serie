@@ -11,7 +11,7 @@ class Show extends Model {
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'alternative_name', 'api_id', 'api_link', 'rating', 'imdb_link',
+        'uuid', 'name', 'alternative_name', 'api_id', 'api_link', 'imdb_link',
         'imdb_vote', 'description', 'language', 'network_id', 'running_time', 'content_rating_id',
         'status_id', 'timezone', 'banner', 'poster'
     ];
@@ -36,8 +36,16 @@ class Show extends Model {
         return $this->hasMany(Episode::class);
     }
 
+    public function rating() {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function genres() {
+        return $this->belongsToMany(Genre::class);
+    }
+
     public function apiUpdate() {
-        return $this->hasMany(ApiUpdate::class);
+        return $this->belongsToMany(ApiUpdate::class);
     }
 
     public function showPoster() {
