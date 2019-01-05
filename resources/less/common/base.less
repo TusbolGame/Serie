@@ -1,0 +1,43 @@
+@import "../generic/cmn-variables";
+
+html,
+body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+//body {
+//    background-color: #4b4b4b;
+//    color: #cdcdcd;
+//}
+
+#main-wrapper {
+    max-width: 2000px;
+    position: relative;
+    min-height: 100%;
+    height: auto;
+    margin-bottom: -75px;
+}
+/*    margin-top = header height
+    margin-bottom = footer height
+ */
+
+#main-container {
+    padding-bottom: 75px;    /*** circa SAME AS FOOTER HEIGHT, SAME AS WRAPPER MARGIN-BOTTOM ***/
+}
+
+#footer {
+    height: 75px;    /*** SAME AS WRAPPER MARGIN-BOTTOM, SAME AS CONTENT PADDING-BOTTOM ***/
+    margin-top: -75px;
+
+    & .copyright {
+        margin-top: 15px;
+        font-size: 0.8rem;
+    }
+}
+
+#navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}

@@ -12,4 +12,32 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+    .extract([
+    'jquery',
+    'bootstrap',
+    'axios',
+    'lodash',
+    'popper.js',
+    'vue'
+])
+    .scripts([
+            'resources/js/generic/*.js',
+        ],
+        'public/js/generic.js')
+    .scripts([
+            'resources/js/common/*.js',
+        ],
+        'public/js/common.js')
+    .scripts([
+            'resources/js/plugins/*.js'
+        ],
+        'public/js/plugins.js')
+    .sass('resources/sass/app.scss', 'public/css')
+    // .less('resources/less/*.less', 'resources/css/*.less')
+    // .styles('resources/css/generic/*.css', 'public/css/generic.css')
+    .styles([
+        'resources/less/common/base.css'
+    ], 'public/css/common.css')
+    .styles(['resources/less/plugins/Stream.css'], 'public/css/plugins.css')
+    .browserSync('wallpapers.local')
+    .disableNotifications();

@@ -1,0 +1,77 @@
+@charset "utf-8";
+
+// Variables
+// Colors
+/* Deep Purple, Blue, Green, Amber, Deep Orange, Indigo, Purple, Light Blue, Teal, Lime, Orange, Pink, Red, Grey, White */
+@colors: #673ab7, #2196f3, #4caf50, #ffc107, #ff5722, #3F51B5, #9c27b0, #03a9f4, #607d8b, #cddc39, #ff9800, #e91e63, #f44336, #9e9e9e, #FFFFFF;
+@className: c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, neg, neu, whi;
+@colorBG: #ede7f6, #e3f2fd, #e8f5e9, #fff8e1, #fbe9e7, #e8eaf6, #f3e5f5, #e1f5fe, #e0f2f1, #f9fbe7, #fff3e0, #fce4ec, #ffebee, #f5f5f5, #FFFFFF;
+@iterations: length(@colors);
+
+@black: rgba(0, 0, 0, 1);
+@dark: rgba(0, 0, 0, 0.87);
+@mid: rgba(0, 0, 0, 0.54);
+@light: rgba(0, 0, 0, 0.38);
+@lighter: rgba(0, 0, 0, 0.26);
+@lightest: rgba(0, 0, 0, 0.10);
+
+@white: rgba(255, 255, 255, 1);
+@whiteHard: rgba(255, 255, 255, 0.87);
+@whiteMid: rgba(255, 255, 255, 0.54);
+@whiteLight: rgba(255, 255, 255, 0.38);
+@whiteLighter: rgba(255, 255, 255, 0.26);
+@whiteLightest: rgba(255, 255, 255, 0.10);
+@bgLightest: #FAFAFA;
+
+@yellow: #FFD600;
+@red: #F44336;
+@green: #4CAF50;
+@blue:  #2196F3;
+
+@linkColor: #2196f3;
+
+@buttonShadow: 0 2px 5px @lighter;
+@dialogShadow: 0 7px 8px -4px rgba(0,0,0,.2),
+                0 13px 19px 2px rgba(0,0,0,.14),
+                0 5px 24px 4px rgba(0,0,0,.12);
+@smallShadow: 0 2px 4px @lightest;
+@autofillShadow: 0 3px 9px @lighter;
+@midShadow: 0 4px 12px @light;
+@bigShadow: 0 2px 20px @light;
+
+// Sizes
+@smallDimension: 8px;
+@midDimension: 10px;
+@bigDimension: 20px;
+@insetDimension: 48px;
+@titleBarDimension: 64px;
+@widths: percentage(1/12), percentage(2/12), percentage(3/12), percentage(4/12), percentage(5/12), percentage(6/12), percentage(7/12), percentage(8/12), percentage(9/12), percentage(10/12), percentage(11/12), percentage(12/12);
+
+@baseFont: 16px;
+@smallFont: 12px;
+@midFont: 14px;
+@normalFont: 16px;
+@bigFont: 20px;
+
+// Transitions
+@transitionType: cubic-bezier(0.4, 0.0, 0.2, 1);//ease-in-out;
+@transitionTime: 0.4s;
+@transitionDelay: 0.4s;
+@noTransitionTime: 0.0s;
+@noTransitionDelay: 0.0s;
+
+@cursorDefault: context-menu;
+
+// Base stuff
+.userNoSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cmn-click {
+    cursor: pointer;
+}

@@ -1,0 +1,29 @@
+@charset "utf-8";
+
+/* LESS Document */
+.font-face(@font-family, @filename, @font-weight, @font-style){
+    font-family: @font-family;
+    src: url('/fonts/@{filename}.ttf');
+    font-weight:@font-weight;
+    font-style:@font-style;
+}
+
+@font-face {.font-face('Material Icons', MaterialIcons-Regular, 400, normal)}
+@font-face {.font-face('Open Sans', OpenSans-Bold, 300, normal)}
+@font-face {.font-face('Open Sans', OpenSans-Light, 300, normal)}
+@font-face {.font-face('Open Sans', OpenSans-Regular, 300, normal)}
+@font-face {.font-face('Open Sans', OpenSans-SemiBold, 300, normal)}
+@font-face {.font-face('Roboto', Roboto-Bold, 700, normal)}
+@font-face {.font-face('Roboto', Roboto-BoldItalic, 700, italic)}
+@font-face {.font-face('Roboto', Roboto-Medium, 500, normal)}
+@font-face {.font-face('Roboto', Roboto-MediumItalic, 500, italic)}
+@font-face {.font-face('Roboto', Roboto-Regular, 400, normal)}
+@font-face {.font-face('Roboto', Roboto-Italic, 400, italic)}
+@font-face {.font-face('Roboto', Roboto-Light, 300, normal)}
+@font-face {.font-face('Roboto', Roboto-LightItalic, 300, italic)}
+@font-face {.font-face('Roboto', Roboto-Thin, 100, normal)}
+@font-face {.font-face('Roboto', Roboto-ThinItalic, 100, italic)}
+@font-face {.font-face('Roboto Slab', RobotoSlab-Bold, 100, italic)}
+@font-face {.font-face('Roboto Slab', RobotoSlab-Light, 100, italic)}
+@font-face {.font-face('Roboto Slab', RobotoSlab-Regular, 100, italic)}
+@font-face {.font-face('Roboto Slab', RobotoSlab-Thin, 100, italic)}
