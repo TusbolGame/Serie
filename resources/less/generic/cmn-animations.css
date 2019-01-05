@@ -1,0 +1,71 @@
+@keyframes cmn-ripple {
+  from {
+    transform: scale(0.1);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes cmn-ripple-reveal {
+  from {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2);
+    opacity: 1;
+  }
+}
+@keyframes cmn-input-highlighter {
+  from {
+    background: currentColor;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+@keyframes cmn-chip-tool-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes cmn-cubeGridScaleDelay {
+  0%,
+  70%,
+  100% {
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    transform: scale3D(0, 0, 1);
+  }
+}
+@keyframes cmn-cubeGridScaleDelay {
+  0%,
+  70%,
+  100% {
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    transform: scale3D(0, 0, 1);
+  }
+}
+@keyframes cmn-scale-out-animation {
+  0% {
+    transform: scale3D(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale3D(1.5, 1.5, 1.5);
+    opacity: 0;
+  }
+}
+/*# sourceMappingURL=cmn-animations.css.map */
