@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Helpers;
 use App\ApiUpdate;
 use App\ContentRating;
 use App\Genre;
-use App\Http\Controllers\ShowPosterController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\PosterController;
 use App\Network;
 use App\Show;
 use App\Status;
+use App\Traits\PosterHandler;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class ShowHelper extends Controller {
+    use PosterHandler;
+
     public function updateData($api_ID, $dataUpdate) {
         $defaults = [
             'airing_time' => '00:00',
@@ -124,16 +128,9 @@ class ShowHelper extends Controller {
             }
         }
 
-        if ($data->image->original != NULL) {
-            $showPosterHandler = new ShowPosterController();
-            $showPoster = $showPosterHandler->newImage($data->image->original, $show);
-            if ($showPoster == NULL || $showPoster === 0 ||  $showPoster === 1) {
-                $show->fill(['show_poster_id', NULL]);
-                $showPoster = NULL;
-            }
-        } else {
-            $show->fill(['show_poster_id', NULL]);
-            $showPoster = NULL;
+        $poster = $this->posterHandler($data->image, $show, config('custom.posterOriginalFolder'));
+        if ($poster == NULL) {
+            $show->fill(['poster_id', NULL]);
         }
 
         if (!empty($data->genres)) {
@@ -158,11 +155,10 @@ class ShowHelper extends Controller {
         $apiUpdate->dataUpdate()->associate($dataUpdate);
         $apiUpdate->save();
 
-        if ($showPoster != NULL) {
-            $showPoster->show()->associate($show);
-            $showPoster->save();
-            $freshShowPoster = $showPoster->fresh();
-            $show->update(['show_poster_id' => $freshShowPoster->id]);
+        if ($poster != NULL) {
+            $show->posters()->save($poster);
+            $freshPoster = $poster->fresh();
+            $show->update(['poster_id' => $freshPoster->id]);
         }
         if (isset($genreIDs) && is_array($genreIDs)) {
             $show->genres()->sync($genreIDs);

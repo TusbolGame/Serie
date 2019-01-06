@@ -12,12 +12,14 @@ use App\BookmarkType;
 use App\ContentRating;
 use App\Episode;
 use App\Genre;
+use App\Http\Controllers\Helpers\EpisodeHelper;
+use App\Http\Controllers\Helpers\SeasonHelper;
 use App\Http\Controllers\Helpers\ShowHelper;
 use App\Network;
 use App\Rating;
 use App\Season;
 use App\Show;
-use App\ShowPoster;
+use App\Poster;
 use App\Status;
 use App\Torrent;
 use App\DataUpdate;
@@ -43,8 +45,6 @@ class HomeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index() {
-        $showHandler = new ShowHelper();
-
         $dataUpdate = DataUpdate::create([
             'type' => 0
         ]);
@@ -52,12 +52,26 @@ class HomeController extends Controller {
         $options = [
             'type' => 0,        // 0 = All shows, regardless of last update, 1 = All shows with last update > 20 days, 2 = show with ID = $options['show_id'], 3 = New show
         ];
+        $start = microtime(true);
 
-        if ($options['type'] == 0) {
-            $result = $showHandler->updateData(335, $dataUpdate);
-            if ($result !== 0) {
+        $array = [1,2,3,4,5,6,7,8,9,10];
+//        $array = [2];
+        foreach($array as $id) {
+            $showHelper = new ShowHelper();
+            if ($options['type'] == 0) {
+                $result = $showHelper->updateData($id, $dataUpdate);
 
+                if ($result !== 0) {
+                    $seasonHelper = new SeasonHelper();
+                    $seasonResult = $seasonHelper->updateData($result['show'], $result['serverData']->seasons);
+
+                    $episodeHelper = new EpisodeHelper();
+                    $episodeResult = $episodeHelper->updateData($result['show'], $result['serverData']->episodes);
+
+                }
             }
+            echo microtime(true) - $start . '</br>';
+            $start = microtime(true);
         }
 
 

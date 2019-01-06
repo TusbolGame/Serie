@@ -13,11 +13,14 @@ class CreateSeasonsTable extends Migration {
     public function up() {
         Schema::create('seasons', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid');
             $table->integer('show_id')->unsigned()->nullable()->index();
+            $table->integer('api_id')->unsigned()->nullable()->index();
             $table->integer('season')->index();
             $table->integer('episodes')->nullable();
-            $table->date('date_start');
-            $table->date('date_end');
+            $table->date('date_start')->nullable();
+            $table->date('date_end')->nullable();
+            $table->integer('poster_id')->unsigned()->nullable()->index();
             $table->timestamps();
 
             $table->foreign('show_id')->references('id')->on('shows')

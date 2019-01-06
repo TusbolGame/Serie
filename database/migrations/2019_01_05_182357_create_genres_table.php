@@ -22,7 +22,6 @@ class CreateGenresTable extends Migration {
             $table->integer('genre_id')->unsigned()->nullable();
             $table->integer('show_id')->unsigned()->nullable();
             $table->primary(['genre_id', 'show_id']);
-            $table->timestamps();
         });
     }
 

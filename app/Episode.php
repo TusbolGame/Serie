@@ -12,7 +12,7 @@ class Episode extends Model {
      */
     protected $fillable = [
         'uuid', 'show_id', 'season_id', 'episode_number', 'episode_code', 'airing_at', 'title',
-        'api_id', 'api_link', 'synopsis', 'screenshot'
+        'api_id', 'api_link', 'summary', 'poster_id'
     ];
 
     public function show() {
@@ -25,5 +25,9 @@ class Episode extends Model {
 
     public function videoView() {
         return $this->hasMany(VideoView::class);
+    }
+
+    public function posters() {
+        return $this->morphMany(Poster::class, 'posterable');
     }
 }

@@ -8,4 +8,6 @@ return [
     'posterBigFolder' => 'img/posters/big/',
     'posterMidFolder' => 'img/posters/mid/',
     'posterSmaFolder' => 'img/posters/sma/',
+    'seasonOriginalFolder' => 'img/seasons/original/',
+    'episodeOriginalFolder' => 'img/episodes/original/',
 ];

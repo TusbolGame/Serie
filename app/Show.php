@@ -13,7 +13,7 @@ class Show extends Model {
     protected $fillable = [
         'uuid', 'name', 'alternative_name', 'api_id', 'api_link', 'api_rating', 'imdb_link',
         'imdb_vote', 'description', 'language', 'network_id', 'running_time', 'airing_time', 'content_rating_id',
-        'status_id', 'timezone', 'banner', 'show_poster_id'
+        'status_id', 'timezone', 'banner', 'poster_id'
     ];
 
     public function network() {
@@ -48,7 +48,7 @@ class Show extends Model {
         return $this->hasMany(ApiUpdate::class);
     }
 
-    public function showPoster() {
-        return $this->hasMany(ShowPoster::class);
+    public function posters() {
+        return $this->morphMany(Poster::class, 'posterable');
     }
 }

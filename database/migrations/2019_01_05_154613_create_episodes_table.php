@@ -22,8 +22,8 @@ class CreateEpisodesTable extends Migration {
             $table->text('title')->nullable();
             $table->integer('api_id')->unsigned();
             $table->text('api_link');
-            $table->text('synopsis')->nullable();
-            $table->string('screenshot', 80)->nullable();
+            $table->text('summary')->nullable();
+            $table->integer('poster_id')->unsigned()->nullable()->index();
             $table->timestamps();
 
             $table->foreign('show_id')->references('id')->on('shows')

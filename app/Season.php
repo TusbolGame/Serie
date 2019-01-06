@@ -11,6 +11,14 @@ class Season extends Model {
      * @var array
      */
     protected $fillable = [
-        'show_id', 'season', 'episodes', 'date_start', 'date_end'
+        'uuid', 'show_id', 'api_id', 'season', 'episodes', 'date_start', 'date_end', 'poster_id'
     ];
+
+    public function show() {
+        return $this->belongsTo(Show::class);
+    }
+
+    public function posters() {
+        return $this->morphMany(Poster::class, 'posterable');
+    }
 }

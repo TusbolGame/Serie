@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder {
         $this->call(AuthTypeTableSeeder::class);
         $this->call(AuthTrackingTableSeeder::class);
 //        $this->call(NetworkTableSeeder::class);     // To be seeded with MySQL Command
+        $this->call(ActionTypeTableSeeder::class);
         $this->call(StatusTableSeeder::class);
         $this->call(ContentRatingTableSeeder::class);
         $this->call(BookmarkTypeTableSeeder::class);
@@ -112,6 +113,69 @@ class AuthTrackingTableSeeder extends Seeder {
                     'useragent' => 'Mozilla/5.0 (Android 9; Mobile; rv:64.0) Gecko/64.0 Firefox/64.0',
                     'created_at' => '2018-12-31 13:06:51',
                     'updated_at' => '2018-12-31 13:06:51',
+                ]
+            ]
+        );
+    }
+}
+
+class ActionTypeTableSeeder extends Seeder {
+    public function run() {
+        DB::table('action_types')->delete();
+        \App\ActionType::create([
+                'name' => 'play',
+                'group' => 'stream',
+                'created_at' => '2018-12-30 14:03:34',
+                'updated_at' => '2018-12-30 14:03:34',
+            ]
+        );
+
+        DB::table('action_types')->insert([
+                [
+                    'name' => 'pause',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-30 14:03:34',
+                    'updated_at' => '2018-12-30 14:03:34',
+                ],[
+                    'name' => 'fullscreenOpen',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-30 14:03:34',
+                    'updated_at' => '2018-12-30 14:03:34',
+                ],[
+                    'name' => 'fullscreenClose',
+                    'group' => 'stream',
+                    'created_at' => '2019-01-01 01:41:43',
+                    'updated_at' => '2019-01-01 01:41:43',
+                ],[
+                    'name' => 'bookmark',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-30 14:03:34',
+                    'updated_at' => '2018-12-30 14:03:34',
+                ],[
+                    'name' => 'volume',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-30 14:03:34',
+                    'updated_at' => '2018-12-30 14:03:34',
+                ],[
+                    'name' => 'ended',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-31 18:46:29',
+                    'updated_at' => '2018-12-31 18:46:29',
+                ],[
+                    'name' => 'seek',
+                    'group' => 'stream',
+                    'created_at' => '2018-12-30 14:03:34',
+                    'updated_at' => '2018-12-30 14:03:34',
+                ],[
+                    'name' => 'forward',
+                    'group' => 'stream',
+                    'created_at' => '2019-01-01 02:39:27',
+                    'updated_at' => '2019-01-01 02:39:27',
+                ],[
+                    'name' => 'replay',
+                    'group' => 'stream',
+                    'created_at' => '2019-01-01 02:39:27',
+                    'updated_at' => '2019-01-01 02:39:27',
                 ]
             ]
         );
