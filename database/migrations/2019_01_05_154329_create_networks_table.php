@@ -15,7 +15,8 @@ class CreateNetworksTable extends Migration {
             $table->increments('id');
             $table->string('name', 50)->index();
             $table->smallInteger('type')->nullable()->index();
-            $table->string('country', 50)->nullable();
+            $table->string('country_code', 20)->nullable();
+            $table->string('country_name', 50)->nullable();
             $table->string('link', 200)->nullable();
             $table->string('banner', 200)->nullable();
             $table->timestamps();
