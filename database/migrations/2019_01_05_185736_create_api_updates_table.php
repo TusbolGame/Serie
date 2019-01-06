@@ -13,17 +13,16 @@ class CreateApiUpdatesTable extends Migration {
     public function up() {
         Schema::create('api_updates', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('show_id');
-            $table->integer('update_id');
-            $table->dateTime('api_update_at');
+            $table->integer('show_id')->unsigned()->nullable()->index();
+            $table->integer('data_update_id')->unsigned()->nullable()->index();
+            $table->dateTime('api_updated_at');
             $table->timestamps();
-        });
 
-        Schema::create('api_update_show', function (Blueprint $table) {
-            $table->integer('show_id');
-            $table->integer('api_update_id');
-            $table->primary(['api_update_id', 'show_id']);
-            $table->timestamps();
+            $table->foreign('show_id')->references('id')->on('shows')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreign('data_update_id')->references('id')->on('data_updates')
+                ->onUpdate('cascade');
         });
     }
 

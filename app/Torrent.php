@@ -22,4 +22,8 @@ class Torrent extends Model {
     public function videoQuality() {
         return $this->hasOne(VideoQuality::class);
     }
+
+    public function videoView() {
+        return $this->hasMany(VideoView::class);
+    }
 }

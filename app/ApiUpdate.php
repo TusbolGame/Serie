@@ -11,14 +11,14 @@ class ApiUpdate extends Model {
      * @var array
      */
     protected $fillable = [
-        'show_id', 'update_id', 'api_update_at'
+        'show_id', 'data_update_id', 'api_updated_at'
     ];
 
     public function show() {
-        return $this->belongsToMany(Show::class);
+        return $this->belongsTo(Show::class);
     }
 
-    public function update() {
-        return $this->belongsTo(Update::class);
+    public function dataUpdate() {
+        return $this->belongsTo(DataUpdate::class);
     }
 }

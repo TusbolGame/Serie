@@ -13,4 +13,8 @@ class ContentRating extends Model {
     protected $fillable = [
         'name', 'description', 'icon'
     ];
+
+    public function show() {
+        return $this->hasMany(Show::class);
+    }
 }

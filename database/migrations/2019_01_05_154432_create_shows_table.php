@@ -18,17 +18,18 @@ class CreateShowsTable extends Migration {
             $table->text('alternative_name')->nullable();
             $table->integer('api_id')->unsigned()->unique();
             $table->text('api_link');
-            $table->integer('rating')->unsigned()->nullable();
+            $table->smallInteger('api_rating')->unsigned()->nullable();
             $table->text('imdb_link')->nullable();
             $table->decimal('imdb_vote', 3, 1)->nullable();
             $table->text('description');
             $table->string('language', 30)->nullable();
             $table->integer('network_id')->unsigned()->nullable()->index();
-            $table->integer('running_time')->nullable();
+            $table->smallInteger('running_time')->unsigned()->nullable();
+            $table->time('airing_time')->nullable();
             $table->integer('content_rating_id')->unsigned()->nullable()->index();
             $table->integer('status_id')->unsigned()->nullable()->index();
             $table->string('timezone', 50)->nullable();
-            $table->string('banner', 80);
+            $table->string('banner', 36)->nullable();
             $table->integer('show_poster_id')->unsigned()->nullable();
             $table->timestamps();
 

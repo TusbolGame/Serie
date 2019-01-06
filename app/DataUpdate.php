@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Update extends Model {
+class DataUpdate extends Model {
     /**
      * The attributes that are mass assignable.
      *

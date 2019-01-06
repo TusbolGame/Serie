@@ -4,17 +4,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUpdatesTable extends Migration {
+class CreateDataUpdatesTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('updates', function (Blueprint $table) {
+        Schema::create('data_updates', function (Blueprint $table) {
             $table->increments('id');
             $table->smallInteger('type')->index();
-            $table->dateTime('finished_at');
+            $table->dateTime('finished_at')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ class CreateUpdatesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('updates');
+        Schema::dropIfExists('data_updates');
     }
 }

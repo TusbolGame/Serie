@@ -14,7 +14,7 @@ class CreateShowPostersTable extends Migration {
         Schema::create('show_posters', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('show_id')->unsigned()->nullable()->index();
-            $table->string('name', 60);
+            $table->string('name', 36);
             $table->timestamps();
 
             $table->foreign('show_id')->references('id')->on('shows')

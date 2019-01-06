@@ -11,21 +11,21 @@ class Show extends Model {
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'alternative_name', 'api_id', 'api_link', 'imdb_link',
-        'imdb_vote', 'description', 'language', 'network_id', 'running_time', 'content_rating_id',
-        'status_id', 'timezone', 'banner', 'poster'
+        'uuid', 'name', 'alternative_name', 'api_id', 'api_link', 'api_rating', 'imdb_link',
+        'imdb_vote', 'description', 'language', 'network_id', 'running_time', 'airing_time', 'content_rating_id',
+        'status_id', 'timezone', 'banner', 'show_poster_id'
     ];
 
     public function network() {
-        return $this->hasOne(Network::class);
+        return $this->belongsTo(Network::class);
     }
 
     public function contentRating() {
-        return $this->hasOne(ContentRating::class);
+        return $this->belongsTo(ContentRating::class);
     }
 
     public function status() {
-        return $this->hasOne(Status::class);
+        return $this->belongsTo(Status::class);
     }
 
     public function season() {
@@ -45,14 +45,10 @@ class Show extends Model {
     }
 
     public function apiUpdate() {
-        return $this->belongsToMany(ApiUpdate::class);
+        return $this->hasMany(ApiUpdate::class);
     }
 
     public function showPoster() {
         return $this->hasMany(ShowPoster::class);
-    }
-
-    public function genre() {
-        return $this->hasMany(Genre::class);
     }
 }

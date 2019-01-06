@@ -11,6 +11,10 @@ class Network extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'type', 'country', 'link'
+        'name', 'type', 'country_code', 'country_name', 'link', 'banner'
     ];
+
+    public function show() {
+        return $this->hasMany(Show::class);
+    }
 }

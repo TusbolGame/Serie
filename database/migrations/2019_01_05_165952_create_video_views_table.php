@@ -16,13 +16,16 @@ class CreateVideoViewsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable()->index();
             $table->integer('episode_id')->unsigned()->nullable()->index();
+            $table->integer('torrent_id')->unsigned()->nullable()->index();
             $table->dateTime('ended_at')->index();
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade');
             $table->foreign('episode_id')->references('id')->on('episodes')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->foreign('torrent_id')->references('id')->on('torrents')
                 ->onUpdate('cascade');
         });
     }

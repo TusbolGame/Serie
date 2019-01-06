@@ -11,7 +11,7 @@ class VideoView extends Model {
      * @var array
      */
     protected $fillable = [
-        'user_id', 'episode_id', 'ended_at'
+        'user_id', 'episode_id', 'torrent_id', 'ended_at'
     ];
 
     public function user() {
@@ -20,5 +20,9 @@ class VideoView extends Model {
 
     public function episode() {
         return $this->belongsTo(Episode::class);
+    }
+
+    public function torrent() {
+        return $this->belongsTo(Torrent::class);
     }
 }

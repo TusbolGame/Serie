@@ -13,4 +13,8 @@ class Status extends Model {
     protected $fillable = [
         'name'
     ];
+
+    public function show() {
+        return $this->hasMany(Show::class);
+    }
 }

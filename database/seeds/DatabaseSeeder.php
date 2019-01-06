@@ -12,11 +12,17 @@ class DatabaseSeeder extends Seeder {
         $this->call(UserTableSeeder::class);
         $this->call(AuthTypeTableSeeder::class);
         $this->call(AuthTrackingTableSeeder::class);
-        $this->call(NetworkTableSeeder::class);
+//        $this->call(NetworkTableSeeder::class);     // To be seeded with MySQL Command
         $this->call(StatusTableSeeder::class);
         $this->call(ContentRatingTableSeeder::class);
         $this->call(BookmarkTypeTableSeeder::class);
     }
+
+    /*
+     * Genres       INSERT INTO serie.genres (name) SELECT name FROM tvshows.genres
+     * Networks     INSERT INTO serie.networks (name, type, country_code, country_name, link, banner, created_at, updated_at) SELECT name, 0, country, NULL, link, NULL, NOW(), NOW() FROM tvshows.networks
+     * Updates      INSERT INTO serie.updates (type, finished_at, created_at, updated_at) SELECT type, finish, time, finish FROM tvshows.updates
+     */
 }
 
 class UserTableSeeder extends Seeder {
@@ -119,9 +125,12 @@ class NetworkTableSeeder extends Seeder {
         \App\Network::create([
             'name' => 'No Network Available',
             'type' => NULL,
-            'country' => NULL,
+            'country_code' => NULL,
+            'country_name' => NULL,
             'link' => NULL,
             'banner' => NULL,
+            'created_at' => '2018-12-31 13:06:46',
+            'updated_at' => '2018-12-31 13:06:46',
         ]);
     }
 }
@@ -132,15 +141,23 @@ class StatusTableSeeder extends Seeder {
         DB::table('statuses')->delete();
         \App\Status::create([
             'name' => 'Ended',
+            'created_at' => '2019-01-05 23:33:38',
+            'updated_at' => '2019-01-05 23:33:38',
         ]);
 
         DB::table('statuses')->insert([
             [
                 'name' => 'In Development',
+                'created_at' => '2019-01-05 23:33:38',
+                'updated_at' => '2019-01-05 23:33:38',
             ],[
                 'name' => 'Running',
+                'created_at' => '2019-01-05 23:33:38',
+                'updated_at' => '2019-01-05 23:33:38',
             ],[
                 'name' => 'To Be Determined',
+                'created_at' => '2019-01-05 23:33:38',
+                'updated_at' => '2019-01-05 23:33:38',
             ]
         ]);
     }
@@ -154,6 +171,8 @@ class ContentRatingTableSeeder extends Seeder {
             'name' => 'No rating',
             'description' => 'There is no rating.',
             'icon' => NULL,
+            'created_at' => '2018-12-31 13:06:46',
+            'updated_at' => '2018-12-31 13:06:46',
         ]);
 
         DB::table('content_ratings')->insert([
@@ -161,38 +180,56 @@ class ContentRatingTableSeeder extends Seeder {
                 'name' => 'TV-Y',
                 'description' => 'This program is designed to be appropriate for all children.',
                 'icon' => 'TV-Y_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-Y7',
                 'description' => 'This program is designed for children age 7 and above.',
                 'icon' => 'TV-Y7_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-G',
                 'description' => 'Most parents would find this program suitable for all ages.',
                 'icon' => 'TV-G_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-PG',
                 'description' => 'This program contains material that parents may find unsuitable for younger children.',
                 'icon' => 'TV-PG_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-14',
                 'description' => 'This program contains some material that many parents would find unsuitable for children under 14 years of age.',
                 'icon' => 'TV-14_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-14',
                 'description' => 'This program contains some material that many parents would find unsuitable for children under 14 years of age.',
                 'icon' => 'TV-14_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'TV-MA',
                 'description' => 'This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17.',
                 'icon' => 'TV-MA_icon',
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'Not Rated',
                 'description' => NULL,
                 'icon' => NULL,
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ],[
                 'name' => 'VM14',
                 'description' => NULL,
                 'icon' => NULL,
+                'created_at' => '2018-12-31 13:06:46',
+                'updated_at' => '2018-12-31 13:06:46',
             ]
         ]);
     }
