@@ -13,7 +13,7 @@ trait PosterHandler {
         $posterController = new PosterController();
         $poster = $posterController->newImage($data->original, $owner, $folder);
 
-        if ($poster == NULL || $poster === 0 ||  $poster === 1) {
+        if ($poster == NULL || $poster === 0 ||  $poster === 1 ||  $poster === 2) {
             $poster = NULL;
         }
 

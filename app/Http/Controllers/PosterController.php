@@ -10,6 +10,9 @@ class PosterController extends Controller {
     public function newImage($url, $owner, $folderRoot) {
         $allowedExtensions = ['jpg', 'jpeg', 'JPG', 'JPEG'];
         $image = $this->downloadImage($url, $folderRoot);
+        if ($image == 0) {
+            return 2;                       // Folder creation error
+        }
 
         if ($image['response_code'] == 0) {
             return 1;                       // Network Error
@@ -34,7 +37,13 @@ class PosterController extends Controller {
             if (md5_file($image['path']) != md5_file($oldFileName)) {
                 $poster = $this->saveNewPoster($image['name']);
             } else {
-                unlink($image['path']);     // Delete downloaded image if already exists in database
+                $result = unlink($image['path']);     // Delete downloaded image if already exists in database
+                if ($result == FALSE) {               // If delete failed, file added to database to be deleted later
+                    OldFile::firstOrCreate([
+                        'path' => $image['path'],
+                        'outcome' => $image['path'],
+                    ]);
+                }
                 $poster = 0;
             }
         }
@@ -53,9 +62,22 @@ class PosterController extends Controller {
         $name = Str::orderedUuid()->toString();
         $completePath = $path . $name . '.' . $urlExtension;
 
-        $file = fopen($completePath, 'w');
-        $client = new \GuzzleHttp\Client();
-        $response = $client->get($url, ['save_to' => $file]);
-        return ['response_code'=>$response->getStatusCode(), 'path' => $completePath, 'name' => $name, 'extension' => $urlExtension];
+        if ($this->makeDirectory($path)) {   // if path existing or created
+            $file = fopen($completePath, 'w');
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get($url, ['save_to' => $file]);
+            return ['response_code' => $response->getStatusCode(), 'path' => $completePath, 'name' => $name, 'extension' => $urlExtension];
+        } else {                // if path not created or issues
+            return 0;
+        }
+    }
+
+    private function makeDirectory($path) {
+        if (!is_dir($path)){
+            //Directory does not exist, so lets create it.
+            return mkdir($path, 0777, true);
+        } else {
+            return TRUE;
+        }
     }
 }

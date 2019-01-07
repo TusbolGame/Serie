@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder {
     }
 
     /*
+     * Shows        INSERT INTO serie.shows (name, uuid, api_id, api_link, description, created_at) SELECT name, UUID(), tvmazeId, apiLink, description, addedDate FROM tvshows.shows
      * Genres       INSERT INTO serie.genres (name) SELECT name FROM tvshows.genres
      * Networks     INSERT INTO serie.networks (name, type, country_code, country_name, link, banner, created_at, updated_at) SELECT name, 0, country, NULL, link, NULL, NOW(), NOW() FROM tvshows.networks
      * Updates      INSERT INTO serie.updates (type, finished_at, created_at, updated_at) SELECT type, finish, time, finish FROM tvshows.updates

@@ -21,7 +21,7 @@ class CreateShowsTable extends Migration {
             $table->smallInteger('api_rating')->unsigned()->nullable();
             $table->text('imdb_link')->nullable();
             $table->decimal('imdb_vote', 3, 1)->nullable();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('language', 30)->nullable();
             $table->integer('network_id')->unsigned()->nullable()->index();
             $table->smallInteger('running_time')->unsigned()->nullable();

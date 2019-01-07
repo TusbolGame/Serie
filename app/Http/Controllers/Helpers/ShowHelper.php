@@ -172,7 +172,7 @@ class ShowHelper extends Controller {
 
         $apiClient = new Client([
             'base_uri' => $api_link,
-            'timeout'  => 20.0,
+            'timeout'  => 60.0,
         ]);
 
         $apiResponse = $apiClient->request('GET');
