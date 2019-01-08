@@ -32,29 +32,7 @@ class ShowHelper extends Controller {
             'airing_time' => '00:00',
             'timezone' => 'UTC',
         ];
-
-
-        if ($options['type'] == 0) {
-            $showCheck = FALSE;
-        } else {
-            $showCheck = Show::where(['api_id' => $api_ID])->first();
-        }
-        if ($showCheck == NULL || $showCheck == FALSE) {
-            $show = new Show();
-        } else {
-            $show = $showCheck;
-
-            if ($options['type'] == 1) {
-                $apiUpdateCheck = ApiUpdate::where([
-                    'show_id' => $show->id,
-                    'api_updated_at' => Carbon::createFromTimestamp($rawData->updated)->toDateTimeString(),
-                ])->first();
-
-                if ($apiUpdateCheck != NULL) {
-                    return 0;   // No update needed
-                }
-            }
-        }
+        $show = new Show();
 
         $apiUpdate = ApiUpdate::create([
             'api_updated_at' => Carbon::createFromTimestamp($rawData->updated)->toDateTimeString(),
