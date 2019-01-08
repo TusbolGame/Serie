@@ -56,31 +56,31 @@ class HomeController extends Controller {
         $start = microtime(true);
         $single = microtime(true);
 
-        $array = Show::all();
+        $array = Show::take(2);
         foreach($array as $show) {
-            echo $show->name . ' Started</br>';
-            $showHelper = new ShowHelper();
-            if ($options['type'] == 0) {
-                $result = $showHelper->updateData($show->api_id, $dataUpdate);
-                echo 'Show done in (' . (microtime(true) - $single) . ') </br>';
-                $single = microtime(true);
-
-                if ($result !== 0) {
-                    $seasonHelper = new SeasonHelper();
-                    $seasonResult = $seasonHelper->updateData($result['show'], $result['serverData']->seasons);
-                    echo 'Season Ended</br>';
-                    echo 'Season done in (' . (microtime(true) - $single) . ') </br>';
-                    $single = microtime(true);
-
-                    $episodeHelper = new EpisodeHelper();
-                    $episodeResult = $episodeHelper->updateData($result['show'], $result['serverData']->episodes);
-                    echo 'Episode Ended</br>';
-                    echo 'Episode done in (' . (microtime(true) - $single) . ') </br>';
-                    $single = microtime(true);
-                }
-            }
-            echo (microtime(true) - $start) . '</br>';
-            $start = microtime(true);
+//            echo $show->name . ' Started</br>';
+//            $showHelper = new ShowHelper();
+//            if ($options['type'] == 0) {
+//                $result = $showHelper->updateData($show->api_id, $dataUpdate);
+//                echo 'Show done in (' . (microtime(true) - $single) . ') </br>';
+//                $single = microtime(true);
+//
+//                if ($result !== 0) {
+//                    $seasonHelper = new SeasonHelper();
+//                    $seasonResult = $seasonHelper->updateData($result['show'], $result['serverData']->seasons);
+//                    echo 'Season Ended</br>';
+//                    echo 'Season done in (' . (microtime(true) - $single) . ') </br>';
+//                    $single = microtime(true);
+//
+//                    $episodeHelper = new EpisodeHelper();
+//                    $episodeResult = $episodeHelper->updateData($result['show'], $result['serverData']->episodes);
+//                    echo 'Episode Ended</br>';
+//                    echo 'Episode done in (' . (microtime(true) - $single) . ') </br>';
+//                    $single = microtime(true);
+//                }
+//            }
+//            echo (microtime(true) - $start) . '</br>';
+//            $start = microtime(true);
         }
 
 
