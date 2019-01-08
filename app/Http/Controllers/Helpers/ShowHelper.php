@@ -6,6 +6,7 @@ use App\ApiUpdate;
 use App\ContentRating;
 use App\Genre;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\PosterController;
 use App\Network;
 use App\Show;
@@ -19,86 +20,82 @@ use Illuminate\Support\Str;
 class ShowHelper extends Controller {
     use PosterHandler;
 
-    public function updateData($api_ID, $dataUpdate) {
+    /**
+     * @param {int} $api_ID - the show thet is being updated
+     * @param {object} $dataUpdate DataUpdate object - the dataUpdate that started this update
+     * @param {array} $options - array of options:
+     *  $options['type'] => 0 = new show, 1 = check apiUpdate, 2 = force update all fields
+     * @return
+     */
+    public function updateData($api_ID, $dataUpdate, $rawData, $options = []) {
         $defaults = [
             'airing_time' => '00:00',
             'timezone' => 'UTC',
         ];
 
-        $data = $this->fetchData($api_ID);
 
-        $showCheck = Show::where(['api_id' => $api_ID])->first();
-        $apiUpdateCheck = FALSE;
-        if ($showCheck == NULL) {
+        if ($options['type'] == 0) {
+            $showCheck = FALSE;
+        } else {
+            $showCheck = Show::where(['api_id' => $api_ID])->first();
+        }
+        if ($showCheck == NULL || $showCheck == FALSE) {
             $show = new Show();
         } else {
-            $apiUpdateCheck = ApiUpdate::where([
-                'show_id' => $showCheck->id,
-                'api_updated_at' => Carbon::createFromTimestamp($data->updated)->toDateTimeString(),
-            ])->first();
-
-            if ($apiUpdateCheck != NULL) {
-                return 0;   // No update needed
-            }
-
             $show = $showCheck;
+
+            if ($options['type'] == 1) {
+                $apiUpdateCheck = ApiUpdate::where([
+                    'show_id' => $show->id,
+                    'api_updated_at' => Carbon::createFromTimestamp($rawData->updated)->toDateTimeString(),
+                ])->first();
+
+                if ($apiUpdateCheck != NULL) {
+                    return 0;   // No update needed
+                }
+            }
         }
 
         $apiUpdate = ApiUpdate::create([
-            'api_updated_at' => Carbon::createFromTimestamp($data->updated)->toDateTimeString(),
+            'api_updated_at' => Carbon::createFromTimestamp($rawData->updated)->toDateTimeString(),
         ]);
 
         $show->fill([
             'uuid' => Str::orderedUuid()->toString(),
-            'name' => $data->name,
-            'api_id' => $data->id,
-            'api_link' => $data->url,
-            'api_rating' => (int)($data->rating->average * 10),
-            'description' => $data->summary,
-            'language' => $data->language,
-            'running_time' => $data->runtime,
+            'name' => $rawData->name,
+            'api_id' => $rawData->id,
+            'api_link' => $rawData->url,
+            'api_rating' => (int)($rawData->rating->average * 10),
+            'description' => $rawData->summary,
+            'language' => $rawData->language,
+            'running_time' => $rawData->runtime,
         ]);
 
 
         $status = Status::firstOrCreate([
-            'name' => $data->status
+            'name' => $rawData->status
         ]);
 
         $show->status()->associate($status);
 
-        $network = new Network();
+        $networkHandler = new NetworkController();
         $networkType = ['network', 'webChannel'];
-        if ($data->network != "") {
-            $network->fill(['type' => 0]);
-        } else if ($data->webChannel != "") {
-            $network->fill(['type' => 1]);
+        if ($rawData->network != "" && $rawData->network != NULL) {
+            $networkData = $rawData->network;
+            $network = $networkHandler->createUpdate($networkData);
+        } else if ($rawData->webChannel != "" && $rawData->webChannel != NULL) {
+            $networkData = $rawData->webChannel;
+            $network = $networkHandler->createUpdate($networkData);
         } else {
-            // TODO Check what needs to be done if none of the previous options are set (currently the API has no alternatives)
+            $network = $networkHandler->returnDefaultNetwork();
         }
 
-        $network->fill([
-            'name' => ($data->{$networkType[$network->type]}->name != NULL) ? $data->{$networkType[$network->type]}->name : 'No Network Available',
-            'country_code' => ($data->{$networkType[$network->type]}->country != NULL) ? $data->{$networkType[$network->type]}->country->code : NULL,
-            'country_name' => ($data->{$networkType[$network->type]}->country != NULL) ? $data->{$networkType[$network->type]}->country->name : NULL,
-        ]);
-
-        if (Network::where(['name' => $network->name])->first() == null) {
-            $network->save();
-        } else {
-            $network = Network::where(['name' => $network->name])->first();
-            $network->update([
-                'type' => $network->type,
-                'country_code' => $network->country_code,
-                'country_name' => $network->country_name,
-            ]);
-            $network->fresh();
-        }
         $show->network()->associate($network);
 
         $show->fill([
-            'airing_time' => ($data->schedule->time !== "") ? $data->schedule->time : $defaults['airing_time'],
-            'timezone' => ($data->{$networkType[$network->type]}->country != NULL) ? $data->{$networkType[$network->type]}->country->timezone : $defaults['timezone'],
-            'imdb_link' => ($data->externals->imdb != NULL) ? "http://www.imdb.com/title/" . $data->externals->imdb . "/" : NULL,
+            'airing_time' => ($rawData->schedule->time !== "") ? $rawData->schedule->time : $defaults['airing_time'],
+            'timezone' => ($rawData->{$networkType[$network->type]}->country != NULL) ? $rawData->{$networkType[$network->type]}->country->timezone : $defaults['timezone'],
+            'imdb_link' => ($rawData->externals->imdb != NULL) ? "http://www.imdb.com/title/" . $rawData->externals->imdb . "/" : NULL,
         ]);
 
 
@@ -128,14 +125,14 @@ class ShowHelper extends Controller {
             }
         }
 
-        $poster = $this->posterHandler($data->image, $show, config('custom.posterOriginalFolder'));
+        $poster = $this->posterHandler($rawData->image, $show, config('custom.posterOriginalFolder'));
         if ($poster == NULL) {
             $show->fill(['poster_id', NULL]);
         }
 
-        if (!empty($data->genres)) {
+        if (!empty($rawData->genres)) {
             $genreIDs = [];
-            foreach ($data->genres as $dataGenre) {
+            foreach ($rawData->genres as $dataGenre) {
                 $genre = Genre::where(['name' => $dataGenre])->first();
                 if ($genre == NULL) {       // Add new genres only if they don't exist (it's useless to update the pivot table or the name of the genre if it exists
                     $newGenre = Genre::Create([
@@ -164,23 +161,6 @@ class ShowHelper extends Controller {
             $show->genres()->sync($genreIDs);
         }
 
-        return ['show' => $show->fresh(), 'serverData' => $data->_embedded];   // an update has been performed
-    }
-
-    private function fetchData($api_ID) {
-        $api_link = "http://api.tvmaze.com/shows/" . $api_ID . "?embed[]=episodes&embed[]=seasons";
-
-        $apiClient = new Client([
-            'base_uri' => $api_link,
-            'timeout'  => 60.0,
-        ]);
-
-        $apiResponse = $apiClient->request('GET');
-
-        if ($apiResponse->getStatusCode() !== 200) {
-            return [0, $apiResponse->getStatusCode()];
-        }
-
-        return json_decode($apiResponse->getBody()->getContents());
+        return ['show' => $show->fresh(), 'serverData' => $rawData->_embedded];   // an update has been performed
     }
 }
