@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\ApiUpdate;
 use App\ContentRating;
 use App\DataUpdate;
+use App\Episode;
 use App\Genre;
-use App\Http\Controllers\Helpers\ShowHelper;
+use App\Season;
 use App\Show;
 use App\Status;
 use App\Traits\PosterHandler;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class DataUpdateController extends Controller {
@@ -21,28 +23,42 @@ class DataUpdateController extends Controller {
     private $dataUpdate;
     private $updateLimitDays = 1;
 
-    public function __construct() {
+    public function update($type, $api_id = NULL, $stream = NULL) {
         $this->dataUpdate = DataUpdate::create([
             'type' => 0
         ]);
-    }
 
-    private function dataSaver($show, $dataUpdate, $rawData) {
-        $result = [];
-        $result['show'] = $this->saveShowData($show, $this->dataUpdate, $rawData);
-        if (isset($rawData->_embedded) && $rawData->_embedded != "") {
-            // TODO Save the $this->dataupdate id to the episode table too to track their update??
-            $this->saveEpisodeData($show, $rawData);
+        if ($type == 0) {
+            $options = [
+                'type' => 0
+            ];
+        } else if ($type == 1) {
+            $options = [
+                'type' => 1
+            ];
+        } else if ($type == 2) {
+            $options = [
+                'type' => 2,
+                'stream' => $stream
+            ];
+        } else if ($type == 3) {
+            $options = [
+                'type' => 3,
+                'api_id' => $api_id,
+            ];
+        } else {
+            return new AjaxErrorController("The update type is not valid", 409);
         }
+        $results = $this->updateController($options);
+        return new AjaxSuccessController("Update successful", $results);
     }
 
     public function updateController($mainOptions) {
         if ($mainOptions['type'] == 3) {
             $show = new Show();
-            $rawData = $this->fetchData($show->api_id, 'everything');
+            $rawData = $this->fetchData($mainOptions['api_id'], 'everything');
 
-            $results = $this->dataSaver($show, $this->dataUpdate, $rawData);
-
+            return $this->dataSaver($show, $rawData);
         } else {
             if ($mainOptions['type'] == 0) {
                 $showList = Show::all();
@@ -67,7 +83,18 @@ class DataUpdateController extends Controller {
         }
     }
 
-    public function updateHandler($show, $options = []) {
+    private function dataSaver($show, $rawData) {
+        $result = [];
+        $result['show'] = $this->saveShowData($show, $this->dataUpdate, $rawData);
+        if (isset($rawData->_embedded) && $rawData->_embedded != "") {
+            $result['season'] = $this->saveSeasonData($show, $rawData->_embedded->seasons);
+            $result['episode'] = $this->saveEpisodeData($show, $rawData->_embedded->episodes);
+        }
+
+        return $result;
+    }
+
+    private function updateHandler($show, $options = []) {
         if ($show->status->name == 'Ended') {
             $rawData = $this->fetchData($show->api_id, 'minimum');
         } else {
@@ -115,13 +142,13 @@ class DataUpdateController extends Controller {
     }
 
     /**
-     * @param {int} $api_ID - the show thet is being updated
-     * @param {object} $dataUpdate DataUpdate object - the dataUpdate that started this update
+     * @param {int} $api_ID - the show that is being updated
+     * @param {JSON} $rawData - the raw data
      * @param {array} $options - array of options:
      *  $options['type'] => 0 = new show, 1 = check apiUpdate, 2 = force update all fields
      * @return
      */
-    public function saveShowData($show, $rawData, $options = []) {
+    private function saveShowData($show, $rawData, $options = []) {
         $defaults = [
             'airing_time' => '00:00',
             'timezone' => 'UTC',
@@ -222,5 +249,123 @@ class DataUpdateController extends Controller {
         }
 
         return $show->fresh();   // an update has been performed
+    }
+
+    /* Season Handling */
+
+    private function saveSeasonData($show, $rawData) {
+        return $this->updateSeasonData($show, $rawData);
+    }
+
+    private function updateSeasonData($show, $rawData) {
+        if (!isset($rawData) || $rawData == "") {
+            return 0;
+        }
+
+        $newSeasons = new Collection();
+        foreach ($rawData as $seasonData) {
+            $season = $this->addSeasonData($show, $seasonData);
+            $newSeasons->push($season->fresh());
+        }
+        if (empty($newSeasons)) {
+            return 0;
+        }
+        return $newSeasons;
+    }
+
+    private function addSeasonData($show, $rawData) {
+        $season = Season::firstOrNew([
+            'uuid' => Str::orderedUuid()->toString(),
+            'api_id' => $rawData->id,
+            'season' => $rawData->number,
+            'episodes' => ($rawData->episodeOrder !== NULL) ? $rawData->episodeOrder : NULL,
+            'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
+            'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
+        ]);
+
+        $poster = $this->posterHandler($rawData->image, $season, config('custom.seasonOriginalFolder'));
+        if ($poster == NULL) {
+            $season->fill(['poster_id', NULL]);
+        } else {
+            $season->posters()->save($poster);
+            $freshPoster = $poster->fresh();
+            $season->update(['poster_id' => $freshPoster->id]);
+        }
+
+        $season->show()->associate($show);
+        $season->save();
+
+        return $season;
+    }
+
+    /* Episode Handling */
+
+    private function saveEpisodeData($show, $rawData) {
+        return $this->updateEpisodeData($show, $rawData);
+    }
+
+    private function updateEpisodeData($show, $rawData) {
+        if (!isset($rawData) || $rawData == "") {
+            return 0;
+        }
+        $newEpisodes = new Collection();
+        foreach ($rawData as $episodeData) {
+            $episode = $this->addEpisodeData($show, $episodeData);
+            $newEpisodes->push($episode->fresh());
+        }
+        if (empty($newEpisodes)) {
+            return 0;
+        }
+        return $newEpisodes;
+    }
+
+    private function addEpisodeData($show, $rawData) {
+        $episode = Episode::firstOrNew([
+            'uuid' => Str::orderedUuid()->toString(),
+            'api_id' => $rawData->id,
+            'api_link' => $rawData->url,
+            'episode_number' => $rawData->number,
+            'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
+            'title' => $rawData->name,
+            'summary' => $rawData->summary,
+        ]);
+
+        $airstamp = NULL;
+        if (isset($rawData->airstamp) && $rawData->airstamp != "") {
+            $airstamp = \DateTime::createFromFormat(\DateTime::W3C, $rawData->airstamp);
+            if ($airstamp == FALSE) {
+                $airstamp = NULL;
+            }
+        }
+        $episode->fill(['airing_at' => $airstamp]);
+
+        $poster = $this->posterHandler($rawData->image, $episode, config('custom.episodeOriginalFolder'));
+        if ($poster == NULL) {
+            $episode->fill(['poster_id', NULL]);
+        } else {
+            $episode->posters()->save($poster);
+            $freshPoster = $poster->fresh();
+            $episode->update(['poster_id' => $freshPoster->id]);
+        }
+
+        $season = Season::where([
+            'show_id' => $show->id,
+            'season' => $rawData->season,
+        ])->first();
+
+        if ($season != NULL) {
+            $episode->season()->associate($season);
+        }
+
+        $episode->show()->associate($show);
+        $episode->save();
+
+        return $episode;
+    }
+
+    public function episodeCodeGenerator($season, $episode) {
+        $code = "S" . str_pad($season, 2, '0', STR_PAD_LEFT) .
+            "E" . str_pad($episode, 2, '0', STR_PAD_LEFT);
+        return $code;
     }
 }
