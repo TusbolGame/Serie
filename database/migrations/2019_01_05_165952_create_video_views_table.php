@@ -17,7 +17,7 @@ class CreateVideoViewsTable extends Migration
             $table->integer('user_id')->unsigned()->nullable()->index();
             $table->integer('episode_id')->unsigned()->nullable()->index();
             $table->integer('torrent_id')->unsigned()->nullable()->index();
-            $table->dateTime('ended_at')->index();
+            $table->dateTime('ended_at')->nullable()->index();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

@@ -24,9 +24,6 @@ class DataUpdateController extends Controller {
     private $updateLimitDays = 1;
 
     public function update($type, $api_id = NULL, $stream = NULL) {
-        $this->dataUpdate = DataUpdate::create([
-            'type' => 0
-        ]);
 
         if ($type == 0) {
             $options = [
@@ -49,6 +46,9 @@ class DataUpdateController extends Controller {
         } else {
             return new AjaxErrorController("The update type is not valid", 409);
         }
+        $this->dataUpdate = DataUpdate::create([
+            'type' => $type
+        ]);
         $results = $this->updateController($options);
         return new AjaxSuccessController("Update successful", $results);
     }
@@ -245,7 +245,7 @@ class DataUpdateController extends Controller {
             $show->update(['poster_id' => $freshPoster->id]);
         }
         if (isset($genreIDs) && is_array($genreIDs)) {
-            $show->genres()->sync($genreIDs);
+            $show->genres()->sync($genreIDs, false);
         }
 
         return $show->fresh();   // an update has been performed

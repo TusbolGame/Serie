@@ -25,4 +25,8 @@ class VideoView extends Model {
     public function torrent() {
         return $this->belongsTo(Torrent::class);
     }
+
+    public function bookmark() {
+        return $this->hasMany(Bookmark::class);
+    }
 }

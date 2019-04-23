@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Episode extends Model {
     /**
@@ -29,5 +30,10 @@ class Episode extends Model {
 
     public function posters() {
         return $this->morphMany(Poster::class, 'posterable');
+    }
+
+    public function unwatched() {
+        return DB::table('episodes')
+            ->where('airing_at', '!=', NULL);
     }
 }

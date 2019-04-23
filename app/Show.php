@@ -36,6 +36,10 @@ class Show extends Model {
         return $this->hasMany(Episode::class);
     }
 
+    public function unwatched() {
+        return $this->episode()->where('airing_at', '<', 'NOW()')->orderBy('airing_at', 'asc');
+    }
+
     public function rating() {
         return $this->hasMany(Rating::class);
     }

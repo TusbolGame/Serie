@@ -2,33 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Action;
-use App\ActionType;
-use App\ApiUpdate;
-use App\AuthTracking;
-use App\AuthType;
-use App\Bookmark;
-use App\BookmarkType;
-use App\ContentRating;
 use App\Episode;
-use App\Genre;
-use App\Http\Controllers\Helpers\EpisodeHelper;
-use App\Http\Controllers\Helpers\SeasonHelper;
-use App\Http\Controllers\Helpers\ShowHelper;
-use App\Network;
-use App\Rating;
-use App\Season;
 use App\Show;
-use App\Poster;
-use App\Status;
-use App\Torrent;
-use App\DataUpdate;
-use App\User;
-use App\VideoQuality;
-use App\VideoView;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller {
     /**
@@ -46,9 +22,22 @@ class HomeController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index() {
-//        $models = [new Action(), new ActionType(), new ApiUpdate(), new AuthTracking(), new AuthType(), new Bookmark(), new BookmarkType(),
-//            new ContentRating(), new Episode(), new Genre(), new Network(), new Rating(), new Season(), new Show(), new ShowPoster(),
-//            new Status(), new Torrent(), new DataUpdate(), new User(), new VideoQuality(), new VideoView()];
+//        $episodes = Episode::groupBy('show_id')->get();
+//        $episodes = new Episode();
+//        $episodes = $episodes->unwatched()->get();
+//        $episodesSql = Episode::whereRaw('airing_at < NOW()')->doesnthave('videoView', 'and', function($query) {
+//            $query->where('ended_at', '!=', NULL);
+//        })->groupBy('show_id')->with(['show', 'show'])->toSql();
+//        $episodes = Episode::whereRaw('CONVERT_TZ(DATE_ADD(airing_at, INTERVAL shows.running_time MINUTE), "UTC", Europe/Rome) <= NOW()')->doesnthave('videoView', 'and', function($query) {
+
+//            $episodes = Episode::whereRaw('airing_at < NOW()')->doesnthave('videoView', 'and', function($query) {
+//            $query->where('ended_at', '!=', NULL);
+//        })->groupBy('show_id')->with(['show', 'videoView', 'videoView.bookmark' => function($query) {
+//            $query->orderBy('time', 'desc');
+//        }])->get();
+////        dd($episodesSql);
+////        $episodes = Episode::doesnthave('videoView')->with(['show', 'show.posters'])->get();
+//        var_dump($episodes->toArray()); //$episodes->toArray()[0]['show'],
 
         return view('home');
     }

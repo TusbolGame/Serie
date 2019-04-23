@@ -44,7 +44,7 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
+            'strict' => false,      // Changed from true (true = MySQL 5.7 setting, issues on group by)
             'engine' => null,
         ],
 
