@@ -18,6 +18,8 @@ Route::get('/{name}', [
 
 Auth::routes();
 
+Route::post('/errors/javascript/add', 'JavascriptErrorController@errorManager')->middleware('auth');
+
 Route::get('/data/update/{type}', 'DataUpdateController@updateManager')->middleware('auth');
 Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');
 Route::get('/episode/torrent/check/{magnetlink}', 'EpisodeController@torrentCheck')->middleware('auth');

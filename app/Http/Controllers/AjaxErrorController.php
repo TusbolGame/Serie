@@ -14,6 +14,9 @@ class AjaxErrorController extends Controller {
         $this->message = $message;
         $this->status = $status;
         $this->data = $data;
+
+        $javascriptError = new JavascriptErrorController();
+        $javascriptError->errorHandler(NULL, $this->data, $this->status);
     }
 
     public function __toString() {

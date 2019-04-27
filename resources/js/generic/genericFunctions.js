@@ -1,5 +1,10 @@
 function ajaxCaller(args) {
     let ajaxOptions = setDefaultOptions(args);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     return $.ajax({
         url: ajaxOptions.url,
         headers: ajaxOptions.headers,
@@ -21,9 +26,6 @@ function ajaxCaller(args) {
                 xml: 'text/xml',
                 text: 'text/plain'
             },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            },
             async: true,
             cache: false,
             data: data
@@ -44,6 +46,20 @@ function defaultAjaxErrorCallback(error, ajaxErrorCallback = null) {
             console.log(error);
         }
     }
+}
+
+function errorManager(errorData) {
+    var args = {
+        url: '/errors/javascript/add',
+        data: {error: errorData},
+        method: 'POST'
+    };
+
+    ajaxHandler(args,
+        function() {
+
+        }, null
+    );
 }
 
 function defaultAjaxSuccessCallback(serverData, successCallbackFunction) {
