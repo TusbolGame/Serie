@@ -40,9 +40,11 @@ function defaultAjaxErrorCallback(error, ajaxErrorCallback = null) {
     } else {
         if (error != null && typeof error  !== 'undefined') {
             if (error.responseJSON != null && typeof error.responseJSON  !== 'undefined') {
+                errorManager(error);
                 console.log(error.responseJSON);
             }
         } else {
+            errorManager(error);
             console.log(error);
         }
     }
