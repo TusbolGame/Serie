@@ -24,7 +24,9 @@ class EpisodeController extends Controller {
 
     public function episode($episode_id) {
         $episodeCheck = Episode::where('uuid', $episode_id)
-            ->with('posters', 'torrent', 'videoView', 'show')
+            ->with(['posters', 'torrent', 'videoView' => function($query) {
+                $query->where('ended_at', '!=', NULL);
+            }, 'show'])
             ->first();
 
         if (empty($episodeCheck)) {

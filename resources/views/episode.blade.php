@@ -26,7 +26,9 @@
                     {{$episode->summary}}
                 </div>
                 <div class="col-xl-3 col-sm-12">
+                    @if (isset($episode->posters->first()->name))
                     <img class="w-100" src="/{{config('custom.episodeOriginalFolder').$episode->posters->first()->name}}.jpg" >
+                    @endif
                 </div>
             </div>
             <div class="row pb-3">

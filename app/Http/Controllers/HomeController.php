@@ -60,7 +60,9 @@ class HomeController extends Controller {
                 })
                 ->with(['show'
                     ])
-                ->withCount('videoView')
+                ->withCount(['videoView' => function($query) {
+                    $query->where('ended_at', '!=', NULL);
+                }])
                 ->withCount('torrent')
                 ->orderBy('airing_at', 'asc')
                 ->get();
