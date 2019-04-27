@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* Deep Purple, Blue, Green, Amber, Deep Orange, Indigo, Purple, Light Blue, Teal, Lime, Orange, Pink, Red, Grey, White */
+.userNoSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cmn-click {
+  cursor: pointer;
+}

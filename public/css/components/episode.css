@@ -1,0 +1,67 @@
+@charset "utf-8";
+/* Deep Purple, Blue, Green, Amber, Deep Orange, Indigo, Purple, Light Blue, Teal, Lime, Orange, Pink, Red, Grey, White */
+.userNoSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cmn-click {
+  cursor: pointer;
+}
+.episode .card-img-top {
+  position: relative;
+  width: 100%;
+  height: 15vw;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.episode .card-body {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  min-height: 2.5vw;
+}
+.episode .card-actions {
+  height: 0vw;
+  width: 100%;
+  opacity: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.episode .card-actions .actions-basic {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.episode .card-actions .actions-basic .cmn-button:not([data-type="0"]) {
+  opacity: 0;
+  -webkit-transform: scale(0) rotate(-60deg);
+          transform: scale(0) rotate(-60deg);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+}
+.episode .card-actions .actions-basic .cmn-button[data-type="0"] {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  transition: -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, -webkit-transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+.episode:hover .card-actions {
+  opacity: 1;
+  height: 40px;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+.episode:hover .card-actions .actions-basic .cmn-button:not([data-type="0"]) {
+  opacity: 1;
+  -webkit-transform: scale(1) rotate(0deg);
+          transform: scale(1) rotate(0deg);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
