@@ -141,13 +141,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row pb-3 mt-4">
-                <h2 class="col-12 m-0 pt-2">Schedule</h2>
-            </div>
-            <div class="row" id="schedule">
-                <div class="col-12">
-                </div>
-            </div>
         </div>
     </div>
     <div class="row justify-content-center">

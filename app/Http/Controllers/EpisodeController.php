@@ -22,6 +22,18 @@ class EpisodeController extends Controller {
         $this->middleware('auth');
     }
 
+    public function episode($episode_id) {
+        $episodeCheck = Episode::where('uuid', $episode_id)
+            ->with('posters', 'torrent', 'videoView', 'show')
+            ->first();
+
+        if (empty($episodeCheck)) {
+            abort(404);
+        }
+
+        return view('episode', ['episode' => $episodeCheck]);
+    }
+
     public function actionAdd($buttonType) {
         $actionType = '';
         switch ($buttonType) {

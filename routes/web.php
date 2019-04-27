@@ -22,6 +22,7 @@ Route::post('/errors/javascript/add', 'JavascriptErrorController@errorManager')-
 
 Route::get('/data/update/{type}', 'DataUpdateController@updateManager')->middleware('auth');
 
+Route::get('/episode/{episode}', 'EpisodeController@episode')->middleware('auth');
 Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');
 Route::get('/episode/torrent/check/{magnetlink}', 'EpisodeController@torrentCheck')->middleware('auth');
 Route::get('/episode/view/mark/{episode}/{state}', 'EpisodeController@viewMark')->middleware('auth');
