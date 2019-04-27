@@ -172,7 +172,7 @@ class DataUpdateController extends Controller {
             'api_id' => $rawData->id,
             'api_link' => $rawData->url,
             'api_rating' => (int)($rawData->rating->average * 10),
-            'description' => $rawData->summary,
+            'description' => strip_tags($rawData->summary),
             'language' => $rawData->language,
             'running_time' => $rawData->runtime,
         ]);
@@ -219,7 +219,7 @@ class DataUpdateController extends Controller {
                 $imdbVote = $imdbVoteResult->text();
                 $imdbVote = preg_match('/(\d)?\d(.)\d/', $imdbVote, $imdbVoteMatches);
                 if ($imdbVote == 1) {
-                    $show->imdb_vote = (int)(preg_replace('/,/', '.', $imdbVoteMatches[0])) * 10;
+                    $show->imdb_rating = (preg_replace('/,/', '.', $imdbVoteMatches[0]));
                 }
             }
 
@@ -339,7 +339,7 @@ class DataUpdateController extends Controller {
             'episode_number' => $rawData->number,
             'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
             'title' => $rawData->name,
-            'summary' => $rawData->summary,
+            'summary' => strip_tags($rawData->summary),
         ]);
 
         $airstamp = NULL;

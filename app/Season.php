@@ -18,6 +18,10 @@ class Season extends Model {
         return $this->belongsTo(Show::class);
     }
 
+    public function episode() {
+        return $this->hasMany(Episode::class);
+    }
+
     public function posters() {
         return $this->morphMany(Poster::class, 'posterable');
     }
