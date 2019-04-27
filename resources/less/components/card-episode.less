@@ -1,0 +1,250 @@
+@import "../generic/cmn-variables";
+
+.actions-basic-shown {
+    & .actions-basic {
+        & .cmn-button {
+            &:not([data-type="0"]) {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+
+                transition: all @transitionTime @transitionType @transitionDelay / 2;
+            }
+        }
+    }
+}
+
+.card-episode {
+    & .episode-poster-container {
+        overflow: hidden;
+
+        & .episode-poster {
+            position: relative;
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+
+            filter: blur(0px);
+
+            transition: filter @transitionTime @transitionType;
+        }
+    }
+
+    & .card-body {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        min-height: 2.5vw;
+
+        transition: min-height @transitionTime @transitionType @noTransitionDelay;
+
+        & .card-info {
+            & .card-info-default {
+                & .card-info-default-container {
+                    min-height: 30px;
+                    overflow: hidden;
+                }
+
+                & .episode-code {
+                    max-height: 30px;
+                    opacity: 1;
+
+                    transition: max-height @transitionTime / 2 @transitionType @transitionDelay / 4,
+                                opacity @transitionTime / 4 @transitionType @noTransitionDelay;
+                }
+
+                & .episode-show-name {
+                    max-height: 0px;
+                    opacity: 0;
+                    overflow: hidden;
+
+                    transition: max-height @transitionTime / 2 @transitionType @noTransitionDelay,
+                                opacity @transitionTime / 2 @transitionType @noTransitionDelay;
+                }
+            }
+
+            & .card-info-extra {
+                opacity: 0;
+                height: 0px;
+                overflow: hidden;
+
+                transition: height @transitionTime / 2 @transitionType @noTransitionDelay;
+            }
+        }
+
+        & .card-actions {
+            height: 0vw;
+            width: 100%;
+            opacity: 0;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: flex-end;
+            align-items: center;
+
+            transition: height @transitionTime / 2 @transitionType @transitionDelay / 2,
+                        opacity @transitionTime / 2 @transitionType @transitionDelay / 2;
+
+            & .cmn-button {
+                &:not([data-type="0"]) {
+                    opacity: 0;
+
+                    transform: scale(0) rotate(-60deg);
+
+                    transition: all @transitionTime @transitionType @noTransitionDelay;
+                }
+
+                &[data-type="0"] {
+                    transform: rotate(0deg);
+
+                    transition: transform @transitionTime / 2 @transitionType @transitionDelay / 2;
+                }
+            }
+
+            & .actions-basic {
+                width: 100%;
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            & .actions-extra {
+                width: 100%;
+                height: 0px;
+                opacity: 0;
+
+                transition: height @transitionTime / 2 @transitionType @noTransitionDelay,
+                            opacity @transitionTime / 2 @transitionType @noTransitionDelay;
+            }
+        }
+    }
+
+    &:hover {
+        & .episode-poster-container {
+            & .episode-poster {
+                filter: blur(10px);
+
+                transition: filter @transitionTime @transitionType;
+            }
+        }
+
+        & .card-body {
+            & .card-info {
+                & .card-info-default {
+                    & .episode-code {
+                        max-height: 0px;
+                        opacity: 0;
+
+                        transition: max-height @transitionTime / 2 @transitionType @transitionDelay / 4,
+                                    opacity @transitionTime / 4 @transitionType @noTransitionDelay;
+                    }
+
+                    & .episode-show-name {
+                        max-height: 90px;
+                        opacity: 1;
+
+                        transition: max-height @transitionTime / 2 @transitionType @noTransitionDelay,
+                                    opacity @transitionTime / 2 @transitionType @noTransitionDelay;
+                    }
+                }
+            }
+
+            & .card-actions {
+                opacity: 1;
+                height: 40px;
+
+                transition: height @transitionTime @transitionType @noTransitionDelay,
+                            opacity @transitionTime @transitionType @transitionDelay / 2;
+
+                & .cmn-button {
+                    &:not([data-type="0"]) {
+                        opacity: 1;
+                        transform: scale(1) rotate(0deg);
+
+                        transition: all @transitionTime @transitionType @transitionDelay / 2;
+                    }
+                }
+
+                & .actions-basic {
+                }
+            }
+        }
+    }
+
+    &.expanded {
+        & .episode-poster-container {
+            & .episode-poster {
+                filter: blur(10px);
+
+                transition: filter @transitionTime @transitionType;
+            }
+        }
+
+        & .card-body {
+            min-height:  100%;
+
+            transition: min-height @transitionTime @transitionType @noTransitionDelay;
+
+            & .card-info {
+                & .card-info-default {
+                    & .episode-code {
+                        max-height: 60px;
+                        opacity: 1;
+
+                        transition: max-height @transitionTime / 2 @transitionType @noTransitionDelay,
+                                    opacity @transitionTime / 4 @transitionType @noTransitionDelay;
+                    }
+
+                    & .episode-show-name {
+                        max-height: 60px;
+                        opacity: 1;
+
+                        transition: max-height @transitionTime / 2 @transitionType @noTransitionDelay,
+                                    opacity @transitionTime / 2 @transitionType @noTransitionDelay;
+                    }
+                }
+
+                & .card-info-extra {
+                    opacity: 1;
+                    height: 60px;
+
+                    transition: height @transitionTime @transitionType @noTransitionDelay,
+                    opacity @transitionTime @transitionType @transitionDelay / 2;
+                }
+            }
+
+            & .card-actions {
+                opacity: 1;
+                height: 150px;
+
+                transition: height @transitionTime @transitionType @transitionDelay;
+
+                & .cmn-button {
+                    &:not([data-type="0"]) {
+                        opacity: 1;
+                        transform: scale(1) rotate(0deg);
+
+                        transition: all @transitionTime @transitionType @transitionDelay / 2;
+                    }
+
+                    &[data-type="0"] {
+                        transform: rotate(180deg);
+
+                        transition: transform @transitionTime / 2 @transitionType @transitionDelay / 2;
+                    }
+                }
+
+                & .actions-basic {
+                }
+
+                & .actions-extra {
+                    height: 100%;
+                    opacity: 1;
+
+                    transition: height @transitionTime @transitionType @transitionDelay,
+                                opacity @transitionTime @transitionType @transitionDelay;
+                }
+            }
+        }
+    }
+}

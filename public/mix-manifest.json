@@ -1,11 +1,23 @@
 {
     "/js/app.js": "/js/app.js",
+    "/css/generic/cmn-variables.css": "/css/generic/cmn-variables.css",
+    "/css/generic/cmn-fonts.css": "/css/generic/cmn-fonts.css",
+    "/css/generic/cmn-animations.css": "/css/generic/cmn-animations.css",
+    "/css/generic/cmn-loaders.css": "/css/generic/cmn-loaders.css",
+    "/css/generic/cmn-inputs.css": "/css/generic/cmn-inputs.css",
+    "/css/generic/cmn-styles.css": "/css/generic/cmn-styles.css",
+    "/css/common/base.css": "/css/common/base.css",
+    "/css/components/card-episode.css": "/css/components/card-episode.css",
+    "/css/plugins/Stream.css": "/css/plugins/Stream.css",
     "/css/app.css": "/css/app.css",
     "/js/manifest.js": "/js/manifest.js",
     "/js/vendor.js": "/js/vendor.js",
     "/js/generic.js": "/js/generic.js",
     "/js/common.js": "/js/common.js",
+    "/js/components.js": "/js/components.js",
     "/js/plugins.js": "/js/plugins.js",
+    "/css/generic.css": "/css/generic.css",
     "/css/common.css": "/css/common.css",
+    "/css/components.css": "/css/components.css",
     "/css/plugins.css": "/css/plugins.css"
 }

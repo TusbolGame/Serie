@@ -19,9 +19,11 @@ class CreateBookmarksTable extends Migration {
             $table->timestamps();
 
             $table->foreign('video_view_id')->references('id')->on('video_views')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('bookmark_type_id')->references('id')->on('bookmark_types')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 

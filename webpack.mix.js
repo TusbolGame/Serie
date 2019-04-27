@@ -15,6 +15,8 @@ mix.js('resources/js/app.js', 'public/js')
     .extract([
     'jquery',
     'bootstrap',
+    'bootbox',
+    'moment',
     'axios',
     'lodash',
     'popper.js',
@@ -29,15 +31,42 @@ mix.js('resources/js/app.js', 'public/js')
         ],
         'public/js/common.js')
     .scripts([
+            'resources/js/components/*.js'
+        ],
+        'public/js/components.js')
+    .scripts([
             'resources/js/plugins/*.js'
         ],
         'public/js/plugins.js')
     .sass('resources/sass/app.scss', 'public/css')
     // .less('resources/less/*.less', 'resources/css/*.less')
     // .styles('resources/css/generic/*.css', 'public/css/generic.css')
+    .less('resources/less/generic/cmn-variables.less', 'public/css/generic')
+    .less('resources/less/generic/cmn-fonts.less', 'public/css/generic')
+    .less('resources/less/generic/cmn-animations.less', 'public/css/generic')
+    .less('resources/less/generic/cmn-loaders.less', 'public/css/generic')
+    .less('resources/less/generic/cmn-inputs.less', 'public/css/generic')
+    .less('resources/less/generic/cmn-styles.less', 'public/css/generic')
+    .less('resources/less/common/base.less', 'public/css/common')
+    .less('resources/less/components/card-episode.less', 'public/css/components')
+    .less('resources/less/plugins/Stream.less', 'public/css/plugins')
     .styles([
-        'resources/less/common/base.css'
+        'public/css/generic/cmn-variables.css',
+        'public/css/generic/cmn-fonts.css',
+        'public/css/generic/cmn-animations.css',
+        'public/css/generic/cmn-loaders.css',
+        'public/css/generic/cmn-inputs.css',
+        'public/css/generic/cmn-styles.css',
+    ], 'public/css/generic.css')
+    .styles([
+        'public/css/common/base.css'
     ], 'public/css/common.css')
+    .styles([
+        'public/css/components/card-episode.css'
+    ], 'public/css/components.css')
+    .styles([
+        'public/css/plugins/Stream.css'
+    ], 'public/css/plugins.css')
     .styles(['resources/less/plugins/Stream.css'], 'public/css/plugins.css')
-    .browserSync('wallpapers.local')
+    .browserSync('newserie.local')
     .disableNotifications();

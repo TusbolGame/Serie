@@ -34,11 +34,20 @@ class CreateShowsTable extends Migration {
             $table->timestamps();
 
             $table->foreign('network_id')->references('id')->on('networks')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
             $table->foreign('content_rating_id')->references('id')->on('content_ratings')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
             $table->foreign('status_id')->references('id')->on('statuses')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
+        });
+
+        Schema::create('show_user', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('show_id')->unsigned()->nullable();
+            $table->primary(['user_id', 'show_id']);
         });
 
 
@@ -51,5 +60,6 @@ class CreateShowsTable extends Migration {
      */
     public function down() {
         Schema::dropIfExists('shows');
+        Schema::dropIfExists('show_user');
     }
 }

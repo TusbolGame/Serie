@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OldFile extends Model {
+class TempPoster extends Model {
     /**
      * The attributes that are mass assignable.
      *

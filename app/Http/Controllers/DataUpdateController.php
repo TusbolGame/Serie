@@ -6,16 +6,16 @@ use App\ApiUpdate;
 use App\ContentRating;
 use App\DataUpdate;
 use App\Episode;
-use App\Genre;
 use App\Season;
 use App\Show;
 use App\Status;
 use App\Traits\PosterHandler;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Symfony\Component\DomCrawler\Crawler;
 
 class DataUpdateController extends Controller {
     use PosterHandler;
@@ -23,22 +23,21 @@ class DataUpdateController extends Controller {
     private $dataUpdate;
     private $updateLimitDays = 1;
 
-    public function update($type, $api_id = NULL, $stream = NULL) {
-
-        if ($type == 0) {
+    public function updateManager($type, $api_id = NULL, $uuid = NULL) {
+        if ($type == 0) {                   // Update all shows
             $options = [
                 'type' => 0
             ];
-        } else if ($type == 1) {
+        } else if ($type == 1) {            // Update shows where last update $this->updateLimitDays days ago
             $options = [
                 'type' => 1
             ];
-        } else if ($type == 2) {
+        } else if ($type == 2) {            // Update a specific show
             $options = [
                 'type' => 2,
-                'stream' => $stream
+                'uuid' => $uuid
             ];
-        } else if ($type == 3) {
+        } else if ($type == 3) {            // New show
             $options = [
                 'type' => 3,
                 'api_id' => $api_id,
@@ -50,6 +49,8 @@ class DataUpdateController extends Controller {
             'type' => $type
         ]);
         $results = $this->updateController($options);
+
+        $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
         return new AjaxSuccessController("Update successful", $results);
     }
 
@@ -68,7 +69,7 @@ class DataUpdateController extends Controller {
                 $showList = Show::with('status')->where('updated_at', '<', $limitDate->getTimestamp());
                 $options = [];
             } else if ($mainOptions['type'] == 2) {
-                $showList = Show::where('uuid', $mainOptions['stream'])->get();
+                $showList = Show::where('uuid', $mainOptions['uuid'])->get();
                 $options = [];
             } else {
                 // TODO Handle error on wrong update type
@@ -85,7 +86,7 @@ class DataUpdateController extends Controller {
 
     private function dataSaver($show, $rawData) {
         $result = [];
-        $result['show'] = $this->saveShowData($show, $this->dataUpdate, $rawData);
+        $result['show'] = $this->saveShowData($show, $rawData);
         if (isset($rawData->_embedded) && $rawData->_embedded != "") {
             $result['season'] = $this->saveSeasonData($show, $rawData->_embedded->seasons);
             $result['episode'] = $this->saveEpisodeData($show, $rawData->_embedded->episodes);
@@ -95,16 +96,19 @@ class DataUpdateController extends Controller {
     }
 
     private function updateHandler($show, $options = []) {
-        if ($show->status->name == 'Ended') {
+        if (isset($show->status) && $show->status->name == 'Ended') {
             $rawData = $this->fetchData($show->api_id, 'minimum');
         } else {
             $rawData = $this->fetchData($show->api_id, 'everything');
         }
-        if ($rawData == 0) {
+        if (is_int($rawData) && $rawData == 0) {
             return -1;
         }
-        if ($rawData == 1) {
+        if (is_int($rawData) && $rawData == 1) {
             return -2;
+        }
+        if (is_int($rawData) && $rawData == 1) {
+            return -3;
         }
 
         $apiUpdateCheck = ApiUpdate::where([
@@ -115,7 +119,7 @@ class DataUpdateController extends Controller {
         if ($apiUpdateCheck != NULL) {
             return 0;   // No update needed
         }
-        return $this->dataSaver($show, $this->dataUpdate, $rawData);
+        return $this->dataSaver($show, $rawData);
     }
 
     private function fetchData($api_ID, $type) {
@@ -132,10 +136,14 @@ class DataUpdateController extends Controller {
             'timeout'  => 60.0,
         ]);
 
-        $apiResponse = $apiClient->request('GET');
+        try {
+            $apiResponse = $apiClient->request('GET');
+        } catch (ClientException $e) {
+            return 1;
+        }
 
         if ($apiResponse->getStatusCode() !== 200) {
-            return 1;
+            return 2;
         }
 
         return json_decode($apiResponse->getBody()->getContents());
@@ -204,12 +212,15 @@ class DataUpdateController extends Controller {
             ]);
 
             $imdbResponse = $imdbClient->request('GET');
-            $crawler = new \Symfony\Component\DomCrawler\Crawler($imdbResponse->getBody()->getContents());
+            $crawler = new Crawler($imdbResponse->getBody()->getContents());
 
-            $imdbVote = $crawler->filter('.ratingValue span[itemprop="ratingValue"]')->text();
-            $imdbVote = preg_match('/(\d)?\d(.)\d/', $imdbVote, $imdbVoteMatches);
-            if ($imdbVote == 1) {
-                $show->imdb_vote = (int)(preg_replace('/,/', '.', $imdbVoteMatches[0])) * 10;
+            $imdbVoteResult = $crawler->filter('.ratingValue span[itemprop="ratingValue"]');
+            if ($imdbVoteResult->count() !== 0) {
+                $imdbVote = $imdbVoteResult->text();
+                $imdbVote = preg_match('/(\d)?\d(.)\d/', $imdbVote, $imdbVoteMatches);
+                if ($imdbVote == 1) {
+                    $show->imdb_vote = (int)(preg_replace('/,/', '.', $imdbVoteMatches[0])) * 10;
+                }
             }
 
             $check = preg_match('/[\n\s]*(.*)?[\n\s]*?</', $crawler->filter('.subtext')->html(), $imdbContentRatingMatches);
@@ -282,6 +293,7 @@ class DataUpdateController extends Controller {
             'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
             'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
         ]);
+        $season->save();
 
         $poster = $this->posterHandler($rawData->image, $season, config('custom.seasonOriginalFolder'));
         if ($poster == NULL) {
@@ -338,6 +350,7 @@ class DataUpdateController extends Controller {
             }
         }
         $episode->fill(['airing_at' => $airstamp]);
+        $episode->save();
 
         $poster = $this->posterHandler($rawData->image, $episode, config('custom.episodeOriginalFolder'));
         if ($poster == NULL) {

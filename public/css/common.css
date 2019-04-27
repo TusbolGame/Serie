@@ -3,7 +3,6 @@
 .userNoSelect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -16,6 +15,7 @@ body {
   height: 100%;
   margin: 0px;
   padding: 0px;
+  font-family: "Roboto";
 }
 #main-wrapper {
   max-width: 2000px;
@@ -44,4 +44,3 @@ body {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-/*# sourceMappingURL=base.css.map */

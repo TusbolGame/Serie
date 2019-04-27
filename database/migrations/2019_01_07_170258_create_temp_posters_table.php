@@ -4,14 +4,14 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOldFilesTable extends Migration {
+class CreateTempPostersTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('old_files', function (Blueprint $table) {
+        Schema::create('temp_posters', function (Blueprint $table) {
             $table->increments('id');
             $table->text('path');
             $table->text('outcome');
@@ -25,6 +25,6 @@ class CreateOldFilesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('old_files');
+        Schema::dropIfExists('temp_posters');
     }
 }

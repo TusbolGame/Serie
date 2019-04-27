@@ -28,12 +28,22 @@ class Episode extends Model {
         return $this->hasMany(VideoView::class);
     }
 
-    public function posters() {
-        return $this->morphMany(Poster::class, 'posterable');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * Torrent status details:
+     * - 5 => Unusable, avoid
+     * - 0 => Default, just added to DB
+     * - 1 => Started downloading
+     * - 2 => Finished downloading
+     * - 3 => Converted
+     * - 4 => Used
+     */
+    public function torrent() {
+        return $this->hasMany(Torrent::class)->orderByRaw('FIELD(status, 4, 3, 2, 1, 0, 5)');
     }
 
-    public function unwatched() {
-        return DB::table('episodes')
-            ->where('airing_at', '!=', NULL);
+    public function posters() {
+        return $this->morphMany(Poster::class, 'posterable');
     }
 }

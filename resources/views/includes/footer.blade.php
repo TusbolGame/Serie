@@ -7,6 +7,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/generic.js') }}" defer></script>
     <script src="{{ asset('js/common.js') }}" defer></script>
+    <script src="{{ asset('js/components.js') }}" defer></script>
     <script src="{{ asset('js/plugins.js') }}" defer></script>
     @stack('pagespecificscripts')
 </footer>

@@ -8,8 +8,9 @@
 
 <!-- Styles -->
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-{{--<link href="{{ asset('css/generic.css') }}" rel="stylesheet">--}}
+<link href="{{ asset('css/generic.css') }}" rel="stylesheet">
 <link href="{{ asset('css/common.css') }}" rel="stylesheet">
+<link href="{{ asset('css/components.css') }}" rel="stylesheet">
 <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
 <link rel="shortcut icon" href="{{{ asset('img/ui/favicon.png') }}}">
 @stack('pagespecificstyles')

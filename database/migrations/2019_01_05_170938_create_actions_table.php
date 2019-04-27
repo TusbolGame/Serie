@@ -18,9 +18,11 @@ class CreateActionsTable extends Migration {
             $table->timestamps();
 
             $table->foreign('video_view_id')->references('id')->on('video_views')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('action_type_id')->references('id')->on('action_types')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 

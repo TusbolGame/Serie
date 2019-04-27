@@ -1,5 +1,7 @@
 
 window._ = require('lodash');
+window.bootbox = require('bootbox');
+window.moment = require('moment');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

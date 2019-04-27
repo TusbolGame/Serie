@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OldFile;
 use App\Poster;
+use App\TempPoster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -40,7 +41,7 @@ class PosterController extends Controller {
             } else {
                 $result = unlink($image['path']);     // Delete downloaded image if already exists in database
                 if ($result == FALSE) {               // If delete failed, file added to database to be deleted later
-                    OldFile::firstOrCreate([
+                    TempPoster::firstOrCreate([
                         'path' => $image['path'],
                         'outcome' => $image['path'],
                     ]);

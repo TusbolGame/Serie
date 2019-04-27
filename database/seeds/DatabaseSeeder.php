@@ -17,10 +17,11 @@ class DatabaseSeeder extends Seeder {
         $this->call(StatusTableSeeder::class);
         $this->call(ContentRatingTableSeeder::class);
         $this->call(BookmarkTypeTableSeeder::class);
+        $this->call(VideoQualitiesTableSeeder::class);
     }
 
     /*
-     * Shows        INSERT INTO serie.shows (name, uuid, api_id, api_link, description, created_at) SELECT name, UUID(), tvmazeId, apiLink, description, addedDate FROM tvshows.shows
+     * Shows        INSERT INTO serie.shows (name, uuid, api_id, api_link, description, created_at, updated_at) SELECT name, UUID(), tvmazeId, apiLink, description, addedDate, addedDate FROM tvshows.shows
      * Genres       INSERT INTO serie.genres (name) SELECT name FROM tvshows.genres
      * Networks     INSERT INTO serie.networks (name, type, country_code, country_name, link, banner, created_at, updated_at) SELECT name, 0, country, NULL, link, NULL, NOW(), NOW() FROM tvshows.networks
      * Updates      INSERT INTO serie.updates (type, finished_at, created_at, updated_at) SELECT type, finish, time, finish FROM tvshows.updates
@@ -348,18 +349,26 @@ class VideoQualitiesTableSeeder extends Seeder {
                     'name' => '2k',
                     'code' => '1440p',
                     'priority' => '1',
+                    'created_at' => '2019-04-26 20:44:02',
+                    'updated_at' => '2019-04-26 20:44:02',
                 ],[
                     'name' => 'Full HD',
                     'code' => '1080p',
                     'priority' => '2',
+                    'created_at' => '2019-04-26 20:44:02',
+                    'updated_at' => '2019-04-26 20:44:02',
                 ],[
                     'name' => 'HD',
                     'code' => '720p',
                     'priority' => '3',
+                    'created_at' => '2019-04-26 20:44:02',
+                    'updated_at' => '2019-04-26 20:44:02',
                 ],[
                     'name' => 'SD',
                     'code' => '480p',
                     'priority' => '4',
+                    'created_at' => '2019-04-26 20:44:02',
+                    'updated_at' => '2019-04-26 20:44:02',
                 ]
             ]
         );

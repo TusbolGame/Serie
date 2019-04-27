@@ -31,6 +31,10 @@ class User extends Authenticatable {
         return $this->hasMany(AuthTracking::class);
     }
 
+    public function shows() {
+        return $this->belongsToMany(Show::class);
+    }
+
     public function videoView() {
         return $this->hasMany(AuthTracking::class);
     }

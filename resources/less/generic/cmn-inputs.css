@@ -192,6 +192,9 @@ button::-moz-focus-inner {
 .default-replay-10:after {
   content: '\E059';
 }
+.default-convert:after {
+  content: '\E8B3';
+}
 .default-stop:after {
   content: '\E047';
 }

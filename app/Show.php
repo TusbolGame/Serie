@@ -20,6 +20,10 @@ class Show extends Model {
         return $this->belongsTo(Network::class);
     }
 
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
+
     public function contentRating() {
         return $this->belongsTo(ContentRating::class);
     }

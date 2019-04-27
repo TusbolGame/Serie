@@ -11,7 +11,7 @@ class Torrent extends Model {
      * @var array
      */
     protected $fillable = [
-        'episode_id', 'file_name', 'magnet_link', 'file_size', 'used', 'deleted',
+        'episode_id', 'file_name', 'hash', 'file_size', 'used', 'deleted', 'status',
         'video_quality_id', 'started_at', 'finished_at', 'converted_at'
     ];
 
@@ -20,7 +20,7 @@ class Torrent extends Model {
     }
 
     public function videoQuality() {
-        return $this->hasOne(VideoQuality::class);
+        return $this->belongsTo(VideoQuality::class);
     }
 
     public function videoView() {

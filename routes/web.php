@@ -11,11 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{name}', [
+    'as' => 'home',
+    'uses' => 'HomeController@index'
+])->where('name', '(home)?')->middleware('auth')->name('home');
 
 Auth::routes();
 
-Route::get('/ajax/update/{type}', 'DataUpdateController@update');
+Route::get('/data/update/{type}', 'DataUpdateController@updateManager')->middleware('auth');
+Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');
+Route::get('/episode/torrent/check/{magnetlink}', 'EpisodeController@torrentCheck')->middleware('auth');
+Route::get('/episode/view/mark/{episode}/{state}', 'EpisodeController@viewMark')->middleware('auth');
+Route::get('/episode/action/add/{buttonType}', 'EpisodeController@actionAdd')->middleware('auth');
+
+Route::get('/show/remove/{show}', 'ShowController@removeShow')->middleware('auth');

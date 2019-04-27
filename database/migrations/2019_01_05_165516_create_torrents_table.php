@@ -14,22 +14,24 @@ class CreateTorrentsTable extends Migration {
         Schema::create('torrents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('episode_id')->unsigned()->nullable()->index();
-            $table->text('file_name');
-            $table->string('magnet_link', '40');
-            $table->bigInteger('file_size');
+            $table->text('file_name')->nullable();
+            $table->string('hash', '40');
+            $table->bigInteger('file_size')->nullable();
             $table->boolean('used');
             $table->boolean('deleted');
+            $table->integer('status')->unsigned()->nullable()->index()->default(0);
             $table->integer('video_quality_id')->unsigned()->nullable()->index();
-            $table->dateTime('started_at');
-            $table->dateTime('finished_at');
-            $table->dateTime('converted_at');
+            $table->dateTime('started_at')->nullable()->index();
+            $table->dateTime('finished_at')->nullable()->index();
+            $table->dateTime('converted_at')->nullable()->index();
             $table->timestamps();
 
             $table->foreign('episode_id')->references('id')->on('episodes')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreign('video_quality_id')->references('id')->on('video_qualities')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 

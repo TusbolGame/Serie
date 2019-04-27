@@ -15,6 +15,6 @@ class VideoQuality extends Model {
     ];
 
     public function torrent() {
-        return $this->belongsTo(Torrent::class);
+        return $this->hasMany(Torrent::class);
     }
 }
