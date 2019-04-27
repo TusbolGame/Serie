@@ -4,64 +4,68 @@
     <div class="row justify-content-center">
         <div class="col-xl-9 col-sm-12 px-1 text-filter-container">
             <div class="row pb-3">
-                <h1 class="col-xl-9 col-sm-12 m-0 pt-2">{{$show->name}}</h1>
-                <div class="col-xl-3 col-sm-12">
-                </div>
-            </div>
-            <div class="row pb-3">
-                <div class="col-xl-2 col-sm-12">
-                    <div class="row no-gutters">
-                        <div class="col-xl-6 col-sm-12">
-                            <span>Status</span>
+                <div class="col-xl-9">
+                    <div class="row pb-3">
+                        <h1 class="col-xl-9 col-sm-12 m-0 pt-2">
+                            {{$show->name}}
+                        </h1>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col-xl-2 col-sm-12">
+                            <div class="row no-gutters">
+                                <div class="col-xl-6 col-sm-12">
+                                    <span>Status</span>
+                                </div>
+                                <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
+                                    <span>{{$show->status->name}}</span>
+                                </div>
+                            </div>
+                            <div class="row no-gutters">
+                                <div class="col-xl-6 col-sm-12">
+                                    <span>Network</span>
+                                </div>
+                                <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
+                                    <a href="{{$show->network->link}}" target="_blank">{{$show->network->name}}</a>
+                                </div>
+                            </div>
+                            <div class="row no-gutters">
+                                <div class="col-xl-6 col-sm-12">
+                                    <span>Tvmaze</span>
+                                </div>
+                                <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
+                                    <a href="{{$show->api_link}}" target="_blank">{{$show->api_rating}}</a>
+                                </div>
+                            </div>
+                            @if (isset($show->imdb_link) && isset($show->imdb_rating))
+                                <div class="row no-gutters">
+                                    <div class="col-xl-6 col-sm-12">
+                                        <span>IMDb</span>
+                                    </div>
+                                    <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
+                                        <a href="{{$show->imdb_link}}" target="_blank">{{$show->imdb_rating}}</a>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="row no-gutters">
+                                <div class="col-xl-6 col-sm-12">
+                                    <span>Schedule</span>
+                                </div>
+                                <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
+                                    <span>{{Carbon\Carbon::parse($show->airing_time)->format('H:i')}} ({{$show->running_time}} min)</span>
+                                </div>
+                            </div>
+                            <div class="row no-gutters">
+                                <div class="col-xl-12 col-sm-12">
+                                    @foreach ($show->genres as $genre)
+                                        <span class="badge badge-info text-white">{{$genre->name}}</span>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
-                            <span>{{$show->status->name}}</span>
+                        <div class="col-xl-7 col-sm-12">
+                            <span>{{$show->description}}</span>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col-xl-6 col-sm-12">
-                            <span>Network</span>
-                        </div>
-                        <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
-                            <a href="{{$show->network->link}}" target="_blank">{{$show->network->name}}</a>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-xl-6 col-sm-12">
-                            <span>Tvmaze</span>
-                        </div>
-                        <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
-                            <a href="{{$show->api_link}}" target="_blank">{{$show->api_rating}}</a>
-                        </div>
-                    </div>
-                    @if (isset($show->imdb_link) && isset($show->imdb_rating))
-                    <div class="row no-gutters">
-                        <div class="col-xl-6 col-sm-12">
-                            <span>IMDb</span>
-                        </div>
-                        <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
-                            <a href="{{$show->imdb_link}}" target="_blank">{{$show->imdb_rating}}</a>
-                        </div>
-                    </div>
-                    @endif
-                    <div class="row no-gutters">
-                        <div class="col-xl-6 col-sm-12">
-                            <span>Schedule</span>
-                        </div>
-                        <div class="col-xl-6 col-sm-12 d-xl-flex justify-content-xl-end">
-                            <span>{{Carbon\Carbon::parse($show->airing_time)->format('H:i')}} ({{$show->running_time}} min)</span>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-xl-12 col-sm-12">
-                            @foreach ($show->genres as $genre)
-                                <span class="badge badge-info text-white">{{$genre->name}}</span>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-7 col-sm-12">
-                    <span>{{$show->description}}</span>
                 </div>
                 <div class="col-xl-3 col-sm-12">
                     <img class="w-100" src="/{{config('custom.posterOriginalFolder').$show->posters->first()->name}}.jpg" >

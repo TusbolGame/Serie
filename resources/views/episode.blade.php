@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-xl-9 col-sm-12 px-1 text-filter-container">
             <div class="row pb-3">
-                <h1 class="col-xl-9 col-sm-12 m-0 pt-2">{{$episode->show->name}} - {{$episode->episode_code}}</h1>
+                <h1 class="col-xl-9 col-sm-12 m-0 pt-2"><a href="/show/{{$episode->show->uuid}}">{{$episode->show->name}}</a> - {{$episode->episode_code}}</h1>
                 <div class="col-xl-3 col-sm-12">
                 </div>
             </div>
@@ -27,6 +27,13 @@
                 </div>
                 <div class="col-xl-3 col-sm-12">
                     <img class="w-100" src="/{{config('custom.episodeOriginalFolder').$episode->posters->first()->name}}.jpg" >
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-xl-12 col-sm-12">
+                    @if ($episode->torrent->first() !== NULL && $episode->torrent->first()->status == 3)
+                        {{--TODO Add episode video streaming capability--}}
+                    @endif
                 </div>
             </div>
         </div>
