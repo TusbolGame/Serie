@@ -55,6 +55,17 @@ return [
             'visibility' => 'public',
         ],
 
+        'dropbox' => [
+            'driver' => 'dropbox',
+            'accessToken' => env('DROPBOX_ACCESS_TOKEN'),
+            'appSecret' => env('DROPBOX_APP_SECRET'),
+        ],
+
+        'backup' => [
+            'driver' => 'local',
+            'root' => storage_path('databaseBackup'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
