@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class BackupDatabase extends Command {
@@ -37,10 +38,12 @@ class BackupDatabase extends Command {
             return basename($item);
         }, glob($filenamePattern));
 
-        sort($backupFiles);
+        rsort($backupFiles);
 
         if (sizeof($backupFiles) > 4) {
-            unlink(config('custom.backupFolder') . $backupFiles[0]);
+            foreach (array_slice($backupFiles, 4) as $file) {
+                unlink(config('custom.backupFolder') . $file);
+            }
         }
 
         $this->process = new Process(sprintf(

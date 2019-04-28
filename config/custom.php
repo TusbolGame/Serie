@@ -1,7 +1,6 @@
 <?php
 
 return [
-    // Main Video Folders
     'torrentFolder' => 'G:/Torrent/',
     'streamFolder' => 'G:/Streams/',
     'backupFolder' => 'C:/Users/Ivan/Dropbox/Code/Web/___Database___BACKUP/',
