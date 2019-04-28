@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Episode;
-use App\Show;
-use App\Torrent;
-use App\User;
 use Carbon\Carbon;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use uTorrent\Api;
 
 class HomeController extends Controller {

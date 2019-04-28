@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -29,6 +30,18 @@ class BackupDatabase extends Command {
         parent::__construct();
 
         $executablePath = 'C:/Wamp/bin/mysql/mysql8.0.16/bin/';
+        $filenamePattern = config('custom.backupFolder') . config('database.connections.Serie.database') . '_*.sql';
+        $filename = config('database.connections.Serie.database') . '_' . Carbon::now()->format('Y-m-d_His') . '.sql';
+
+        $backupFiles = array_map(function ($item) {
+            return basename($item);
+        }, glob($filenamePattern));
+
+        sort($backupFiles);
+
+        if (sizeof($backupFiles) > 4) {
+            unlink(config('custom.backupFolder') . $backupFiles[0]);
+        }
 
         $this->process = new Process(sprintf(
             '%smysqldump -u%s -p%s %s > %s',
@@ -36,7 +49,7 @@ class BackupDatabase extends Command {
             config('database.connections.Serie.username'),
             config('database.connections.Serie.password'),
             config('database.connections.Serie.database'),
-            config('filesystems.disks.backup.root') . '/serie.sql'
+            config('custom.backupFolder') . $filename
         ));
     }
 
