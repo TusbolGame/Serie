@@ -63,7 +63,7 @@ return [
 
         'backup' => [
             'driver' => 'local',
-            'root' => 'C:\Users\Ivan\Dropbox\Code\Web\___Database___BACKUP',
+            'root' => 'C:/Users/Ivan/Dropbox/Code/Web/___Database___BACKUP',
         ],
 
         's3' => [

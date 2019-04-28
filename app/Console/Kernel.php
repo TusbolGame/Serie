@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        'App\Console\Commands\BackupDatabase',
     ];
 
     /**
@@ -24,8 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('backup:clean')->daily()->at('18:00');
-        $schedule->command('backup:run')->daily()->at('18:01');
+        $schedule->command('backup:clean')->dailyAt('19:00')->cron('* * * * *');
+        $schedule->command('backup:run')->dailyAt('19:00')->cron('* * * * *');
+        $schedule->command('db:backup')->cron('* * * * *'); //->runInBackground();
     }
 
     /**
