@@ -285,14 +285,25 @@ class DataUpdateController extends Controller {
     }
 
     private function addSeasonData($show, $rawData) {
-        $season = Season::firstOrNew([
-            'uuid' => Str::orderedUuid()->toString(),
-            'api_id' => $rawData->id,
-            'season' => $rawData->number,
-            'episodes' => ($rawData->episodeOrder !== NULL) ? $rawData->episodeOrder : NULL,
-            'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
-            'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
-        ]);
+        $seasonCheck = Season::where('api_id', $rawData->id)->first();
+
+        if (empty($seasonCheck)) {
+            $season = Season::create([
+                'uuid' => Str::orderedUuid()->toString(),
+                'api_id' => $rawData->id,
+                'season' => $rawData->number,
+                'episodes' => ($rawData->episodeOrder !== NULL) ? $rawData->episodeOrder : NULL,
+                'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
+                'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
+            ]);
+        } else {
+            $season = Season::update([
+                'season' => $rawData->number,
+                'episodes' => ($rawData->episodeOrder !== NULL) ? $rawData->episodeOrder : NULL,
+                'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
+                'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
+            ]);
+        }
         $season->save();
 
         $poster = $this->posterHandler($rawData->image, $season, config('custom.seasonOriginalFolder'));
@@ -332,15 +343,27 @@ class DataUpdateController extends Controller {
     }
 
     private function addEpisodeData($show, $rawData) {
-        $episode = Episode::firstOrNew([
-            'uuid' => Str::orderedUuid()->toString(),
-            'api_id' => $rawData->id,
-            'api_link' => $rawData->url,
-            'episode_number' => $rawData->number,
-            'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
-            'title' => $rawData->name,
-            'summary' => strip_tags($rawData->summary),
-        ]);
+        $episodeCheck = Episode::where('api_id', $rawData->id)->first();
+
+        if (empty($episodeCheck)) {
+            $episode = Episode::create([
+                'uuid' => Str::orderedUuid()->toString(),
+                'api_id' => $rawData->id,
+                'api_link' => $rawData->url,
+                'episode_number' => $rawData->number,
+                'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
+                'title' => $rawData->name,
+                'summary' => strip_tags($rawData->summary),
+            ]);
+        } else {
+            $episode = Episode::update([
+                'api_link' => $rawData->url,
+                'episode_number' => $rawData->number,
+                'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
+                'title' => $rawData->name,
+                'summary' => strip_tags($rawData->summary),
+            ]);
+        }
 
         $airstamp = NULL;
         if (isset($rawData->airstamp) && $rawData->airstamp != "") {
@@ -361,13 +384,13 @@ class DataUpdateController extends Controller {
             $episode->update(['poster_id' => $freshPoster->id]);
         }
 
-        $season = Season::where([
+        $seasonCheck = Season::where([
             'show_id' => $show->id,
             'season' => $rawData->season,
         ])->first();
 
-        if ($season != NULL) {
-            $episode->season()->associate($season);
+        if ($seasonCheck != NULL) {
+            $episode->season()->associate($seasonCheck);
         }
 
         $episode->show()->associate($show);

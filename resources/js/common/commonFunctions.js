@@ -10,8 +10,31 @@ function episodeMarkView(container, episode_id, state) {
     ajaxHandler(args,
         function(serverData) {
             container.fadeOut(ANIMATION_TIME, function() {
+                var airDate = new Date(container.attr("data-airdate"));
                 $(this).replaceWith(serverData.data);
+
+                // TODO check the reordering because it doesn't seem to work
+                container.siblings().each(function(){
+                    var currentTime = new Date($(this).attr("data-airdate"));
+                    if(airDate.getTime() > currentTime.getTime()) {
+                        container.addClass('new').insertBefore(this);
+                        return false;
+                    }
+                    container.addClass('new').insertAfter(container.siblings().last());
+                });
             });
         }, null
     );
 }
+
+
+// Reorder cards
+var airDate = new Date(card.attr("data-airdatetime"));
+card.parent().find(".card").each(function(){
+    var currentTime = new Date($(this).attr("data-airdatetime"));
+    if(airDate.getTime() > currentTime.getTime()) {
+        card.addClass('new').insertBefore(this);
+        return false;
+    }
+    card.addClass('new').insertAfter(card.parent().find(".card").last());
+});

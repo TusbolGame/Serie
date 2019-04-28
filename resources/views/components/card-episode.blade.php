@@ -1,4 +1,4 @@
-<div class="card-episode col-xl-2 col-sm-12 px-1 mb-2" data-show="{{$episode->show->uuid}}" data-episode="{{$episode->uuid}}" data-filter="{{$episode->show->name}}">
+<div class="card-episode col-xl-2 col-sm-12 px-1 mb-2" data-show="{{$episode->show->uuid}}" data-episode="{{$episode->uuid}}" data-airdate="{{Carbon\Carbon::parse($episode->airing_at)->format('Y-m-d H:i:s')}}" data-filter="{{$episode->show->name}}">
     <div class="card d-flex">
         <div class="episode-poster-container card-img-top">
             <img class="episode-poster" src="/{{config('custom.posterOriginalFolder').$episode->show->posters->first()->name}}.jpg" alt="">
