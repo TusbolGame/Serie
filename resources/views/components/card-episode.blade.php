@@ -18,7 +18,10 @@
                         {{Carbon\Carbon::parse($episode->airing_at)->diffForHumans()}}
                     </div>
                 </div>
-                <div class="card-info-extra">
+                <div class="card-info-extra pt-2 font-weight-light">
+                    @if (isset($episode->show->description) && strlen($episode->show->description) > 100)
+                        {{substr($episode->show->description, 0, 100)}}
+                    @endif
                 </div>
             </div>
             <div class="card-actions">

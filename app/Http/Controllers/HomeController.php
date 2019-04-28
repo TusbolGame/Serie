@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Episode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use uTorrent\Api;
 
 class HomeController extends Controller {
     /**

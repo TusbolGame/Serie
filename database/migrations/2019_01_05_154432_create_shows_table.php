@@ -18,7 +18,7 @@ class CreateShowsTable extends Migration {
             $table->text('alternative_name')->nullable();
             $table->integer('api_id')->unsigned()->unique();
             $table->text('api_link');
-            $table->smallInteger('api_rating')->unsigned()->nullable();
+            $table->decimal('api_rating', 3, 1)->nullable();
             $table->text('imdb_link')->nullable();
             $table->decimal('imdb_rating', 3, 1)->nullable();
             $table->text('description')->nullable();

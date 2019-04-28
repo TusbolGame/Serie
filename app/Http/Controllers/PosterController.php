@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\OldFile;
 use App\Poster;
 use App\TempPoster;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Whoops\Exception\ErrorException;
 
 class PosterController extends Controller {
     public function newImage($url, $owner, $folderRoot) {
@@ -39,8 +39,15 @@ class PosterController extends Controller {
             if (md5_file($image['path']) != md5_file($oldFileName)) {
                 $poster = $this->saveNewPoster($image['name']);
             } else {
-                $result = unlink($image['path']);     // Delete downloaded image if already exists in database
-                if ($result == FALSE) {               // If delete failed, file added to database to be deleted later
+                try {
+                    $result = unlink($image['path']);     // Delete downloaded image if already exists in database
+                    if ($result == FALSE) {               // If delete failed, file added to database to be deleted later
+                        TempPoster::firstOrCreate([
+                            'path' => $image['path'],
+                            'outcome' => $image['path'],
+                        ]);
+                    }
+                } catch (ErrorException $e) {
                     TempPoster::firstOrCreate([
                         'path' => $image['path'],
                         'outcome' => $image['path'],

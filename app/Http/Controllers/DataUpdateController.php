@@ -58,6 +58,9 @@ class DataUpdateController extends Controller {
     public function updateController($mainOptions) {
         if ($mainOptions['type'] == 3) {
             $show = new Show();
+            $show->fill([
+                'uuid' => Str::orderedUuid()->toString()
+            ]);
             $rawData = $this->fetchData($mainOptions['api_id'], 'everything');
 
             return $this->dataSaver($show, $rawData);
@@ -99,7 +102,7 @@ class DataUpdateController extends Controller {
         if (is_int($rawData) && $rawData == 1) {
             return -2;
         }
-        if (is_int($rawData) && $rawData == 1) {
+        if (is_int($rawData) && $rawData == 2) {
             return -3;
         }
 
@@ -163,11 +166,10 @@ class DataUpdateController extends Controller {
         ]);
 
         $show->fill([
-            'uuid' => Str::orderedUuid()->toString(),
             'name' => $rawData->name,
             'api_id' => $rawData->id,
             'api_link' => $rawData->url,
-            'api_rating' => (int)($rawData->rating->average * 10),
+            'api_rating' => $rawData->rating->average,
             'description' => strip_tags($rawData->summary),
             'language' => $rawData->language,
             'running_time' => $rawData->runtime,
@@ -219,6 +221,7 @@ class DataUpdateController extends Controller {
                 }
             }
 
+            // TODO re-do the content rating parsing logic: wrong results (see table)
             $check = preg_match('/[\n\s]*(.*)?[\n\s]*?</', $crawler->filter('.subtext')->html(), $imdbContentRatingMatches);
             if ($check == 1) {
                 $contentRating = ContentRating::firstOrCreate([

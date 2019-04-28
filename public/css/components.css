@@ -139,7 +139,7 @@
 .card-episode.expanded .card-body .card-info .card-info-default .episode-code {
   max-height: 60px;
   opacity: 1;
-  transition: max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s, opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  transition: max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 .card-episode.expanded .card-body .card-info .card-info-default .episode-show-name {
   max-height: 60px;
@@ -148,12 +148,12 @@
 }
 .card-episode.expanded .card-body .card-info .card-info-extra {
   opacity: 1;
-  height: 60px;
-  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  height: 120px;
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 .card-episode.expanded .card-body .card-actions {
   opacity: 1;
-  height: 150px;
+  height: 120px;
   transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
 }
 .card-episode.expanded .card-body .card-actions .cmn-button:not([data-type="0"]) {
