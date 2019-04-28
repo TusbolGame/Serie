@@ -30,6 +30,9 @@
                         @slot('type')
                             7
                         @endslot
+                        @slot('group')
+                            1
+                        @endslot
                         @slot('title')
                             Remove show
                         @endslot
@@ -43,6 +46,9 @@
                         @endslot
                         @slot('type')
                             8
+                        @endslot
+                        @slot('group')
+                            1
                         @endslot
                         @slot('title')
                             Add bookmark
@@ -58,6 +64,9 @@
                         @slot('type')
                             9
                         @endslot
+                        @slot('group')
+                            1
+                        @endslot
                         @slot('title')
                             Show more details
                         @endslot
@@ -71,6 +80,9 @@
                         @endslot
                         @slot('type')
                             10
+                        @endslot
+                        @slot('group')
+                            1
                         @endslot
                         @slot('title')
                             Rate this episode
@@ -90,6 +102,9 @@
                                 @slot('type')
                                     1
                                 @endslot
+                                @slot('group')
+                                    1
+                                @endslot
                                 @slot('title')
                                     Search for torrents
                                 @endslot
@@ -104,6 +119,9 @@
                             @endslot
                             @slot('type')
                                 2
+                            @endslot
+                            @slot('group')
+                                1
                             @endslot
                             @slot('title')
                                     Add magnet link
@@ -121,6 +139,9 @@
                                 @slot('type')
                                     2
                                 @endslot
+                                @slot('group')
+                                    1
+                                @endslot
                                 @slot('title')
                                     Add magnet link
                                 @endslot
@@ -134,6 +155,9 @@
                                 @endslot
                                 @slot('type')
                                     6
+                                @endslot
+                                @slot('group')
+                                    1
                                 @endslot
                                 @slot('title')
                                     Check torrent status
@@ -150,6 +174,9 @@
                                 @slot('type')
                                     3
                                 @endslot
+                                @slot('group')
+                                    1
+                                @endslot
                                 @slot('title')
                                         Convert Video
                                 @endslot
@@ -164,6 +191,9 @@
                                 @endslot
                                 @slot('type')
                                     4
+                                @endslot
+                                @slot('group')
+                                    1
                                 @endslot
                                 @slot('title')
                                         Play episode
@@ -181,6 +211,9 @@
                         @slot('type')
                             5
                         @endslot
+                        @slot('group')
+                            1
+                        @endslot
                         @slot('title')
                                 Mark this episode as watched
                         @endslot
@@ -194,6 +227,9 @@
                         @endslot
                         @slot('type')
                             0
+                        @endslot
+                        @slot('group')
+                            1
                         @endslot
                         @slot('title')
                                 Show more information

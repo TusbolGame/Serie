@@ -256,4 +256,10 @@ class EpisodeController extends Controller {
 
         return new AjaxSuccessController("Torrent check Successful", $torrents[$currentTorrentKey][10]);
     }
+
+    public function codeGenerator($season, $episode) {
+        $code = "S" . str_pad($season, 2, '0', STR_PAD_LEFT) .
+            "E" . str_pad($episode, 2, '0', STR_PAD_LEFT);
+        return $code;
+    }
 }

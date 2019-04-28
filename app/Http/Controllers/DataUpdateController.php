@@ -51,6 +51,7 @@ class DataUpdateController extends Controller {
         $results = $this->updateController($options);
 
         $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
+        $this->dataUpdate->save();
         return new AjaxSuccessController("Update successful", $results);
     }
 
@@ -82,17 +83,8 @@ class DataUpdateController extends Controller {
                 $results[] = $this->updateHandler($show, $options);
             }
         }
-    }
 
-    private function dataSaver($show, $rawData) {
-        $result = [];
-        $result['show'] = $this->saveShowData($show, $rawData);
-        if (isset($rawData->_embedded) && $rawData->_embedded != "") {
-            $result['season'] = $this->saveSeasonData($show, $rawData->_embedded->seasons);
-            $result['episode'] = $this->saveEpisodeData($show, $rawData->_embedded->episodes);
-        }
-
-        return $result;
+        return $results;
     }
 
     private function updateHandler($show, $options = []) {
@@ -122,6 +114,17 @@ class DataUpdateController extends Controller {
         return $this->dataSaver($show, $rawData);
     }
 
+    private function dataSaver($show, $rawData) {
+        $result = [];
+        $this->saveShowData($show, $rawData);
+        if (isset($rawData->_embedded) && $rawData->_embedded != "") {
+            $result['seasons'] = $this->saveSeasonData($show, $rawData->_embedded->seasons);
+            $result['episodes'] = $this->saveEpisodeData($show, $rawData->_embedded->episodes);
+        }
+
+        return $result;
+    }
+
     private function fetchData($api_ID, $type) {
         if ($type == 'minimum') {
             $api_link = "http://api.tvmaze.com/shows/" . $api_ID . "";
@@ -149,13 +152,6 @@ class DataUpdateController extends Controller {
         return json_decode($apiResponse->getBody()->getContents());
     }
 
-    /**
-     * @param {int} $api_ID - the show that is being updated
-     * @param {JSON} $rawData - the raw data
-     * @param {array} $options - array of options:
-     *  $options['type'] => 0 = new show, 1 = check apiUpdate, 2 = force update all fields
-     * @return
-     */
     private function saveShowData($show, $rawData, $options = []) {
         $defaults = [
             'airing_time' => '00:00',
@@ -276,15 +272,18 @@ class DataUpdateController extends Controller {
         $newSeasons = new Collection();
         foreach ($rawData as $seasonData) {
             $season = $this->addSeasonData($show, $seasonData);
-            $newSeasons->push($season->fresh());
+            if ($season !== NULL) {
+                $newSeasons->push($season);
+            }
         }
-        if (empty($newSeasons)) {
-            return 0;
+        if ($newSeasons->count() == 0) {
+            return NULL;
         }
         return $newSeasons;
     }
 
     private function addSeasonData($show, $rawData) {
+        $flagNewSeason = FALSE;
         $seasonCheck = Season::where('api_id', $rawData->id)->first();
 
         if (empty($seasonCheck)) {
@@ -296,8 +295,10 @@ class DataUpdateController extends Controller {
                 'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
                 'date_end' => ($rawData->endDate !== NULL && $rawData->endDate !== "") ? $rawData->endDate : NULL,
             ]);
+            $flagNewSeason = TRUE;
         } else {
-            $season = Season::update([
+            $season = $seasonCheck;
+            $season->update([
                 'season' => $rawData->number,
                 'episodes' => ($rawData->episodeOrder !== NULL) ? $rawData->episodeOrder : NULL,
                 'date_start' => ($rawData->premiereDate !== NULL && $rawData->premiereDate !== "") ? $rawData->premiereDate : NULL,
@@ -318,7 +319,11 @@ class DataUpdateController extends Controller {
         $season->show()->associate($show);
         $season->save();
 
-        return $season;
+        if ($flagNewSeason === TRUE) {
+            return $season->fresh();
+        } else {
+            return NULL;
+        }
     }
 
     /* Episode Handling */
@@ -334,15 +339,19 @@ class DataUpdateController extends Controller {
         $newEpisodes = new Collection();
         foreach ($rawData as $episodeData) {
             $episode = $this->addEpisodeData($show, $episodeData);
-            $newEpisodes->push($episode->fresh());
+            if ($episode !== NULL) {
+                $newEpisodes->push($episode);
+            }
         }
-        if (empty($newEpisodes)) {
-            return 0;
+        if ($newEpisodes->count() == 0) {
+            return NULL;
         }
         return $newEpisodes;
     }
 
     private function addEpisodeData($show, $rawData) {
+        $episodeController = new EpisodeController();
+        $flagNewEpisode = FALSE;
         $episodeCheck = Episode::where('api_id', $rawData->id)->first();
 
         if (empty($episodeCheck)) {
@@ -351,15 +360,18 @@ class DataUpdateController extends Controller {
                 'api_id' => $rawData->id,
                 'api_link' => $rawData->url,
                 'episode_number' => $rawData->number,
-                'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
+                'episode_code' => $episodeController->codeGenerator($rawData->season, $rawData->number),
                 'title' => $rawData->name,
                 'summary' => strip_tags($rawData->summary),
             ]);
+
+            $flagNewEpisode = TRUE;
         } else {
-            $episode = Episode::update([
+            $episode = $episodeCheck;
+            $episode->update([
                 'api_link' => $rawData->url,
                 'episode_number' => $rawData->number,
-                'episode_code' => $this->episodeCodeGenerator($rawData->season, $rawData->number),
+                'episode_code' => $episodeController->codeGenerator($rawData->season, $rawData->number),
                 'title' => $rawData->name,
                 'summary' => strip_tags($rawData->summary),
             ]);
@@ -396,12 +408,10 @@ class DataUpdateController extends Controller {
         $episode->show()->associate($show);
         $episode->save();
 
-        return $episode;
-    }
-
-    public function episodeCodeGenerator($season, $episode) {
-        $code = "S" . str_pad($season, 2, '0', STR_PAD_LEFT) .
-            "E" . str_pad($episode, 2, '0', STR_PAD_LEFT);
-        return $code;
+        if ($flagNewEpisode === TRUE) {
+            return $episode->fresh();
+        } else {
+            return NULL;
+        }
     }
 }

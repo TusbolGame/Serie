@@ -26,15 +26,3 @@ function episodeMarkView(container, episode_id, state) {
         }, null
     );
 }
-
-
-// Reorder cards
-var airDate = new Date(card.attr("data-airdatetime"));
-card.parent().find(".card").each(function(){
-    var currentTime = new Date($(this).attr("data-airdatetime"));
-    if(airDate.getTime() > currentTime.getTime()) {
-        card.addClass('new').insertBefore(this);
-        return false;
-    }
-    card.addClass('new').insertAfter(card.parent().find(".card").last());
-});

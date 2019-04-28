@@ -30,7 +30,7 @@
                                         Update all shows
                                     </div>
                                     <div class="col-xl-5 col-sm-12 d-flex justify-content-end">
-                                        <a href="/data/update/0" type="button" class="btn btn-sm btn-primary" data-group="0" data-type="0">Update</a>
+                                        <button type="button" class="btn btn-sm btn-primary" data-group="0" data-type="0">Update</button>
                                     </div>
                                 </div>
                             </li>
