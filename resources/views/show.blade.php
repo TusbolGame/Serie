@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main', ['title' => $episode->show->name])
 
 @section('content')
     <div class="row justify-content-center">

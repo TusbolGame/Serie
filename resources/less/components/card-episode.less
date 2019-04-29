@@ -21,6 +21,7 @@
             position: relative;
             width: 100%;
             height: 15vw;
+            min-height: 325px;
             object-fit: cover;
 
             filter: blur(0px);
@@ -65,10 +66,10 @@
 
             & .card-info-extra {
                 opacity: 0;
-                height: 0px;
+                max-height: 0px;
                 overflow: hidden;
 
-                transition: height @transitionTime / 2 @transitionType @noTransitionDelay;
+                transition: max-height @transitionTime / 2 @transitionType @noTransitionDelay;
             }
         }
 
@@ -207,9 +208,9 @@
 
                 & .card-info-extra {
                     opacity: 1;
-                    height: 120px;
+                    max-height: 120px;
 
-                    transition: height @transitionTime @transitionType @transitionDelay / 2,
+                    transition: max-height @transitionTime @transitionType @transitionDelay / 2,
                                 opacity @transitionTime @transitionType @transitionDelay / 2;
                 }
             }

@@ -1,5 +1,5 @@
-@extends('layouts.main')
-
+@extends('layouts.main', ['title' => 'Home'])
+@section('title', 'S')
 @section('content')
     <div class="row justify-content-center">
         <div class="col-xl-9 col-sm-12 px-1 text-filter-container">
