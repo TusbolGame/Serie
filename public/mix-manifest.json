@@ -6,6 +6,7 @@
     "/css/generic/cmn-loaders.css": "/css/generic/cmn-loaders.css",
     "/css/generic/cmn-inputs.css": "/css/generic/cmn-inputs.css",
     "/css/generic/cmn-styles.css": "/css/generic/cmn-styles.css",
+    "/css/common/vue-transitions.css": "/css/common/vue-transitions.css",
     "/css/common/base.css": "/css/common/base.css",
     "/css/components/card-episode.css": "/css/components/card-episode.css",
     "/css/plugins/Stream.css": "/css/plugins/Stream.css",

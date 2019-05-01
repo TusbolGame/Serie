@@ -47,6 +47,7 @@ mix.js('resources/js/app.js', 'public/js')
     .less('resources/less/generic/cmn-loaders.less', 'public/css/generic')
     .less('resources/less/generic/cmn-inputs.less', 'public/css/generic')
     .less('resources/less/generic/cmn-styles.less', 'public/css/generic')
+    .less('resources/less/common/vue-transitions.less', 'public/css/common')
     .less('resources/less/common/base.less', 'public/css/common')
     .less('resources/less/components/card-episode.less', 'public/css/components')
     .less('resources/less/plugins/Stream.less', 'public/css/plugins')
@@ -59,6 +60,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/css/generic/cmn-styles.css',
     ], 'public/css/generic.css')
     .styles([
+        'public/css/common/vue-transitions',
         'public/css/common/base.css'
     ], 'public/css/common.css')
     .styles([

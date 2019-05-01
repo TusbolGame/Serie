@@ -44,37 +44,27 @@ class DataUpdateController extends Controller {
                 'api_id' => $api_id,
             ];
         } else {
-            return new AjaxErrorController("The update type is not valid", 409);
+            return AjaxErrorController::response("The update type is not valid.", 409);
         }
         $this->dataUpdate = DataUpdate::create([
             'type' => $type
         ]);
         $results = $this->updateController($options);
 
+        if ($results == -1) {
+            return AjaxErrorController::response("Wrong update type.", 409);
+        } else if ($results == -2) {
+            return AjaxErrorController::response("The show is already present in the database.", 409);
+        }
+
         $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
         $this->dataUpdate->save();
-        return new AjaxSuccessController("Update successful", $results);
+        return AjaxSuccessController::response("Update successful", $results);
     }
 
     public function updateController($mainOptions) {
         if ($mainOptions['type'] == 3) {
-            $showCheck = Show::where('api_id', $mainOptions['api_id'])->first();
-
-            if ($showCheck->count() != 0) {
-                return new AjaxErrorController("The show is already present in the database.", 409);
-            }
-
-            $show = new Show();
-            $show->fill([
-                'uuid' => Str::orderedUuid()->toString()
-            ]);
-
-            // TODO add show to the requesting user shows
-
-            $link = $this->apiHandler(1, $mainOptions['api_id']);
-            $rawData = $this->fetchData($link);
-
-            return $this->dataSaver($show, $rawData);
+            return $this->addShow($mainOptions['api_id']);
         } else {
             if ($mainOptions['type'] == 0) {
                 $showList = Show::all();
@@ -87,8 +77,7 @@ class DataUpdateController extends Controller {
                 $showList = Show::where('uuid', $mainOptions['uuid'])->get();
                 $options = [];
             } else {
-                // TODO Handle error on wrong update type
-                return FALSE;
+                return -1;
             }
 
             // TODO Add event to notify the number of shows to be updated
@@ -101,6 +90,26 @@ class DataUpdateController extends Controller {
         return $results;
     }
 
+    private function addShow($api_id) {
+        $showCheck = Show::where('api_id', $api_id)->first();
+
+        if ($showCheck != NULL) {
+            return -2;
+        }
+
+        $show = new Show();
+        $show->fill([
+            'uuid' => Str::orderedUuid()->toString()
+        ]);
+
+        $link = $this->apiHandler(1, ['api_id' => $api_id]);
+        $rawData = $this->fetchData($link);
+
+        $results = $this->dataSaver($show, $rawData);
+        $addedShow = $show->fresh();
+        return $addedShow->uuid;
+    }
+
     private function updateHandler($show, $options = []) {
         if (isset($show->status) && $show->status->name == 'Ended') {
             $type = 0;
@@ -111,7 +120,7 @@ class DataUpdateController extends Controller {
 
             $lastUpdate = $first = Carbon::createFromTimestamp($lastUpdateCheck->api_updated_at);
 
-            if ($lastUpdateCheck->count() == 0 || $lastUpdate->lessThan($limitDate)) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
+            if ($lastUpdateCheck == NULL || $lastUpdate->lessThan($limitDate)) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
                 $type = 1;
             }
         } else {
@@ -203,24 +212,24 @@ class DataUpdateController extends Controller {
 
     public function searchShowController($show_name) {
         if (trim($show_name) == '') {
-            return new AjaxErrorController("The show name is not valid", 409);
+            return AjaxErrorController::response("The show name is not valid.", 409);
         }
 
         $link = $this->apiHandler(2, ['show_name' => $show_name]);
         $rawData = $this->fetchData($link);
 
         if (is_int($rawData) && $rawData == 0) {
-            return new AjaxErrorController("Network response invalid: empty", 409);
+            return AjaxErrorController::response("Network response invalid: empty.", 409);
         }
         if (is_int($rawData) && $rawData == 1) {
-            return new AjaxErrorController("GuzzleHttp api exception", 409);
+            return AjaxErrorController::response("GuzzleHttp api exception.", 409);
         }
         if (is_int($rawData) && $rawData == 2) {
-            return new AjaxErrorController("Network response error code", 409);
+            return AjaxErrorController::response("Network response error code.", 409);
         }
 
         if (empty($rawData)) {
-            return new AjaxSuccessController("No shows found", []);
+            return AjaxSuccessController::response("No shows found", []);
         }
 
         $results = [];
@@ -229,10 +238,10 @@ class DataUpdateController extends Controller {
         }
 
         if (empty($results)) {
-            return new AjaxSuccessController("No shows found", []);
+            return AjaxSuccessController::response("No shows found", []);
         }
 
-        return new AjaxSuccessController("Search successful", $results);
+        return AjaxSuccessController::response("Search successful", $results);
     }
 
     private function searchShowHandler($rawData) {
@@ -395,7 +404,7 @@ class DataUpdateController extends Controller {
         $flagNewSeason = FALSE;
         $seasonCheck = Season::where('api_id', $rawData->id)->first();
 
-        if ($seasonCheck->count() == 0) {
+        if ($seasonCheck == NULL) {
             $season = Season::create([
                 'uuid' => Str::orderedUuid()->toString(),
                 'api_id' => $rawData->id,
@@ -463,7 +472,7 @@ class DataUpdateController extends Controller {
         $flagNewEpisode = FALSE;
         $episodeCheck = Episode::where('api_id', $rawData->id)->first();
 
-        if ($episodeCheck->count() == 0) {
+        if ($episodeCheck == NULL) {
             $episode = Episode::create([
                 'uuid' => Str::orderedUuid()->toString(),
                 'api_id' => $rawData->id,

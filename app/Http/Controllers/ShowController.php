@@ -21,7 +21,7 @@ class ShowController extends Controller {
         return view('show', ['show' => $showCheck]);
     }
 
-    public function removeShow($show) {
+    public function removeUserShow($show) {
         $showCheck = Show::where('uuid', $show)->first();
 
         if (empty($showCheck)) {
@@ -29,7 +29,26 @@ class ShowController extends Controller {
         }
 
         $user = User::where('id', Auth::user()->id)->first();
+        if ($user == NULL) {
+            return new AjaxErrorController("No user is logged in????", 409, 0);
+        }
         $user->shows()->detach($showCheck);
+
+        return new AjaxSuccessController("Show removal Successful", []);
+    }
+
+    public function addUserShow($show) {
+        $showCheck = Show::where('uuid', $show)->first();
+
+        if (empty($showCheck)) {
+            return new AjaxErrorController("The show does not exist", 409, 0);
+        }
+
+        $user = User::where('id', Auth::user()->id)->first();
+        if ($user == NULL) {
+            return new AjaxErrorController("No user is logged in????", 409, 0);
+        }
+        $user->shows()->attach($showCheck);
 
         return new AjaxSuccessController("Show removal Successful", []);
     }

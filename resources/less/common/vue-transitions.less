@@ -1,0 +1,49 @@
+@import "../generic/cmn-variables";
+
+.list-enter-active,
+.list-leave-active,
+.list-move {
+    transition: @transitionTime @transitionType;
+    transition-property: opacity, transform;
+}
+
+.list-enter {
+    opacity: 0;
+    transform: translateX(50px) scaleY(0.5);
+}
+
+.list-enter-to {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+}
+
+.list-leave-active {
+    position: absolute;
+}
+
+.list-leave-to {
+    opacity: 0;
+    transform: scaleY(0);
+}
+
+.fade-enter-active,
+.fade-leave-active,
+.fade-move {
+    transition: @transitionTime @transitionType;
+    transition-property: opacity;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-to {
+    opacity: 1;
+}
+
+.fade-leave-active {
+}
+
+.fade-leave-to {
+    opacity: 0;
+}

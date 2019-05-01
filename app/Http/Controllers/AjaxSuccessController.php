@@ -7,15 +7,10 @@ class AjaxSuccessController extends Controller {
     private $message;
     private $data;
 
-    public function __construct($message, $data = NULL) {
-        $this->message = $message;
-        $this->data = $data;
-    }
-
-    public function __toString() {
-        return json_encode([
-            'message' => $this->message,
-            'data' => $this->data,
-        ]);
+    public static function response($message, $data = NULL) {
+        return response()->json([
+            'message' => $message,
+            'data' => $data,
+        ], 200);
     }
 }

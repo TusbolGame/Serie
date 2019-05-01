@@ -31,12 +31,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowSearchResultComponent",
   props: ['name', 'api_id', 'api_id', 'api_link', 'api_rating', 'description', 'poster'],
+  data: function data() {
+    return {
+      updated: false,
+      added: false,
+      uuid: '',
+      errorType: {
+        addToDB: false,
+        addToUser: false
+      },
+      error: false
+    };
+  },
   methods: {
     addShow: function addShow(api_id) {
-      this.$emit('add-show', api_id);
+      var _this = this;
+
+      window.axios.get('/data/update/3/' + api_id).then(function (_ref) {
+        var data = _ref.data;
+        _this.uuid = data.data;
+        _this.updated = true;
+      })["catch"](function (error) {
+        console.log(error.response.data);
+        _this.error = true;
+        _this.errorType.addToDB = true;
+      });
+    },
+    addUserShow: function addUserShow(uuid) {
+      var _this2 = this;
+
+      window.axios.get('/show/add/' + uuid).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.added = true;
+      })["catch"](function (error) {
+        console.log(error.response.data);
+        _this2.error = true;
+        _this2.errorType.addToUser = true;
+      });
     }
   }
 });
@@ -865,23 +908,81 @@ var render = function() {
           _vm._v(
             "\n                " + _vm._s(_vm.description) + "\n            "
           )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-12 pt-3" }, [
+        _c("div", { staticClass: "row no-gutters text-center" }, [
+          _vm.updated && !_vm.added
+            ? _c("span", { staticClass: "col-12" }, [
+                _vm._v("The show was added to the database.")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.updated && _vm.added
+            ? _c("span", { staticClass: "col-12" }, [
+                _vm._v("The show was added to your shows.")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.errorType.addToDB
+            ? _c("span", { staticClass: "col-12" }, [
+                _vm._v("The show is already present in the Database.")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.errorType.addToUser
+            ? _c("span", { staticClass: "col-12" }, [
+                _vm._v("The show was NOT added to your shows.")
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-12 pt-3 d-flex justify-content-end" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-md btn-link",
-              attrs: { type: "button", "data-group": "0", "data-type": "2" },
-              on: {
-                click: function($event) {
-                  return _vm.addShow(_vm.api_id)
-                }
-              }
-            },
-            [_vm._v("Add")]
-          )
-        ])
+        _c(
+          "div",
+          { staticClass: "row no-gutters d-flex justify-content-end" },
+          [
+            !_vm.error && !_vm.updated && !_vm.added
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-md btn-link",
+                    attrs: {
+                      type: "button",
+                      "data-group": "0",
+                      "data-type": "2"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.addShow(_vm.api_id)
+                      }
+                    }
+                  },
+                  [_vm._v("Add")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.error && _vm.updated && !_vm.added
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-md btn-primary",
+                    attrs: {
+                      type: "button",
+                      "data-group": "0",
+                      "data-type": "3"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.addUserShow(_vm.uuid)
+                      }
+                    }
+                  },
+                  [_vm._v("Add to your shows")]
+                )
+              : _vm._e()
+          ]
+        )
       ])
     ])
   ])
@@ -1100,20 +1201,27 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('truncate', function (text, st
 var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#ShowSearch',
   data: {
-    showSearchQuery: '',
+    showSearchQuery: 'dogs of berlin',
     results: [],
     active: false,
     noResults: false,
-    searching: false
+    searching: false,
+    searched: false
   },
   methods: {
     searchShow: function searchShow() {
       var _this = this;
 
+      this.results = [];
+      this.searched = false;
+      this.searching = false;
+      this.active = false;
+
       if (this.showSearchQuery.trim().length > 0) {
         this.searching = true;
         window.axios.get('/data/search/show/' + this.showSearchQuery).then(function (_ref) {
           var data = _ref.data;
+          _this.searched = true;
 
           if (data.data.length > 0) {
             _this.active = true;
@@ -1127,11 +1235,12 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         });
       } else {}
     },
-    addShow: function addShow(api_id) {
-      window.axios.get('/data/add/show/' + api_id).then(function (_ref2) {
-        var data = _ref2.data;
-        console.log(data);
-      });
+    resetSearch: function resetSearch() {
+      this.results = [];
+      this.searched = false;
+      this.searching = false;
+      this.active = false;
+      this.showSearchQuery = '';
     }
   }
 });
@@ -1280,6 +1389,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/less/common/vue-transitions.less":
+/*!****************************************************!*\
+  !*** ./resources/less/common/vue-transitions.less ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/less/components/card-episode.less":
 /*!*****************************************************!*\
   !*** ./resources/less/components/card-episode.less ***!
@@ -1380,9 +1500,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 0:
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/less/generic/cmn-variables.less ./resources/less/generic/cmn-fonts.less ./resources/less/generic/cmn-animations.less ./resources/less/generic/cmn-loaders.less ./resources/less/generic/cmn-inputs.less ./resources/less/generic/cmn-styles.less ./resources/less/common/base.less ./resources/less/components/card-episode.less ./resources/less/plugins/Stream.less ./resources/sass/app.scss ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/less/generic/cmn-variables.less ./resources/less/generic/cmn-fonts.less ./resources/less/generic/cmn-animations.less ./resources/less/generic/cmn-loaders.less ./resources/less/generic/cmn-inputs.less ./resources/less/generic/cmn-styles.less ./resources/less/common/vue-transitions.less ./resources/less/common/base.less ./resources/less/components/card-episode.less ./resources/less/plugins/Stream.less ./resources/sass/app.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1393,6 +1513,7 @@ __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\g
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-loaders.less */"./resources/less/generic/cmn-loaders.less");
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-inputs.less */"./resources/less/generic/cmn-inputs.less");
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-styles.less */"./resources/less/generic/cmn-styles.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\common\vue-transitions.less */"./resources/less/common/vue-transitions.less");
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\common\base.less */"./resources/less/common/base.less");
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\components\card-episode.less */"./resources/less/components/card-episode.less");
 __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\plugins\Stream.less */"./resources/less/plugins/Stream.less");

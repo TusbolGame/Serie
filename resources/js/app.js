@@ -28,18 +28,24 @@ import Vue from 'vue'
 var ShowSearch = new Vue({
     el: '#ShowSearch',
     data: {
-        showSearchQuery: '',
+        showSearchQuery: 'dogs of berlin',
         results: [],
         active: false,
         noResults: false,
-        searching: false
+        searching: false,
+        searched: false,
     },
     methods: {
         searchShow: function () {
+            this.results = [];
+            this.searched = false;
+            this.searching = false;
+            this.active = false;
             if (this.showSearchQuery.trim().length > 0) {
                 this.searching = true;
                 window.axios.get('/data/search/show/' + this.showSearchQuery)
                     .then(({data}) => {
+                        this.searched = true;
                         if (data.data.length > 0) {
                             this.active = true;
                         } else {
@@ -50,14 +56,14 @@ var ShowSearch = new Vue({
                         this.results = data.data;
                     });
             } else {
-
             }
         },
-        addShow: function(api_id) {
-            window.axios.get('/data/add/show/' + api_id)
-                .then(({data}) => {
-                    console.log(data);
-                });
+        resetSearch: function() {
+            this.results = [];
+            this.searched = false;
+            this.searching = false;
+            this.active = false;
+            this.showSearchQuery = '';
         }
     }
 });

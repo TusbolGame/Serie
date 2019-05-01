@@ -41,6 +41,7 @@
                                         <input v-model="showSearchQuery" type="text" class="w-100 form-control form-control-md" id="showSearchInput" placeholder="Search new shows">
                                     </div>
                                     <div class="col-xl-4 col-sm-12 d-flex justify-content-end">
+                                        <button v-if="searched" @click="resetSearch" type="button" class="btn btn-md btn-primary mr-2" data-group="0" data-type="4">Reset</button>
                                         <button @click="searchShow" type="button" class="btn btn-md btn-primary" data-group="0" data-type="1">Search</button>
                                     </div>
                                 </div>
@@ -53,8 +54,7 @@
                                                                       v-bind:name="result.name"
                                                                       v-bind:api_link="result.api_link"
                                                                       v-bind:api_rating="result.api_rating"
-                                                                      v-bind:description="result.description | truncate(150)"
-                                                                      @add-show="addShow"
+                                                                      v-bind:description="result.description | truncate(200)"
                                                                       v-bind:poster="result.poster">
                                         </show-search-result-component>
                                     </div>

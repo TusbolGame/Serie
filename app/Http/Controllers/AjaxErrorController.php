@@ -2,29 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-
 class AjaxErrorController extends Controller {
     private $message;
     private $status;
     private $data;
 
-    public function __construct($message, $status, $data = NULL) {
-        $this->message = $message;
-        $this->status = $status;
-        $this->data = $data;
-
+    public static function response($message, $status, $data = NULL) {
         $javascriptError = new JavascriptErrorController();
-        $javascriptError->errorHandler(NULL, $this->data, $this->status);
-    }
+        $javascriptError->errorHandler(NULL, $data, $status);
 
-    public function __toString() {
-        return json_encode([
-            'message' => $this->message,
-            'status' => $this->status,
-            'data' => $this->data,
-        ]);
+        return response()->json([
+            'message' => $message,
+            'status' => $status,
+            'data' => $data,
+            ], $status);
     }
 }
 

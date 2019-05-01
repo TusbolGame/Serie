@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* Deep Purple, Blue, Green, Amber, Deep Orange, Indigo, Purple, Light Blue, Teal, Lime, Orange, Pink, Red, Grey, White */
+.userNoSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cmn-click {
+  cursor: pointer;
+}
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: opacity, transform;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateX(50px) scaleY(0.5);
+}
+.list-enter-to {
+  opacity: 1;
+  transform: translateX(0) scaleY(1);
+}
+.list-leave-active {
+  position: absolute;
+}
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+}
+.fade-enter-active,
+.fade-leave-active,
+.fade-move {
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: opacity;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+/*# sourceMappingURL=vue-transitions.css.map */
