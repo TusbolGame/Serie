@@ -31,9 +31,9 @@ mix.js('resources/js/app.js', 'public/js')
         ],
         'public/js/common.js')
     .scripts([
-            'resources/js/components/*.js'
+            'resources/js/specific/*.js'
         ],
-        'public/js/components.js')
+        'public/js/specific.js')
     .scripts([
             'resources/js/plugins/*.js'
         ],

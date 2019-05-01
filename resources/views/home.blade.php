@@ -5,7 +5,7 @@
         <div class="col-xl-9 col-sm-12 px-1 text-filter-container">
             <div class="row pb-3">
                 <h2 class="col-xl-9 col-sm-12 m-0 pt-2">Unwatched Episodes</h2>
-                <div class="col-xl-3 col-sm-12">
+                <div class="col-xl-3 col-sm-12 pt-2 pt-xl-0">
                     <input class="form-control text-filter-input" type="text" placeholder="Filter" autocomplete="off">
                 </div>
             </div>
@@ -25,29 +25,48 @@
                     <div class="card">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item p-2">
-                                <div class="row no-gutters">
+                                <div id="show-update-container" class="row no-gutters cmn-admin-action">
                                     <div class="col-xl-7 col-sm-12 pr-1 pt-2">
                                         Update all shows
                                     </div>
                                     <div class="col-xl-5 col-sm-12 d-flex justify-content-end">
-                                        <button type="button" class="btn btn-sm btn-primary" data-group="0" data-type="0">Update</button>
+                                        <button type="button" class="btn btn-md btn-primary" data-group="0" data-type="0">Update</button>
                                     </div>
                                 </div>
                             </li>
-                            <li class="list-group-item p-2">
-                                <form class="row no-gutters form-inline">
+                            <li id="ShowSearch" class="list-group-item p-2">
+                                <div class="row no-gutters form-inline cmn-admin-action">
                                     <div class="col-xl-8 col-sm-12 form-group pr-1">
-                                        <label for="showSearch" class="sr-only">Email</label>
-                                        <input type="text" class="w-100 form-control form-control-sm" id="showSearch" placeholder="Search new shows">
+                                        <label for="showSearch" class="sr-only">Search</label>
+                                        <input v-model="showSearchQuery" type="text" class="w-100 form-control form-control-md" id="showSearchInput" placeholder="Search new shows">
                                     </div>
                                     <div class="col-xl-4 col-sm-12 d-flex justify-content-end">
-                                        <a href="/data/update/0" type="button" class="btn btn-sm btn-primary" data-group="0" data-type="0">Search</a>
+                                        <button @click="searchShow" type="button" class="btn btn-md btn-primary" data-group="0" data-type="1">Search</button>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="row no-gutters cmn-admin-result mt-3" v-if="active">
+                                    <h4 class="row no-gutters mb-2">Results</h4>
+                                    <div class="row no-gutters results">
+                                        <show-search-result-component v-for="result in results" v-bind:data="result"
+                                                                      v-bind:key="result.api_id"
+                                                                      v-bind:api_id="result.api_id"
+                                                                      v-bind:name="result.name"
+                                                                      v-bind:api_link="result.api_link"
+                                                                      v-bind:api_rating="result.api_rating"
+                                                                      v-bind:description="result.description | truncate(150)"
+                                                                      @add-show="addShow"
+                                                                      v-bind:poster="result.poster">
+                                        </show-search-result-component>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters mt-3" v-if="noResults">
+                                    <span class="col-12 text-center">No shows were found.</span>
+                                </div>
+                                <div class="row no-gutters mt-3 text-center" v-if="searching">
+                                    <span class="col-12 text-center">Searching...</span>
+                                </div>
                             </li>
                         </ul>
-                        <div class="card-body">
-                        </div>
                     </div>
                 </div>
             </div>

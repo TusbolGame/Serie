@@ -20,7 +20,8 @@ Auth::routes();
 
 Route::post('/errors/javascript/add', 'JavascriptErrorController@errorManager')->middleware('auth');
 
-Route::get('/data/update/{type}', 'DataUpdateController@updateManager')->middleware('auth');
+Route::get('/data/search/show/{show_name}', 'DataUpdateController@searchShowController')->middleware('auth');
+Route::get('/data/update/{type}/(api_id?)', 'DataUpdateController@updateManager')->middleware('auth');
 
 Route::get('/episode/{episode}', 'EpisodeController@episode')->middleware('auth');
 Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');

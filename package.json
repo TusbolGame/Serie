@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "bootbox": "^5.1.2",
-        "moment": "^2.24.0"
+        "moment": "^2.24.0",
+        "popper": "^1.0.1"
     }
 }

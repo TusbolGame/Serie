@@ -61,6 +61,10 @@ class HomeController extends Controller {
                 ->get();
         }
 
+//        $search = new DataUpdateController();
+//        $result = $search->searchShowController('person of interest');
+//        var_dump($result);
+
         return view('home', ['episodes' => $episodes, 'schedule' => $schedule]);
     }
 }
