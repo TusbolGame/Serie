@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+require('./Echo');
 
 /**
  * The following block of code may be used to automatically register your

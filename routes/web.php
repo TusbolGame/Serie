@@ -32,3 +32,15 @@ Route::get('/episode/action/add/{buttonType}', 'EpisodeController@actionAdd')->m
 Route::get('/show/{show}', 'ShowController@show')->middleware('auth');
 Route::get('/show/remove/{show}', 'ShowController@removeUserShow')->middleware('auth');
 Route::get('/show/add/{show}', 'ShowController@addUserShow')->middleware('auth');
+
+
+
+
+
+Route::get('/episode-action', function(){
+//    $redis = app()->make(('redis'));
+//    $redis->set('user', 'pinuccio');
+//    $redis->get('user');
+    $episode = \App\Episode::where('id', 1)->first();
+    broadcast(new \App\Events\EpisodeCreated(\Illuminate\Support\Facades\Auth::user(), $episode));
+});

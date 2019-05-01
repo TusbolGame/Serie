@@ -18,4 +18,9 @@
 <link href="{{asset('css/components.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins.css')}}" rel="stylesheet">
 <link rel="shortcut icon" href="{{{asset('img/ui/favicon.png')}}}">
+<script>
+    window.Laravel = {!! json_encode([
+        'user' => auth()->check() ? auth()->user()->id : null,
+    ]) !!};
+</script>
 @stack('pagespecificstyles')

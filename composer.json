@@ -14,6 +14,7 @@
         "laravel/framework": "^5.7",
         "laravel/tinker": "^1.0",
         "moontoast/math": "^1.1",
+        "predis/predis": "^1.1",
         "ramsey/uuid": "^3.8",
         "spatie/flysystem-dropbox": "^1.0",
         "spatie/laravel-backup": "^6.2",
