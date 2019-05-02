@@ -13,10 +13,25 @@ trait PosterHandler {
         $posterController = new PosterController();
         $poster = $posterController->newImage($data->original, $owner, $folder);
 
-        if ($poster == NULL || $poster === 0 ||  $poster === 1 ||  $poster === 2) {
-            $poster = NULL;
-        }
+        switch ($poster) {
+            case NULL:          // Unknown error
+                $poster = NULL;
+                break;
+            case 0:             // File is already present on disk
+                $poster = NULL;
+                break;
+            case 1:             // Response error / Network error
+                $poster = NULL;
+                break;
+            case 2:             // Save path not created or issues
+                $poster = NULL;
+                break;
+            case 3:             // Failed to convert the image
+                $poster = NULL;
+                break;
+            default:
+                return $poster;
 
-        return $poster;
+        }
     }
 }

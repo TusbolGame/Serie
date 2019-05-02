@@ -5,6 +5,7 @@ return [
     'streamFolder' => 'G:/Streams/',
     'backupFolder' => 'C:/Users/Ivan/Dropbox/Code/Web/___Database___BACKUP/',
     'posterOriginalFolder' => 'img/posters/original/',
+    'posterTempFolder' => 'img/posters/temp/',
     'posterBigFolder' => 'img/posters/big/',
     'posterMidFolder' => 'img/posters/mid/',
     'posterSmaFolder' => 'img/posters/sma/',
