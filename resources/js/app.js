@@ -57,7 +57,7 @@ var ShowSearch = new Vue({
                         this.searching = false;
                         this.results = data.data;
                     }).catch((error) => {
-                    console.log(error.response.data);
+                    console.log(error.response);
                 });
             } else {
             }
@@ -90,7 +90,7 @@ var ShowUpdate = new Vue({
                         this.results.push(episode);
                     });
                 }).catch((error) => {
-                console.log(error.response.data);
+                console.log(error.response);
             });
         },
     }

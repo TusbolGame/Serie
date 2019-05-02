@@ -88,6 +88,7 @@ module.exports = function(arraybuffer, start, end) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _loaders_SquareGridLoaderComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loaders/SquareGridLoaderComponent.vue */ "./resources/js/components/loaders/SquareGridLoaderComponent.vue");
 //
 //
 //
@@ -120,8 +121,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowSearchResultComponent",
+  components: {
+    SquareGridLoaderComponent: _loaders_SquareGridLoaderComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: ['show_name', 'api_id', 'api_id', 'api_link', 'api_rating', 'description', 'poster', 'existing', 'owned'],
   data: function data() {
     return {
@@ -148,7 +154,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.uuid = data.data;
         _this.updated = true;
       })["catch"](function (error) {
-        console.log(error.response.data);
+        console.log(error.response);
         _this.adding = false;
         _this.error = true;
         _this.errorType.addToDB = true;
@@ -162,17 +168,13 @@ __webpack_require__.r(__webpack_exports__);
         _this2.added = true;
         props.owned = true;
       })["catch"](function (error) {
-        console.log(error.response.data);
+        console.log(error.response);
         _this2.error = true;
         _this2.errorType.addToUser = true;
       });
     }
   },
-  watch: {
-    muteShow: function muteShow(val) {
-      document.getElementsByClassName('cover').className = val ? "cover active" : "cover";
-    }
-  }
+  watch: {}
 });
 
 /***/ }),
@@ -205,6 +207,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowUpdateResultComponent",
   props: ['show_name', 'uuid', 'api_link', 'airing_at', 'episode_code', 'summary'],
+  data: function data() {
+    return {};
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "SquareGridLoaderComponent",
+  props: {
+    loading: {
+      type: Boolean,
+      "default": false
+    }
+  },
   data: function data() {
     return {};
   }
@@ -2715,7 +2747,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.cover[data-v-fb093b80] {\n    position: absolute;\n}\n.cover.active[data-v-fb093b80] {\n    opacity: 0.8;\n    z-index: 99;\n    background: #FFFFFF;\n    height: 100%;\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.cover[data-v-fb093b80] {\n    position: absolute;\n}\n.cover .cmn-loader-container[data-v-fb093b80] {\n    display: none;\n}\n.cover.active[data-v-fb093b80] {\n    z-index: 99;\n    height: 100%;\n    width: 100%;\n}\n.cover.active .curtain[data-v-fb093b80] {\n    position: absolute;\n    opacity: 0.8;\n    background: #FFFFFF;\n    height: 100%;\n    width: 100%;\n}\n.cover.active .cmn-loader-container[data-v-fb093b80] {\n    display: block;\n}\n", ""]);
 
 // exports
 
@@ -11408,7 +11440,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
-    _c("div", { staticClass: "row no-gutters mb-3" }, [
+    _c("div", { staticClass: "result row no-gutters mb-3" }, [
       _c("div", { staticClass: "col-3" }, [
         _c("img", { staticClass: "w-100", attrs: { src: _vm.poster } })
       ]),
@@ -11443,13 +11475,13 @@ var render = function() {
           _vm._v(" "),
           _vm.owned
             ? _c("span", { staticClass: "col-12" }, [
-                _vm._v("The show is already in your shows.")
+                _vm._v("The show is in your shows.")
               ])
             : _vm._e(),
           _vm._v(" "),
           (_vm.existing && !_vm.owned) || _vm.errorType.addToDB
             ? _c("span", { staticClass: "col-12" }, [
-                _vm._v("The show is already present in the Database.")
+                _vm._v("The show is in the Database.")
               ])
             : _vm._e(),
           _vm._v(" "),
@@ -11514,7 +11546,29 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "cover pb-3" })
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.adding,
+              expression: "adding"
+            }
+          ],
+          class: {
+            "cover pb-3 d-flex justify-content-center align-items-center": true,
+            active: _vm.adding
+          }
+        },
+        [
+          _c("div", { staticClass: "curtain" }),
+          _vm._v(" "),
+          _c("square-grid-loader-component", { attrs: { loading: _vm.adding } })
+        ],
+        1
+      )
     ])
   ])
 }
@@ -11559,6 +11613,42 @@ var render = function() {
       ])
     ])
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      class: {
+        "cmn-loader-container cmn-cube-grid c2": true,
+        loading: _vm.loading
+      }
+    },
+    _vm._l(9, function(index) {
+      return _c("div", { class: "cmn-loader-cube cmn-loader-cube" + index })
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -11901,7 +11991,7 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           _this.searching = false;
           _this.results = data.data;
         })["catch"](function (error) {
-          console.log(error.response.data);
+          console.log(error.response);
         });
       } else {}
     },
@@ -11935,7 +12025,7 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           _this2.results.push(episode);
         });
       })["catch"](function (error) {
-        console.log(error.response.data);
+        console.log(error.response);
       });
     }
   }
@@ -12162,6 +12252,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowUpdateResultComponent_vue_vue_type_template_id_6de3517f_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowUpdateResultComponent_vue_vue_type_template_id_6de3517f_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/loaders/SquareGridLoaderComponent.vue":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/loaders/SquareGridLoaderComponent.vue ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true& */ "./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true&");
+/* harmony import */ var _SquareGridLoaderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SquareGridLoaderComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SquareGridLoaderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "0c04ce3d",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/loaders/SquareGridLoaderComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SquareGridLoaderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./SquareGridLoaderComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SquareGridLoaderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true&":
+/*!******************************************************************************************************************!*\
+  !*** ./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true& ***!
+  \******************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loaders/SquareGridLoaderComponent.vue?vue&type=template&id=0c04ce3d&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SquareGridLoaderComponent_vue_vue_type_template_id_0c04ce3d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -161,7 +161,7 @@ function createPlaceHolder(type, colorClass) {
     if (type === 0) {
         container.addClass("cmn-cube-grid");
         for (var i = 1; i <= 9; i++) {
-            container.append('<div class="cmn-cube sk-cube'+i+'"></div>');
+            container.append('<div class="cmn-loader-cube cmn-loader-cube'+i+'"></div>');
         }
     } else if (type === 1) {
         container.addClass("loading");
