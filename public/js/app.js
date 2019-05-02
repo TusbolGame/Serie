@@ -236,7 +236,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     color: {
       type: String,
-      "default": 'c3'
+      "default": ' c2'
     }
   },
   data: function data() {
