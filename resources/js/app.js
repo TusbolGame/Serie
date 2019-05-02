@@ -8,6 +8,8 @@
 require('./bootstrap');
 require('./Echo');
 
+import Vue from 'vue'
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,17 +21,16 @@ require('./Echo');
 // const files = require.context('./components', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
 
 Vue.filter('truncate', function (text, stop, suffix) {
     return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '')
 })
 
-import Vue from 'vue'
+Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
 var ShowSearch = new Vue({
     el: '#ShowSearch',
     data: {
-        showSearchQuery: 'dogs of berlin',
+        showSearchQuery: '',
         results: [],
         active: false,
         noResults: false,
@@ -55,7 +56,9 @@ var ShowSearch = new Vue({
                         }
                         this.searching = false;
                         this.results = data.data;
-                    });
+                    }).catch((error) => {
+                    console.log(error.response.data);
+                });
             } else {
             }
         },
@@ -66,5 +69,29 @@ var ShowSearch = new Vue({
             this.active = false;
             this.showSearchQuery = '';
         }
+    }
+});
+
+Vue.component('show-update-result-component', require('./components/ShowUpdateResultComponent.vue').default);
+var ShowUpdate = new Vue({
+    el: '#ShowUpdate',
+    data: {
+        active: false,
+        results: [],
+    },
+    methods: {
+        updateAllShows: function () {
+            window.axios.get('/data/update/0')
+                .then(({data}) => {
+                    this.active = true;
+                    Echo.channel('episode-action.' + window.Laravel.user).listen('EpisodeCreated', (user, episode) => {
+                        console.log(user);
+                        console.log(episode);
+                        this.results.push(episode);
+                    });
+                }).catch((error) => {
+                console.log(error.response.data);
+            });
+        },
     }
 });

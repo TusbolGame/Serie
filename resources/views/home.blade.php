@@ -24,13 +24,28 @@
                 <div class="col-12">
                     <div class="card">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item p-2">
+                            <li id="ShowUpdate" class="list-group-item p-2">
                                 <div id="show-update-container" class="row no-gutters cmn-admin-action">
                                     <div class="col-xl-7 col-sm-12 pr-1 pt-2">
                                         Update all shows
                                     </div>
                                     <div class="col-xl-5 col-sm-12 d-flex justify-content-end">
-                                        <button type="button" class="btn btn-md btn-primary" data-group="0" data-type="0">Update</button>
+                                        <button type="button" @click="updateAllShows" class="btn btn-md btn-primary" data-group="0" data-type="0">Update</button>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters cmn-admin-result mt-3" v-if="active">
+                                    <h4 class="row no-gutters mb-2">Updated Episodes</h4>
+                                    <div class="row no-gutters results">
+                                        <show-update-result-component v-for="result in results" v-bind:data="result"
+                                                                      v-bind:key="result.id"
+                                                                      v-bind:id="result.id"
+                                                                      v-bind:show_name="result.show_name"
+                                                                      v-bind:uuid="result.uuid"
+                                                                      v-bind:api_link="result.api_link"
+                                                                      v-bind:airing_at="result.airing_at"
+                                                                      v-bind:episode_code="result.episode_code"
+                                                                      v-bind:summary="result.summary | truncate(200)">
+                                        </show-update-result-component>
                                     </div>
                                 </div>
                             </li>
@@ -51,11 +66,13 @@
                                         <show-search-result-component v-for="result in results" v-bind:data="result"
                                                                       v-bind:key="result.api_id"
                                                                       v-bind:api_id="result.api_id"
-                                                                      v-bind:name="result.name"
+                                                                      v-bind:show_name="result.show_name"
                                                                       v-bind:api_link="result.api_link"
                                                                       v-bind:api_rating="result.api_rating"
                                                                       v-bind:description="result.description | truncate(200)"
-                                                                      v-bind:poster="result.poster">
+                                                                      v-bind:poster="result.poster"
+                                                                      v-bind:existing="result.existing"
+                                                                      v-bind:owned="result.owned">
                                         </show-search-result-component>
                                     </div>
                                 </div>

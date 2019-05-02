@@ -6,6 +6,7 @@ use App\ApiUpdate;
 use App\ContentRating;
 use App\DataUpdate;
 use App\Episode;
+use App\Events\EpisodeCreated;
 use App\Season;
 use App\Show;
 use App\Status;
@@ -14,6 +15,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -25,41 +27,45 @@ class DataUpdateController extends Controller {
     private $updateEndedLimitDays = 100;
 
     public function updateManager($type, $api_id = NULL, $uuid = NULL) {
-        if ($type == 0) {                   // Update all shows
-            $options = [
-                'type' => 0
-            ];
-        } else if ($type == 1) {            // Update shows where last update $this->updateLimitDays days ago
-            $options = [
-                'type' => 1
-            ];
-        } else if ($type == 2) {            // Update a specific show
-            $options = [
-                'type' => 2,
-                'uuid' => $uuid
-            ];
-        } else if ($type == 3) {            // New show
-            $options = [
-                'type' => 3,
-                'api_id' => $api_id,
-            ];
-        } else {
-            return AjaxErrorController::response("The update type is not valid.", 409);
-        }
-        $this->dataUpdate = DataUpdate::create([
-            'type' => $type
-        ]);
-        $results = $this->updateController($options);
+//        if ($type == 0) {                   // Update all shows
+//            $options = [
+//                'type' => 0
+//            ];
+//        } else if ($type == 1) {            // Update shows where last update $this->updateLimitDays days ago
+//            $options = [
+//                'type' => 1
+//            ];
+//        } else if ($type == 2) {            // Update a specific show
+//            $options = [
+//                'type' => 2,
+//                'uuid' => $uuid
+//            ];
+//        } else if ($type == 3) {            // New show
+//            $options = [
+//                'type' => 3,
+//                'api_id' => $api_id,
+//            ];
+//        } else {
+//            return AjaxErrorController::response("The update type is not valid.", 409);
+//        }
+//        $this->dataUpdate = DataUpdate::create([
+//            'type' => $type
+//        ]);
+//        $results = $this->updateController($options);
+//
+//        if ($results == -1) {
+//            return AjaxErrorController::response("Wrong update type.", 409);
+//        } else if ($results == -2) {
+//            return AjaxErrorController::response("The show is already present in the database.", 409);
+//        }
+//
+//        $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
+//        $this->dataUpdate->save();
+//        return AjaxSuccessController::response("Update successful", $results);
+        $episode = Episode::where('id', 3450)->first();
+        event(new EpisodeCreated(Auth::user(), $episode));
 
-        if ($results == -1) {
-            return AjaxErrorController::response("Wrong update type.", 409);
-        } else if ($results == -2) {
-            return AjaxErrorController::response("The show is already present in the database.", 409);
-        }
-
-        $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
-        $this->dataUpdate->save();
-        return AjaxSuccessController::response("Update successful", $results);
+        return AjaxSuccessController::response('Success');
     }
 
     public function updateController($mainOptions) {
@@ -116,12 +122,13 @@ class DataUpdateController extends Controller {
             $limitDate = new Carbon($this->updateEndedLimitDays . ' days ago midnight');
             $lastUpdateCheck = ApiUpdate::select('api_updated_at')->where([
                 'show_id' => $show->id,
-            ])->orderBy('api_updated_at', 'desc')->value('api_updated_at')->first();     // Get last time this show was updated
+            ])->orderBy('api_updated_at', 'desc')->value('api_updated_at');     // Get last time this show was updated
 
-            $lastUpdate = $first = Carbon::createFromTimestamp($lastUpdateCheck->api_updated_at);
-
-            if ($lastUpdateCheck == NULL || $lastUpdate->lessThan($limitDate)) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
-                $type = 1;
+            if ($lastUpdateCheck == NULL) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
+                $lastUpdate = $first = Carbon::createFromTimestamp($lastUpdateCheck->api_updated_at);
+                if ($lastUpdate->lessThan($limitDate)) {
+                    $type = 1;
+                }
             }
         } else {
             $type = 1;
@@ -255,7 +262,15 @@ class DataUpdateController extends Controller {
             'language' => $rawData->show->language,
             'running_time' => $rawData->show->runtime,
             'genres' => $rawData->show->genres,
+            'existing' => FALSE,
+            'owned' => FALSE,
         ];
+        $showCheck = Show::where('api_id', $rawData->show->id)->first();
+        if ($showCheck != NULL) {
+            $show['existing'] = TRUE;
+            $user = Auth::user();
+            $show['owned'] = $user->shows()->where('shows.id', $showCheck->id)->exists();
+        }
 
         if (isset($rawData->show->network)) {
             $show['network'] = $rawData->show->network->name;
@@ -525,6 +540,8 @@ class DataUpdateController extends Controller {
 
         $episode->show()->associate($show);
         $episode->save();
+
+        event(new EpisodeCreated(Auth::user(), $episode->fresh()));
 
         if ($flagNewEpisode === TRUE) {
             return $episode->fresh();

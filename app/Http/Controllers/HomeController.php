@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Episode;
+use App\Events\EpisodeCreated;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller {
     /**

@@ -70,14 +70,14 @@ class EpisodeController extends Controller {
                 $newAction = 'episodeRate';
                 break;
             default:
-                return new AjaxErrorController("The button type does not exist", 409, 0);
+                return AjaxErrorController::response("The button type does not exist", 409, 0);
                 break;
         }
 
         $actionType = ActionType::where('name', $newAction)->first();
 
         if (empty($actionType)) {
-            return new AjaxErrorController("Backend error, the action type does not exist", 409, 1);
+            return AjaxErrorController::response("Backend error, the action type does not exist", 409, 1);
         }
 
         $action = new Action([
@@ -86,21 +86,21 @@ class EpisodeController extends Controller {
 
         $action->save();
 
-        return new AjaxSuccessController("Action add Successful", []);
+        return AjaxSuccessController::response("Action add Successful", []);
     }
 
     public function viewMark($episode, $state, $torrent = NULL) {
         $episodeCheck = Episode::where('uuid', $episode)->with('show')->first();
 
         if (empty($episodeCheck)) {
-            return new AjaxErrorController("The episode does not exist", 409, 1);
+            return AjaxErrorController::response("The episode does not exist", 409, 1);
         }
 
         if (!is_null($torrent)) {
             $torrentCheck = Torrent::where('id', $torrent)->first();
 
             if (empty($torrentCheck)) {
-                return new AjaxErrorController("The torrent does not exist", 409, 1);
+                return AjaxErrorController::response("The torrent does not exist", 409, 1);
             }
         }
 
@@ -109,7 +109,7 @@ class EpisodeController extends Controller {
                 $videoView = VideoView::where('ended_at', '!=', NULL)->first();
                 $videoView->ended_at = NULL;
                 $videoView->save();
-                return new AjaxSuccessController("Video mark Successful", []);
+                return AjaxSuccessController::response("Video mark Successful", []);
             case 1:             // To be marked as watched
                 $videoView = new VideoView([
                     'user_id' => Auth::user()->id,
@@ -127,9 +127,9 @@ class EpisodeController extends Controller {
                 })->orderBy('airing_at', 'ASC')->first();
 
                 if (!empty($nextEpisode)) {
-                    return new AjaxSuccessController("Video mark Successful", view('components.card-episode', ['episode' => $nextEpisode])->render());
+                    return AjaxSuccessController::response("Video mark Successful", view('components.card-episode', ['episode' => $nextEpisode])->render());
                 } else {
-                    return new AjaxSuccessController("Video mark Successful", []);
+                    return AjaxSuccessController::response("Video mark Successful", []);
                 }
 
             case 2:            // ALL to be marked as unwatched
@@ -137,7 +137,7 @@ class EpisodeController extends Controller {
             case 3:            // ALL to be marked as watched
                 break;
             default:
-                return new AjaxErrorController("The view mark state is not correct", 409, 0);
+                return AjaxErrorController::response("The view mark state is not correct", 409, 0);
                 break;
         }
 
@@ -147,19 +147,19 @@ class EpisodeController extends Controller {
         $hashCheck = preg_match('/([a-fA-F0-9]{40})/', $magnetlink, $matches);
 
         if ($hashCheck == FALSE || $hashCheck == 0) {
-            return new AjaxErrorController("The string is not a valid magnet link", 409, 0);
+            return AjaxErrorController::response("The string is not a valid magnet link", 409, 0);
         }
 
         $episodeCheck = Episode::where('uuid', $episode)->first();
         if (empty($episodeCheck)) {
-            return new AjaxErrorController("The episode does not exist", 409, 1);
+            return AjaxErrorController::response("The episode does not exist", 409, 1);
         }
 
         $torrentCheck = Torrent::where(['hash' => strtoupper($matches[1])])->first();
 
         if (!empty($torrentCheck)) {
             if ($torrentCheck->episode_id !== $episodeCheck->id) {
-                return new AjaxErrorController("Wrong association between torrent and episode. The same torrent is already linked to an other episode", 409, 4);
+                return AjaxErrorController::response("Wrong association between torrent and episode. The same torrent is already linked to an other episode", 409, 4);
             }
             $torrent = $torrentCheck;
         } else {
@@ -179,25 +179,25 @@ class EpisodeController extends Controller {
         );
 
         if (!$utorrentClient->is_online()) {
-            return new AjaxErrorController("The torrent client is not online", 404, 2);
+            return AjaxErrorController::response("The torrent client is not online", 404, 2);
         }
 
         $result = $utorrentClient->torrentAdd($magnetlink);
 
 //        if ($result == FALSE) {
-//            return new AjaxErrorController("The torrent could not be added", 409, 3);
+//            return AjaxErrorController::response("The torrent could not be added", 409, 3);
 //        }
 
         $result = $utorrentClient->torrentStart('magnet:?xt=urn:btih:' . $magnetlink);
 
-        return new AjaxSuccessController("Torrent addition Successful", []);
+        return AjaxSuccessController::response("Torrent addition Successful", []);
     }
 
     public function torrentCheck($hash) {
         $torrentCheck = Torrent::where('hash', $hash)->first();
 
         if (empty($torrentCheck)) {
-            return new AjaxErrorController("The hash does not exist", 409, 4);
+            return AjaxErrorController::response("The hash does not exist", 409, 4);
         }
 
         $utorrent = new Api(
@@ -254,7 +254,7 @@ class EpisodeController extends Controller {
 
         $torrentCheck->save();
 
-        return new AjaxSuccessController("Torrent check Successful", $torrents[$currentTorrentKey][10]);
+        return AjaxSuccessController::response("Torrent check Successful", $torrents[$currentTorrentKey][10]);
     }
 
     public function codeGenerator($season, $episode) {

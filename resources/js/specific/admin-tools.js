@@ -7,7 +7,7 @@ $(document).ready(function() {
         if (buttonGroup == 0) {
             switch (buttonType) {
                 case 0:         // Update all shows
-                    updateShows(0);
+                    // updateShows(0);
                     break;
                 case 1:         // Search shows
                     // if ($('#showSearch').val().trim().length == 0) {

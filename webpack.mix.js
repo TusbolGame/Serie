@@ -18,7 +18,6 @@ mix.js('resources/js/app.js', 'public/js')
     'bootbox',
     'moment',
     'axios',
-    'Echo',
     'lodash',
     'popper.js',
     'vue'

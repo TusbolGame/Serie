@@ -39,19 +39,21 @@ class PosterController extends Controller {
             if (md5_file($image['path']) != md5_file($oldFileName)) {
                 $poster = $this->saveNewPoster($image['name']);
             } else {
-                try {
-                    $result = unlink($image['path']);     // Delete downloaded image if already exists in database
-                    if ($result == FALSE) {               // If delete failed, file added to database to be deleted later
+                if (file_exists($image['path'])) {
+                    try {
+                        // TODO Solve the unlink issue (Resource temporarily unavailable)
+                        if (!unlink($image['path'])) {               // Delete downloaded image if already exists in database. If delete failed, file added to database to be deleted later
+                            TempPoster::firstOrCreate([
+                                'path' => $image['path'],
+                                'outcome' => $image['path'],
+                            ]);
+                        }
+                    } catch (ErrorException $e) {
                         TempPoster::firstOrCreate([
                             'path' => $image['path'],
                             'outcome' => $image['path'],
                         ]);
                     }
-                } catch (ErrorException $e) {
-                    TempPoster::firstOrCreate([
-                        'path' => $image['path'],
-                        'outcome' => $image['path'],
-                    ]);
                 }
                 $poster = 0;
             }
