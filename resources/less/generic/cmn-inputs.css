@@ -228,6 +228,15 @@ button::-moz-focus-inner {
 .default-search:after {
   content: '\E8B6';
 }
+.default-autorenew:after {
+  content: '\E863';
+}
+.default-error:after {
+  content: '\E000';
+}
+.default-delete:after {
+  content: '\E872';
+}
 .whi .cmn-button:not(.cmn-warn):not([disabled]).cmn-primary {
   color: #FFFFFF;
 }

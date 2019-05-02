@@ -5,9 +5,7 @@
                 <img class="w-100" v-bind:src="poster" >
             </div>
             <div class="col-9">
-                <div class="col-12 show-description">
-                    {{description}}
-                </div>
+                <div class="col-12 show-description">{{description}}</div>
             </div>
             <div class="col-12 pt-3">
                 <div class="row no-gutters text-center">
@@ -33,6 +31,7 @@
 
 <script>
     import SquareGridLoaderComponent from './loaders/SquareGridLoaderComponent.vue'
+
     export default {
         name: "ShowSearchResultComponent",
         components: {

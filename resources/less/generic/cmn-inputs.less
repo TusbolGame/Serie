@@ -278,6 +278,18 @@ button::-moz-focus-inner {
     content: '\E8B6';
 }
 
+&.default-autorenew:after {
+    content: '\E863';
+}
+
+&.default-error:after {
+    content: '\E000';
+}
+
+&.default-delete:after {
+    content: '\E872';
+}
+
 .loop (@colors, @className, @i) when (@i > 0) {
     @color: extract(@colors, @i);
     @class: extract(@className, @i);

@@ -40,8 +40,8 @@ class BackupDatabase extends Command {
 
         rsort($backupFiles);
 
-        if (sizeof($backupFiles) > 4) {
-            foreach (array_slice($backupFiles, 4) as $file) {
+        if (sizeof($backupFiles) > 5) {
+            foreach (array_slice($backupFiles, 5) as $file) {
                 unlink(config('custom.backupFolder') . $file);
             }
         }

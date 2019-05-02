@@ -120,8 +120,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowSearchResultComponent",
@@ -235,6 +233,10 @@ __webpack_require__.r(__webpack_exports__);
     loading: {
       type: Boolean,
       "default": false
+    },
+    color: {
+      type: String,
+      "default": 'c3'
     }
   },
   data: function data() {
@@ -11447,9 +11449,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-9" }, [
         _c("div", { staticClass: "col-12 show-description" }, [
-          _vm._v(
-            "\n                " + _vm._s(_vm.description) + "\n            "
-          )
+          _vm._v(_vm._s(_vm.description))
         ])
       ]),
       _vm._v(" "),
@@ -11639,10 +11639,10 @@ var render = function() {
   return _c(
     "div",
     {
-      class: {
-        "cmn-loader-container cmn-cube-grid c2": true,
-        loading: _vm.loading
-      }
+      class:
+        "cmn-loader-container cmn-cube-grid" +
+        _vm.color +
+        (_vm.loading ? " loading" : "")
     },
     _vm._l(9, function(index) {
       return _c("div", { class: "cmn-loader-cube cmn-loader-cube" + index })

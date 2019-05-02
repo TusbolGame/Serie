@@ -244,5 +244,44 @@
                 </div>
             </div>
         </div>
+        <div class="card-cover active">
+            <div class="card-cover-closer">
+                @component('components.cmn-button-icon')
+                    @slot('class')
+                        icon neu
+                    @endslot
+                    @slot('type')
+                        0
+                    @endslot
+                    @slot('group')
+                        1
+                    @endslot
+                    @slot('title')
+                        Close
+                    @endslot
+                    @slot('icon')
+                        default-clear
+                    @endslot
+                @endcomponent
+            </div>
+            <div class="card-cover-loader d-flex justify-content-center align-items-center">
+                <div class="cmn-loader-container cmn-cube-grid c2">
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube1"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube2"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube3"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube4"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube5"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube6"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube7"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube8"></div>
+                    <div data-v-0c04ce3d="" class="cmn-loader-cube cmn-loader-cube9"></div>
+                </div>
+            </div>
+            <div class="card-cover-splash d-flex justify-content-center align-items-center">
+                <div class="card-cover-item default-mark"></div>
+                {{--<div class="card-cover-item"></div>--}}
+                {{--<div class="card-cover-item"></div>--}}
+            </div>
+        </div>
     </div>
 </div>
