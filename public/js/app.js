@@ -11915,9 +11915,7 @@ module.exports = yeast;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-window.Echo.channel('episode-action.' + window.Laravel.user).listen('EpisodeCreated', function (e) {
-  console.log(e);
-});
+
 
 /***/ }),
 
@@ -12095,9 +12093,25 @@ window.io = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.i
 if (typeof io !== 'undefined') {
   window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
     broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
+    host: 'newserie.local:6001',
+    authEndpoint: '/broadcasting/auth'
   });
 }
+
+window.Echo["private"]('data-update.' + window.Laravel.user) // window.Echo.channel('data-update')
+.listen('EpisodeCreated', function (e) {
+  console.log(e);
+  console.log(true);
+});
+window.Echo.connector.socket.on('connect', function () {
+  console.log('connected', window.Echo.socketId());
+});
+window.Echo.connector.socket.on('disconnect', function () {
+  console.log('disconnected');
+});
+window.Echo.connector.socket.on('reconnecting', function (attemptNumber) {
+  console.log('reconnecting', attemptNumber);
+});
 
 /***/ }),
 

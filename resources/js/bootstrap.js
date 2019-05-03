@@ -47,14 +47,31 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo'
-
+import Echo from "laravel-echo"
 window.io = require('socket.io-client');
 
 // Have this in case you stop running your laravel echo server
+
 if (typeof io !== 'undefined') {
     window.Echo = new Echo({
         broadcaster: 'socket.io',
-        host: window.location.hostname + ':6001',
+        host: 'newserie.local:6001',
+        authEndpoint: '/broadcasting/auth',
     });
 }
+
+window.Echo.private('data-update.' + window.Laravel.user)
+// window.Echo.channel('data-update')
+    .listen('EpisodeCreated', (e) => {
+    console.log(e);
+    console.log(true);
+});
+window.Echo.connector.socket.on('connect', function(){
+    console.log('connected', window.Echo.socketId());
+});
+window.Echo.connector.socket.on('disconnect', function(){
+    console.log('disconnected');
+});
+window.Echo.connector.socket.on('reconnecting', function(attemptNumber){
+    console.log('reconnecting', attemptNumber);
+});

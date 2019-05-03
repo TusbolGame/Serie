@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Episode;
+use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -21,9 +22,9 @@ class EpisodeCreated implements ShouldBroadcast {
      *
      * @return void
      */
-    public function __construct($user, $episode) { //Episode $episode
+    public function __construct(User $user, Episode $episode) { //Episode $episode
         $this->user = $user;
-        $this->episode = $episode->id;
+        $this->episode = $episode;
     }
 
     /**
@@ -32,6 +33,7 @@ class EpisodeCreated implements ShouldBroadcast {
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn() {
-        return new PrivateChannel('episode-action.' . $this->user->id);
+//        return ['data-update'];
+        return new PrivateChannel('data-update.' . $this->user->id);
     }
 }
