@@ -38,6 +38,10 @@ mix.js('resources/js/app.js', 'public/js')
             'resources/js/plugins/*.js'
         ],
         'public/js/plugins.js')
+    .scripts([
+            'resources/js/torrentClient.js'
+        ],
+        'public/js/torrentClient.js')
     .sass('resources/sass/app.scss', 'public/css')
     // .less('resources/less/*.less', 'resources/css/*.less')
     // .styles('resources/css/generic/*.css', 'public/css/generic.css')

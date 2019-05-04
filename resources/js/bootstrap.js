@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 window.bootbox = require('bootbox');
 window.moment = require('moment');
@@ -58,3 +57,14 @@ if (typeof io !== 'undefined') {
         host: window.location.hostname + ':6001',
     });
 }
+
+// var baseURL               = getBaseURL(); // Call function to determine it
+// var socketIOPort          = 8080;
+// var socketIOLocation      = baseURL + socketIOPort; // Build Socket.IO location
+// var socket                = io.connect(socketIOLocation);
+//
+// // Build the user-specific path to the socket.io server, so it works both on 'localhost' and a 'real domain'
+// function getBaseURL() {
+//     baseURL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+//     return baseURL;
+// }
