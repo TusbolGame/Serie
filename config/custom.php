@@ -6,8 +6,8 @@ return [
     'imgTempFolder' => 'G:/LocalWebsites/serie/tmp/',
     'backupFolder' => 'C:/Users/Ivan/Dropbox/Code/Web/___Database___BACKUP/',
     'posterOriginalFolder' => 'img/posters/',
+    'posterSmallFolder' => 'img/posters/small/',
     'posterMidFolder' => 'img/posters/mid/',
-    'posterSmaFolder' => 'img/posters/small/',
     'seasonOriginalFolder' => 'img/seasons/',
     'episodeOriginalFolder' => 'img/episodes/',
     'torrentClient' => [

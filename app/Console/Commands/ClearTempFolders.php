@@ -34,7 +34,7 @@ class ClearTempFolders extends Command {
      * @return mixed
      */
     public function handle() {
-        $filesArray = new \FilesystemIterator(config('custom.imgTempFolder', \FilesystemIterator::SKIP_DOTS));
+        $filesArray = new \FilesystemIterator(config('custom.imgTempFolder'), \FilesystemIterator::SKIP_DOTS);
         $files = [];
 
         foreach ($filesArray as $fileInfo) {

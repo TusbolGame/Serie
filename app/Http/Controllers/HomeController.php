@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Episode;
 use App\Events\EpisodeCreated;
+use App\Http\Controllers\Helpers\ImageHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
