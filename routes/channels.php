@@ -11,6 +11,6 @@
 |
 */
 
-Broadcast::channel('episode-action.{id}', function ($user, $id) {
+Broadcast::channel('data-update.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });

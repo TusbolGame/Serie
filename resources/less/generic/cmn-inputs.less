@@ -278,100 +278,6 @@ button::-moz-focus-inner {
     content: '\E8B6';
 }
 
-.loop (@colors, @className, @i) when (@i > 0) {
-    @color: extract(@colors, @i);
-    @class: extract(@className, @i);
-    
-    // Buttons
-    
-    .@{class} {
-        & .cmn-button:not(.cmn-warn):not([disabled]) {
-            &.cmn-primary {
-                color: @color;
-            }
-            &.cmn-accent {
-                color: spin(@color, 180);
-            }
-            
-            &.cmn-raised:not(.icon) {
-                &.cmn-primary {
-                    color: #FFFFFF;
-                    background-color: @color;
-                }
-                &.cmn-accent {
-                    color: #FFFFFF;
-                    background-color: spin(@color, 180);
-                }
-                
-                &:hover {
-                    &.cmn-primary {
-                        background-color: shade(@color, 5);
-                    }
-                    &.cmn-accent {
-                        background-color: shade(spin(@color, 180), 5);
-                    }
-                }
-            }
-            
-            &.pick {
-                &.active {
-                    background-color: @color;
-                    color: @white;
-                }
-                
-                &:not(.active) {
-                    &.today {
-                        color: @color;
-                    }
-                }
-            }
-        }
-    
-        &.cmn-button:not(.cmn-warn):not([disabled]) {
-            color: @color;
-
-            &.cmn-raised:not(.icon) {
-                color: @white;
-                background-color: @color;
-
-                &:hover {
-                    background-color: shade(@color, 5);
-                }
-            }
-
-            &.icon {
-                color: @color;
-                
-                &.pick {
-                    &.full {
-                        background-color: desaturate(lighten(@color, 20), 5);
-                        color: @white;
-                        
-                        &.active {
-                            border-color: @color;
-                            background-color: @color;
-                        }
-                        
-                        &.inactive {
-                            border-color: @lightest;
-                            background-color: @white;
-                            color: @lightest;
-                            
-                            &:hover {
-                                border-color: @color;
-                                color: @color;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    .loop(@colors, @className, @i - 1);
-}
-.loop(@colors, @className, @iterations);
-
 .cmn-input input[type="text"],
 .cmn-input input[type="password"],
 .cmn-input input[type="email"],
@@ -639,15 +545,15 @@ button::-moz-focus-inner {
     height: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 3px;
-}
 
-.cmn-progress span {
-    position: relative;
-    display: block;
-    width: 0px;
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.5s;
+    & span {
+        position: relative;
+        display: block;
+        width: 0px;
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.5s;
+    }
 }
 
 .input-item {
@@ -816,3 +722,103 @@ button::-moz-focus-inner {
         .keyframes;
     }
 }
+
+.loop (@colors, @className, @i) when (@i > 0) {
+    @color: extract(@colors, @i);
+    @class: extract(@className, @i);
+
+    // Buttons
+
+    .@{class} {
+        & .cmn-button:not(.cmn-warn):not([disabled]) {
+            &.cmn-primary {
+                color: @color;
+            }
+            &.cmn-accent {
+                color: spin(@color, 180);
+            }
+
+            &.cmn-raised:not(.icon) {
+                &.cmn-primary {
+                    color: #FFFFFF;
+                    background-color: @color;
+                }
+                &.cmn-accent {
+                    color: #FFFFFF;
+                    background-color: spin(@color, 180);
+                }
+
+                &:hover {
+                    &.cmn-primary {
+                        background-color: shade(@color, 5);
+                    }
+                    &.cmn-accent {
+                        background-color: shade(spin(@color, 180), 5);
+                    }
+                }
+            }
+
+            &.pick {
+                &.active {
+                    background-color: @color;
+                    color: @white;
+                }
+
+                &:not(.active) {
+                    &.today {
+                        color: @color;
+                    }
+                }
+            }
+        }
+
+        &.cmn-button:not(.cmn-warn):not([disabled]) {
+            color: @color;
+
+            &.cmn-raised:not(.icon) {
+                color: @white;
+                background-color: @color;
+
+                &:hover {
+                    background-color: shade(@color, 5);
+                }
+            }
+
+            &.icon {
+                color: @color;
+
+                &.pick {
+                    &.full {
+                        background-color: desaturate(lighten(@color, 20), 5);
+                        color: @white;
+
+                        &.active {
+                            border-color: @color;
+                            background-color: @color;
+                        }
+
+                        &.inactive {
+                            border-color: @lightest;
+                            background-color: @white;
+                            color: @lightest;
+
+                            &:hover {
+                                border-color: @color;
+                                color: @color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.cmn-progress {
+            & span {
+                background: repeating-linear-gradient(45deg, @color, @color 15px, lighten(@color, 20%) 15px, lighten(@color, 20%) 30px);;
+            }
+        }
+    }
+
+    .loop(@colors, @className, @i - 1);
+}
+.loop(@colors, @className, @iterations);

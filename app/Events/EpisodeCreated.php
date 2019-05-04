@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Episode;
+use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -10,20 +11,21 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Auth;
 
 class EpisodeCreated implements ShouldBroadcast {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $episode;
     public $user;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user, $episode) { //Episode $episode
-        $this->user = $user;
-        $this->episode = $episode->id;
+    public function __construct(Episode $episode) { //Episode $episode
+        $this->episode = $episode;
     }
 
     /**
@@ -32,6 +34,6 @@ class EpisodeCreated implements ShouldBroadcast {
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn() {
-        return new PrivateChannel('episode-action.' . $this->user->id);
+        return new PrivateChannel('data-update.' . Auth::user()->id);
     }
 }

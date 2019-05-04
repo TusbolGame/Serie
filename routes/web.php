@@ -41,6 +41,8 @@ Route::get('/episode-action', function(){
 //    $redis = app()->make(('redis'));
 //    $redis->set('user', 'pinuccio');
 //    $redis->get('user');
-    $episode = \App\Episode::where('id', 1)->first();
-    broadcast(new \App\Events\EpisodeCreated(\Illuminate\Support\Facades\Auth::user(), $episode));
+    $episode = \App\Episode::where('id', 1)->with('show')->first();
+    $show = \App\Show::where('id', 1)->first();
+    broadcast(new \App\Events\EpisodeCreated($episode));
+    broadcast(new \App\Events\ShowUpdated($show, 5, 14));
 });
