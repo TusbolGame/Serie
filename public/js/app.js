@@ -128,7 +128,32 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     SquareGridLoaderComponent: _loaders_SquareGridLoaderComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['show_name', 'api_id', 'api_id', 'api_link', 'api_rating', 'description', 'poster', 'existing', 'owned'],
+  props: {
+    show_name: {
+      type: String
+    },
+    api_id: {
+      type: Number
+    },
+    api_link: {
+      type: String
+    },
+    api_rating: {
+      type: Number
+    },
+    description: {
+      type: String
+    },
+    poster: {
+      type: String
+    },
+    existing: {
+      type: Boolean
+    },
+    owned: {
+      type: Boolean
+    }
+  },
   data: function data() {
     return {
       updated: false,
@@ -206,9 +231,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowUpdateResultComponent",
-  props: ['show_name', 'uuid', 'api_link', 'airing_at', 'episode_code', 'summary'],
+  props: {
+    show_name: {
+      type: String
+    },
+    uuid: {
+      type: String
+    },
+    api_link: {
+      type: String
+    },
+    airing_at: {
+      type: String
+    },
+    episode_code: {
+      type: String
+    },
+    summary: {
+      type: String
+    }
+  },
   data: function data() {
     return {};
+  },
+  methods: {
+    displayDate: function displayDate(date, format) {
+      return moment(date).format(format);
+    }
   }
 });
 
@@ -11595,23 +11644,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
-    _c("div", { staticClass: "row no-gutters mb-3" }, [
-      _c("div", { staticClass: "col-2" }, [
-        _vm._v("\n            " + _vm._s(_vm.airing_at) + "\n        ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-5" }, [
+    _c(
+      "div",
+      { staticClass: "row no-gutters mb-1 d-flex justify-content-between" },
+      [
         _c(
-          "a",
-          { staticClass: "text-dark", attrs: { href: "/episode/" + _vm.uuid } },
-          [_vm._v(_vm._s(_vm.show_name))]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-5" }, [
-        _vm._v("\n            " + _vm._s(_vm.episode_code) + "\n        ")
-      ])
-    ])
+          "div",
+          {
+            staticClass: "col-2 text-black-50 font-weight-light",
+            attrs: {
+              title:
+                "Airing on the " +
+                _vm.displayDate(_vm.airing_at, "DD/MM/YYYY") +
+                " at " +
+                _vm.displayDate(_vm.airing_at, "HH:mm")
+            }
+          },
+          [
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.displayDate(_vm.airing_at, "DD/MM")) +
+                "\n        "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-8" }, [
+          _c(
+            "a",
+            {
+              staticClass: "text-dark",
+              attrs: { href: "/episode/" + _vm.uuid }
+            },
+            [_vm._v(_vm._s(_vm.show_name))]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _vm._v("\n            " + _vm._s(_vm.episode_code) + "\n        ")
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -11912,11 +11985,37 @@ module.exports = yeast;
 /*!******************************!*\
   !*** ./resources/js/Echo.js ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-window.Echo.channel('episode-action.' + window.Laravel.user).listen('EpisodeCreated', function (e) {
-  console.log(e);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+
+window.io = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js"); // Have this in case you stop running your laravel echo server
+
+if (typeof io !== 'undefined') {
+  window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    broadcaster: 'socket.io',
+    host: 'newserie.local:6001',
+    authEndpoint: '/broadcasting/auth'
+  });
+} // For debugging purposes
+
+
+window.Echo.connector.socket.on('connect', function () {
+  console.log('connected', window.Echo.socketId());
+});
+window.Echo.connector.socket.on('disconnect', function () {
+  console.log('disconnected');
+});
+window.Echo.connector.socket.on('reconnecting', function (attemptNumber) {
+  console.log('reconnecting', attemptNumber);
 });
 
 /***/ }),
@@ -11960,7 +12059,7 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#ShowSearch',
   data: {
     showSearchQuery: '',
-    results: [],
+    searchResults: [],
     active: false,
     noResults: false,
     searching: false,
@@ -11970,7 +12069,7 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     searchShow: function searchShow() {
       var _this = this;
 
-      this.results = [];
+      this.searchResults = [];
       this.searched = false;
       this.searching = false;
       this.active = false;
@@ -11989,14 +12088,14 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           }
 
           _this.searching = false;
-          _this.results = data.data;
+          _this.searchResults = data.data;
         })["catch"](function (error) {
           console.log(error.response);
         });
       } else {}
     },
     resetSearch: function resetSearch() {
-      this.results = [];
+      this.searchResults = [];
       this.searched = false;
       this.searching = false;
       this.active = false;
@@ -12009,24 +12108,73 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#ShowUpdate',
   data: {
     active: false,
-    results: []
+    updating: false,
+    updated: false,
+    completed: false,
+    updateResults: [],
+    updateProgress: {
+      counter: 0,
+      current: 0,
+      total: 0,
+      percentage: 0,
+      currentShow: '',
+      timeStarted: 0,
+      timeRemaining: 0
+    }
   },
   methods: {
     updateAllShows: function updateAllShows() {
       var _this2 = this;
 
+      this.active = true;
+      this.updateProgress.timeStarted = window.performance.now();
+      this.updating = true;
       window.axios.get('/data/update/0').then(function (_ref2) {
         var data = _ref2.data;
-        _this2.active = true;
-        Echo.channel('episode-action.' + window.Laravel.user).listen('EpisodeCreated', function (user, episode) {
-          console.log(user);
-          console.log(episode);
-
-          _this2.results.push(episode);
-        });
+        _this2.completed = true;
+        _this2.updating = false;
       })["catch"](function (error) {
         console.log(error.response);
       });
+    },
+    listenEpisodeUpdated: function listenEpisodeUpdated() {
+      var _this3 = this;
+
+      window.Echo["private"]('data-update.' + window.Laravel.user).listen('EpisodeCreated', function (data) {
+        _this3.updateResults.push(data.episode);
+
+        _this3.updated = true;
+        _this3.updateProgress.counter++;
+      });
+    },
+    listenShowUpdated: function listenShowUpdated() {
+      var _this4 = this;
+
+      window.Echo["private"]('data-update.' + window.Laravel.user).listen('ShowUpdated', function (data) {
+        _this4.updateProgress.current = data.currentShowNumber;
+        _this4.updateProgress.total = data.totalShowNumber;
+        _this4.updateProgress.percentage = _this4.updateProgress.current / _this4.updateProgress.total * 100;
+        _this4.updateProgress.currentShow = data.show.name;
+
+        if (_this4.updateProgress.current != 0) {
+          _this4.updateProgress.timeRemaining = (100 - _this4.updateProgress.current / _this4.updateProgress.total * 100) * (window.performance.now() - _this4.updateProgress.timeStarted) / (_this4.updateProgress.current / _this4.updateProgress.total * 100) / 1000;
+        } else {
+          _this4.updateProgress.timeRemaining = 0;
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.listenEpisodeUpdated();
+    this.listenShowUpdated();
+  },
+  computed: {
+    timeRemaining: function timeRemaining() {
+      if (this.updateProgress.timeRemaining == 0) {
+        return ' - ';
+      } else {
+        return Math.round(this.updateProgress.timeRemaining / 60) + "m " + Math.round(this.updateProgress.timeRemaining % 60) + "s left";
+      }
     }
   }
 });
