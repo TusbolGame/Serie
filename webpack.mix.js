@@ -12,34 +12,36 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    // .extract([
-    // 'jquery',
-    // 'bootstrap',
-    // 'laravel-echo',
-    // 'socket.io-client',
-    // 'bootbox',
-    // 'moment',
-    // 'axios',
-    // 'lodash',
-    // 'popper.js',
-    // 'vue'
-// ])
-//     .scripts([
-//             'resources/js/generic/*.js',
-//         ],
-//         'public/js/generic.js')
-//     .scripts([
-//             'resources/js/common/*.js',
-//         ],
-//         'public/js/common.js')
-//     .scripts([
-//             'resources/js/specific/*.js'
-//         ],
-//         'public/js/specific.js')
-//     .scripts([
-//             'resources/js/plugins/*.js'
-//         ],
-//         'public/js/plugins.js')
+    .extract([
+    'jquery',
+    'bootstrap',
+    'bootbox',
+    'moment',
+    'axios',
+    'lodash',
+    'popper.js',
+    'vue'
+])
+    .scripts([
+            'resources/js/generic/*.js',
+        ],
+        'public/js/generic.js')
+    .scripts([
+            'resources/js/common/*.js',
+        ],
+        'public/js/common.js')
+    .scripts([
+            'resources/js/specific/*.js'
+        ],
+        'public/js/specific.js')
+    .scripts([
+            'resources/js/plugins/*.js'
+        ],
+        'public/js/plugins.js')
+    .scripts([
+            'resources/js/torrentClient.js'
+        ],
+        'public/js/torrentClient.js')
     .sass('resources/sass/app.scss', 'public/css')
     // .less('resources/less/*.less', 'resources/css/*.less')
     // .styles('resources/css/generic/*.css', 'public/css/generic.css')

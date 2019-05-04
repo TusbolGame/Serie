@@ -39,3 +39,32 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+
+import Echo from 'laravel-echo'
+
+window.io = require('socket.io-client');
+
+// Have this in case you stop running your laravel echo server
+if (typeof io !== 'undefined') {
+    window.Echo = new Echo({
+        broadcaster: 'socket.io',
+        host: window.location.hostname + ':6001',
+    });
+}
+
+// var baseURL               = getBaseURL(); // Call function to determine it
+// var socketIOPort          = 8080;
+// var socketIOLocation      = baseURL + socketIOPort; // Build Socket.IO location
+// var socket                = io.connect(socketIOLocation);
+//
+// // Build the user-specific path to the socket.io server, so it works both on 'localhost' and a 'real domain'
+// function getBaseURL() {
+//     baseURL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+//     return baseURL;
+// }
