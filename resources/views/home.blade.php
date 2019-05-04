@@ -33,6 +33,7 @@
                                     </div>
                                     <div class="col-xl-5 col-sm-12 d-flex justify-content-end">
                                         <button type="button" @click="updateAllShows" class="btn btn-md btn-primary" data-group="0" data-type="0" v-if="!active">Update</button>
+                                        {{--// TODO Implement reset update functionality--}}
                                         <button type="button" @click="" class="btn btn-md btn-primary" data-group="0" data-type="5" v-if="active">Reset</button>
                                     </div>
                                 </div>
@@ -63,7 +64,7 @@
                                 <div class="row no-gutters mt-3" v-if="updated">
                                     <div class="col-12 cmn-admin-result">
                                         <div class="row no-gutters mb-2 d-flex justify-content-between">
-                                            <h4>Updated Episodes</h4>
+                                            <h4>New Episodes</h4>
                                             <span class="h4">@{{updateProgress.counter}}</span>
                                         </div>
                                         <div class="row no-gutters results">

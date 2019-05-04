@@ -73969,7 +73969,7 @@ var render = function() {
                 "Airing on the " +
                 _vm.displayDate(_vm.airing_at, "DD/MM/YYYY") +
                 " at " +
-                _vm.displayDate(_vm.airing_at, "HH/mm")
+                _vm.displayDate(_vm.airing_at, "HH:mm")
             }
           },
           [
@@ -86422,7 +86422,6 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
         _this3.updated = true;
         _this3.updateProgress.counter++;
-        console.log(_this3.updateResults);
       });
     },
     listenShowUpdated: function listenShowUpdated() {

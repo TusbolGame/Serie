@@ -1,7 +1,7 @@
 <template>
     <div class="col-12">
         <div class="row no-gutters mb-1 d-flex justify-content-between">
-            <div class="col-2 text-black-50 font-weight-light" v-bind:title="'Airing on the '+displayDate(airing_at, 'DD/MM/YYYY')+' at '+displayDate(airing_at, 'HH/mm')">
+            <div class="col-2 text-black-50 font-weight-light" v-bind:title="'Airing on the '+displayDate(airing_at, 'DD/MM/YYYY')+' at '+displayDate(airing_at, 'HH:mm')">
                 {{displayDate(airing_at, 'DD/MM')}}
             </div>
             <div class="col-8">

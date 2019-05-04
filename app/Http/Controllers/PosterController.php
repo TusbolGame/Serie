@@ -44,6 +44,9 @@ class PosterController extends Controller {
 
         if ($latestPoster == NULL) {
             $poster = $this->saveNewPoster($this->image['name']);
+
+            $newImagePath = $folderRoot . $this->image['name'] . '.jpg';
+            rename($this->image['path'], $newImagePath);
         } else {
             $oldFileName = $folderRoot . $latestPoster->name . '.jpg';
 
