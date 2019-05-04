@@ -73956,40 +73956,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
-    _c("div", { staticClass: "row no-gutters mb-1" }, [
-      _c(
-        "div",
-        {
-          staticClass: "col-2 text-black-50 font-weight-light",
-          attrs: {
-            title:
-              "Airing on the " +
-              _vm.displayDate(_vm.airing_at, "DD/MM/YYYY") +
-              " at " +
-              _vm.displayDate(_vm.airing_at, "HH/mm")
-          }
-        },
-        [
-          _vm._v(
-            "\n            " +
-              _vm._s(_vm.displayDate(_vm.airing_at, "DD/MM")) +
-              "\n        "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-8" }, [
+    _c(
+      "div",
+      { staticClass: "row no-gutters mb-1 d-flex justify-content-between" },
+      [
         _c(
-          "a",
-          { staticClass: "text-dark", attrs: { href: "/episode/" + _vm.uuid } },
-          [_vm._v(_vm._s(_vm.show_name))]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" }, [
-        _vm._v("\n            " + _vm._s(_vm.episode_code) + "\n        ")
-      ])
-    ])
+          "div",
+          {
+            staticClass: "col-2 text-black-50 font-weight-light",
+            attrs: {
+              title:
+                "Airing on the " +
+                _vm.displayDate(_vm.airing_at, "DD/MM/YYYY") +
+                " at " +
+                _vm.displayDate(_vm.airing_at, "HH/mm")
+            }
+          },
+          [
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.displayDate(_vm.airing_at, "DD/MM")) +
+                "\n        "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-8" }, [
+          _c(
+            "a",
+            {
+              staticClass: "text-dark",
+              attrs: { href: "/episode/" + _vm.uuid }
+            },
+            [_vm._v(_vm._s(_vm.show_name))]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _vm._v("\n            " + _vm._s(_vm.episode_code) + "\n        ")
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -86383,6 +86390,7 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     completed: false,
     updateResults: [],
     updateProgress: {
+      counter: 0,
       current: 0,
       total: 0,
       percentage: 0,
@@ -86413,7 +86421,8 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this3.updateResults.push(data.episode);
 
         _this3.updated = true;
-        console.log(data);
+        _this3.updateProgress.counter++;
+        console.log(_this3.updateResults);
       });
     },
     listenShowUpdated: function listenShowUpdated() {
@@ -86424,7 +86433,12 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this4.updateProgress.total = data.totalShowNumber;
         _this4.updateProgress.percentage = _this4.updateProgress.current / _this4.updateProgress.total * 100;
         _this4.updateProgress.currentShow = data.show.name;
-        _this4.updateProgress.timeRemaining = (100 - _this4.updateProgress.current / _this4.updateProgress.total * 100) * (window.performance.now() - _this4.updateProgress.timeStarted) / (_this4.updateProgress.current / _this4.updateProgress.total * 100) / 1000;
+
+        if (_this4.updateProgress.current != 0) {
+          _this4.updateProgress.timeRemaining = (100 - _this4.updateProgress.current / _this4.updateProgress.total * 100) * (window.performance.now() - _this4.updateProgress.timeStarted) / (_this4.updateProgress.current / _this4.updateProgress.total * 100) / 1000;
+        } else {
+          _this4.updateProgress.timeRemaining = 0;
+        }
       });
     }
   },
@@ -86434,7 +86448,11 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   },
   computed: {
     timeRemaining: function timeRemaining() {
-      return Math.round(this.updateProgress.timeRemaining / 60) + "m " + Math.round(this.updateProgress.timeRemaining % 60) + "s left";
+      if (this.updateProgress.timeRemaining == 0) {
+        return ' - ';
+      } else {
+        return Math.round(this.updateProgress.timeRemaining / 60) + "m " + Math.round(this.updateProgress.timeRemaining % 60) + "s left";
+      }
     }
   }
 });

@@ -110,7 +110,6 @@ var ShowUpdate = new Vue({
                     this.updateResults.push(data.episode);
                     this.updated = true;
                     this.updateProgress.counter++;
-                    console.log(this.updateResults);
                 });
         },
         listenShowUpdated: function() {
