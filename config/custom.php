@@ -3,9 +3,9 @@
 return [
     'torrentFolder' => 'G:/Torrent/',
     'streamFolder' => 'G:/Streams/',
+    'imgTempFolder' => 'G:/LocalWebsites/serie/tmp/',
     'backupFolder' => 'C:/Users/Ivan/Dropbox/Code/Web/___Database___BACKUP/',
     'posterOriginalFolder' => 'img/posters/original/',
-    'posterTempFolder' => 'img/posters/temp/',
     'posterBigFolder' => 'img/posters/big/',
     'posterMidFolder' => 'img/posters/mid/',
     'posterSmaFolder' => 'img/posters/sma/',

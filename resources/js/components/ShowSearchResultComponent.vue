@@ -38,7 +38,32 @@
         components: {
             SquareGridLoaderComponent
         },
-        props: ['show_name', 'api_id', 'api_id', 'api_link', 'api_rating', 'description', 'poster', 'existing', 'owned'],
+        props: {
+            show_name: {
+                type: String,
+            },
+            api_id: {
+                type: Number,
+            },
+            api_link: {
+                type: String,
+            },
+            api_rating: {
+                type: Number ,
+            },
+            description: {
+                type: String,
+            },
+            poster: {
+                type: String,
+            },
+            existing: {
+                type: Boolean,
+            },
+            owned: {
+                type: Boolean,
+            },
+        },
         data: function() {
                 return {
                     updated: false,

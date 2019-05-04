@@ -61,6 +61,10 @@ class PosterController extends Controller {
             } else {
                 // TODO Explore possibility/feasibility of adding a "md5" Poster column to check current file against all files
                 if (file_exists($this->image['path'])) {
+//                    TempPoster::firstOrCreate([
+//                        'path' => $this->image['path'],
+//                        'outcome' => $this->image['path'],
+//                    ]);
                     try {
                         // TODO Solve the unlink issue (Resource temporarily unavailable)
                         if (!unlink($this->image['path'])) {               // Delete downloaded image if already exists in database. If delete failed, file added to database to be deleted later
@@ -68,12 +72,14 @@ class PosterController extends Controller {
                                 'path' => $this->image['path'],
                                 'outcome' => $this->image['path'],
                             ]);
+                            throw new \ErrorException('The file counld not be deleted');
                         }
                     } catch (ErrorException $e) {
                         TempPoster::firstOrCreate([
                             'path' => $this->image['path'],
                             'outcome' => $this->image['path'],
                         ]);
+                        return 4;
                     }
                 }
                 $poster = 0;
@@ -92,12 +98,13 @@ class PosterController extends Controller {
     private function downloadImage($url) {
         $this->image['extension'] = pathinfo($url, PATHINFO_EXTENSION);
         $this->image['name'] = Str::orderedUuid()->toString();
-        $this->image['path'] = config('custom.posterTempFolder') . $this->image['name'] . '.' . $this->image['extension'];
+        $this->image['path'] = config('custom.imgTempFolder') . $this->image['name'] . '.' . $this->image['extension'];
 
-        if ($this->makeDirectory(config('custom.posterTempFolder'))) {   // if path existing or created
+        if ($this->makeDirectory(config('custom.imgTempFolder'))) {   // if path existing or created
             $file = fopen($this->image['path'], 'w');
             $client = new \GuzzleHttp\Client();
             $response = $client->get($url, ['save_to' => $file]);
+            fclose($file);
             return ['response_code' => $response->getStatusCode()];
         } else {                // if path not created or issues
             return 0;

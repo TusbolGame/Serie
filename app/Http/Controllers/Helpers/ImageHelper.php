@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Helpers;
 use App\Http\Controllers\Controller;
 
 class ImageHelper extends Controller {
-    public static const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'JPG', 'JPEG'];
-    public static const DEFAULT_JPG_QUALITY = 100;
+    public const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'JPG', 'JPEG'];
+    public const DEFAULT_JPG_QUALITY = 100;
     private $tempImage;
 
     public function __destruct() {

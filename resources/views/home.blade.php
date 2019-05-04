@@ -25,31 +25,64 @@
                     <div class="card">
                         <ul class="list-group list-group-flush">
                             <li id="ShowUpdate" class="list-group-item p-2">
+                                {{-- TODO Add transitions on logic elements--}}
                                 <div id="show-update-container" class="row no-gutters cmn-admin-action">
                                     <div class="col-xl-7 col-sm-12 pr-1 pt-2">
-                                        Update all shows
+                                        <span v-if="!active">Update all shows</span>
+                                        <span class="col-12 text-center" v-if="updating">Updating...</span>
                                     </div>
                                     <div class="col-xl-5 col-sm-12 d-flex justify-content-end">
-                                        <button type="button" @click="updateAllShows" class="btn btn-md btn-primary" data-group="0" data-type="0">Update</button>
+                                        <button type="button" @click="updateAllShows" class="btn btn-md btn-primary" data-group="0" data-type="0" v-if="!active">Update</button>
+                                        <button type="button" @click="" class="btn btn-md btn-primary" data-group="0" data-type="5" v-if="active">Reset</button>
                                     </div>
                                 </div>
-                                <div class="row no-gutters cmn-admin-result mt-3" v-if="active">
-                                    <h4 class="row no-gutters mb-2">Updated Episodes</h4>
-                                    <div class="row no-gutters results">
-                                        <show-update-result-component v-for="result in results" v-bind:data="result"
-                                                                      v-bind:key="result.id"
-                                                                      v-bind:id="result.id"
-                                                                      v-bind:show_name="result.show_name"
-                                                                      v-bind:uuid="result.uuid"
-                                                                      v-bind:api_link="result.api_link"
-                                                                      v-bind:airing_at="result.airing_at"
-                                                                      v-bind:episode_code="result.episode_code"
-                                                                      v-bind:summary="result.summary | truncate(200)">
-                                        </show-update-result-component>
+                                <div class="row no-gutters" v-if="active">
+                                    <div class="col-12 mt-2">
+                                        <div class="cmn-progress c2">
+                                            <span :style="{width: updateProgress.percentage + '%'}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 my-2" v-if="active">
+                                        <div class="row no-gutters">
+                                            <span class="col-12 text-center" v-if="active && !updating && !completed">Starting...</span>
+                                            <span class="col-12 text-center" v-if="active && updating">
+                                                <span>@{{updateProgress.current + ' / ' + updateProgress.total}} - </span>
+                                                <span class="font-weight-bold">@{{updateProgress.currentShow}}</span>
+                                            </span>
+                                            <span class="col-12 text-center" v-if="completed">Complete</span>
+                                        </div>
+                                        <div class="row no-gutters font-weight-light">
+                                            <span class="col-12 text-center" v-if="active && !updating && !completed">-</span>
+                                            <span class="col-12 text-center" v-if="active && updating">
+                                                @{{Math.round(updateProgress.percentage) + '%' + ' - ' + timeRemaining}}
+                                            </span>
+                                            <span class="col-12 text-center" v-if="completed">100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters mt-3" v-if="updated">
+                                    <div class="col-12 cmn-admin-result">
+                                        <div class="row no-gutters mb-2 d-flex justify-content-between">
+                                            <h4>Updated Episodes</h4>
+                                            <span class="h4">@{{updateProgress.counter}}</span>
+                                        </div>
+                                        <div class="row no-gutters results">
+                                            <show-update-result-component v-for="updateResult in updateResults" v-bind:data="updateResult"
+                                                                          v-bind:key="updateResult.id"
+                                                                          v-bind:id="updateResult.id"
+                                                                          v-bind:show_name="updateResult.show.name"
+                                                                          v-bind:uuid="updateResult.uuid"
+                                                                          v-bind:api_link="updateResult.api_link"
+                                                                          v-bind:airing_at="updateResult.airing_at"
+                                                                          v-bind:episode_code="updateResult.episode_code">
+                                            </show-update-result-component>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
                             <li id="ShowSearch" class="list-group-item p-2">
+                                {{-- TODO Add transitions on logic elements--}}
+                                {{-- TODO Add transitions on result elements--}}
                                 <div class="row no-gutters form-inline cmn-admin-action">
                                     <div class="col-xl-8 col-sm-12 form-group pr-1">
                                         <label for="showSearch" class="sr-only">Search</label>
@@ -60,20 +93,22 @@
                                         <button @click="searchShow" type="button" class="btn btn-md btn-primary" data-group="0" data-type="1">Search</button>
                                     </div>
                                 </div>
-                                <div class="row no-gutters cmn-admin-result mt-3" v-if="active">
-                                    <h4 class="row no-gutters mb-2">Results</h4>
-                                    <div class="row no-gutters results">
-                                        <show-search-result-component v-for="result in results" v-bind:data="result"
-                                                                      v-bind:key="result.api_id"
-                                                                      v-bind:api_id="result.api_id"
-                                                                      v-bind:show_name="result.show_name"
-                                                                      v-bind:api_link="result.api_link"
-                                                                      v-bind:api_rating="result.api_rating"
-                                                                      v-bind:description="result.description | truncate(200)"
-                                                                      v-bind:poster="result.poster"
-                                                                      v-bind:existing="result.existing"
-                                                                      v-bind:owned="result.owned">
-                                        </show-search-result-component>
+                                <div class="row no-gutters mt-3" v-if="active">
+                                    <div class="col-12 cmn-admin-result">
+                                        <h4 class="row no-gutters mb-2">Results</h4>
+                                        <div class="row no-gutters results">
+                                            <show-search-result-component v-for="searchResult in searchResults" v-bind:data="searchResult"
+                                                                          v-bind:key="searchResult.api_id"
+                                                                          v-bind:api_id="searchResult.api_id"
+                                                                          v-bind:show_name="searchResult.show_name"
+                                                                          v-bind:api_link="searchResult.api_link"
+                                                                          v-bind:api_rating="searchResult.api_rating"
+                                                                          v-bind:description="searchResult.description | truncate(200)"
+                                                                          v-bind:poster="searchResult.poster"
+                                                                          v-bind:existing="searchResult.existing"
+                                                                          v-bind:owned="searchResult.owned">
+                                            </show-search-result-component>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row no-gutters mt-3" v-if="noResults">
