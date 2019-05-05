@@ -25,8 +25,12 @@ import Vue from 'vue'
 Vue.filter('truncate', function (text, stop, suffix) {
     return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '');
 });
+// Common components
+Vue.component('progress-bar-component', require('./components/ProgressBarComponent.vue').default);
 
+// Specific components
 Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
+
 var ShowSearch = new Vue({
     el: '#ShowSearch',
     data: {
