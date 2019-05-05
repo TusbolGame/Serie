@@ -23,15 +23,19 @@ import Vue from 'vue'
 
 
 Vue.filter('truncate', function (text, stop, suffix) {
-    return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '')
-})
+    return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '');
+});
+// Common components
+Vue.component('progress-bar-component', require('./components/ProgressBarComponent.vue').default);
 
+// Specific components
 Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
+
 var ShowSearch = new Vue({
     el: '#ShowSearch',
     data: {
         showSearchQuery: '',
-        results: [],
+        searchResults: [],
         active: false,
         noResults: false,
         searching: false,
@@ -39,7 +43,7 @@ var ShowSearch = new Vue({
     },
     methods: {
         searchShow: function () {
-            this.results = [];
+            this.searchResults = [];
             this.searched = false;
             this.searching = false;
             this.active = false;
@@ -55,7 +59,7 @@ var ShowSearch = new Vue({
                             this.noResults = true;
                         }
                         this.searching = false;
-                        this.results = data.data;
+                        this.searchResults = data.data;
                     }).catch((error) => {
                     console.log(error.response);
                 });
@@ -63,7 +67,7 @@ var ShowSearch = new Vue({
             }
         },
         resetSearch: function() {
-            this.results = [];
+            this.searchResults = [];
             this.searched = false;
             this.searching = false;
             this.active = false;
@@ -77,21 +81,74 @@ var ShowUpdate = new Vue({
     el: '#ShowUpdate',
     data: {
         active: false,
-        results: [],
+        updating: false,
+        updated: false,
+        completed: false,
+        updateResults: [],
+        updateProgress: {
+            counter: 0,
+            current: 0,
+            total: 0,
+            percentage: 0,
+            currentShow: '',
+            timeStarted: 0,
+            timeRemaining: 0,
+        }
     },
     methods: {
         updateAllShows: function () {
+            this.active = true;
+            this.updateProgress.timeStarted = window.performance.now();
+            this.updating = true;
             window.axios.get('/data/update/0')
                 .then(({data}) => {
-                    this.active = true;
-                    Echo.channel('episode-action.' + window.Laravel.user).listen('EpisodeCreated', (user, episode) => {
-                        console.log(user);
-                        console.log(episode);
-                        this.results.push(episode);
-                    });
+                    this.completed = true;
+                    this.updating = false;
                 }).catch((error) => {
                 console.log(error.response);
             });
         },
+        listenEpisodeUpdated: function() {
+            window.Echo.private('data-update.' + window.Laravel.user)
+                .listen('EpisodeCreated', (data) => {
+                    this.updateResults.push(data.episode);
+                    this.updated = true;
+                    this.updateProgress.counter++;
+                });
+        },
+        listenShowUpdated: function() {
+            window.Echo.private('data-update.' + window.Laravel.user)
+                .listen('ShowUpdated', (data) => {
+                    this.updateProgress.current = data.currentShowNumber;
+                    this.updateProgress.total = data.totalShowNumber;
+                    this.updateProgress.percentage = (this.updateProgress.current / this.updateProgress.total) * 100;
+                    this.updateProgress.currentShow = data.show.name;
+                    if (this.updateProgress.current != 0) {
+                        this.updateProgress.timeRemaining = (((100 - ((this.updateProgress.current / this.updateProgress.total) * 100))
+                            * (window.performance.now() - this.updateProgress.timeStarted))
+                            / ((this.updateProgress.current / this.updateProgress.total) * 100)) / 1000;
+                    } else {
+                        this.updateProgress.timeRemaining = 0;
+                    }
+                });
+        }
+    },
+    mounted: function() {
+        this.listenEpisodeUpdated();
+        this.listenShowUpdated();
+    },
+    computed: {
+        timeRemaining: function() {
+            if (this.updateProgress.timeRemaining == 0) {
+                return ' - ';
+            } else {
+                return Math.round(this.updateProgress.timeRemaining / 60) +
+                    "m " +
+                    Math.round(this.updateProgress.timeRemaining % 60) +
+                    "s left";
+            }
+        },
+    },
+    watch: {
     }
 });

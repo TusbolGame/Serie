@@ -7,6 +7,7 @@ use App\ContentRating;
 use App\DataUpdate;
 use App\Episode;
 use App\Events\EpisodeCreated;
+use App\Events\ShowUpdated;
 use App\Season;
 use App\Show;
 use App\Status;
@@ -62,10 +63,6 @@ class DataUpdateController extends Controller {
         $this->dataUpdate->finished_at = Carbon::now()->toDateTimeString();
         $this->dataUpdate->save();
         return AjaxSuccessController::response("Update successful", $results);
-//        $episode = Episode::where('id', 3450)->first();
-//        event(new EpisodeCreated(Auth::user(), $episode));
-//
-//        return AjaxSuccessController::response('Success');
     }
 
     public function updateController($mainOptions) {
@@ -73,7 +70,7 @@ class DataUpdateController extends Controller {
             return $this->addShow($mainOptions['api_id']);
         } else {
             if ($mainOptions['type'] == 0) {
-                $showList = Show::all();
+                $showList = Show::orderBy('name', 'asc')->get();
                 $options = [];
             } else if ($mainOptions['type'] == 1) {
                 $limitDate = new Carbon($this->updateLimitDays . ' days ago midnight');
@@ -86,9 +83,9 @@ class DataUpdateController extends Controller {
                 return -1;
             }
 
-            // TODO Add event to notify the number of shows to be updated
             $results = [];
-            foreach ($showList as $show) {
+            foreach ($showList as $currentShow => $show) {
+                event(new ShowUpdated($show, $currentShow, $showList->count()));
                 $results[] = $this->updateHandler($show, $options);
             }
         }
@@ -123,9 +120,8 @@ class DataUpdateController extends Controller {
             $lastUpdateCheck = ApiUpdate::select('api_updated_at')->where([
                 'show_id' => $show->id,
             ])->orderBy('api_updated_at', 'desc')->value('api_updated_at');     // Get last time this show was updated
-
-            if ($lastUpdateCheck == NULL) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
-                $lastUpdate = $first = Carbon::createFromTimestamp($lastUpdateCheck->api_updated_at);
+            if ($lastUpdateCheck != NULL) {        // If the show was last updated more than $this->updateEndedLimitDays days ago
+                $lastUpdate = Carbon::parse($lastUpdateCheck);
                 if ($lastUpdate->lessThan($limitDate)) {
                     $type = 1;
                 }
@@ -388,7 +384,7 @@ class DataUpdateController extends Controller {
             $show->genres()->sync($genreIDs, false);
         }
 
-        return $show->fresh();   // an update has been performed
+        return TRUE;   // an update has been performed
     }
 
     /* Season Handling */
@@ -402,15 +398,9 @@ class DataUpdateController extends Controller {
             return 0;
         }
 
-        $newSeasons = new Collection();
+        $newSeasons = [];
         foreach ($rawData as $seasonData) {
-            $season = $this->addSeasonData($show, $seasonData);
-            if ($season !== NULL) {
-                $newSeasons->push($season);
-            }
-        }
-        if ($newSeasons->count() == 0) {
-            return NULL;
+            $newSeasons[] = $this->addSeasonData($show, $seasonData);
         }
         return $newSeasons;
     }
@@ -453,7 +443,8 @@ class DataUpdateController extends Controller {
         $season->save();
 
         if ($flagNewSeason === TRUE) {
-            return $season->fresh();
+//            event(new SeasonCreated($season->fresh()));
+            return TRUE;
         } else {
             return NULL;
         }
@@ -469,15 +460,9 @@ class DataUpdateController extends Controller {
         if (!isset($rawData) || $rawData == "") {
             return 0;
         }
-        $newEpisodes = new Collection();
+        $newEpisodes = [];
         foreach ($rawData as $episodeData) {
-            $episode = $this->addEpisodeData($show, $episodeData);
-            if ($episode !== NULL) {
-                $newEpisodes->push($episode);
-            }
-        }
-        if ($newEpisodes->count() == 0) {
-            return NULL;
+                $newEpisodes[] = $this->addEpisodeData($show, $episodeData);
         }
         return $newEpisodes;
     }
@@ -541,10 +526,10 @@ class DataUpdateController extends Controller {
         $episode->show()->associate($show);
         $episode->save();
 
-        event(new EpisodeCreated(Auth::user(), $episode->fresh()));
-
         if ($flagNewEpisode === TRUE) {
-            return $episode->fresh();
+            $addedEpisode = Episode::where('id', $episode->id)->with('show')->first();
+            event(new EpisodeCreated($addedEpisode));
+            return TRUE;
         } else {
             return NULL;
         }

@@ -17,6 +17,7 @@
     "/js/common.js": "/js/common.js",
     "/js/specific.js": "/js/specific.js",
     "/js/plugins.js": "/js/plugins.js",
+    "/js/torrentClient.js": "/js/torrentClient.js",
     "/css/generic.css": "/css/generic.css",
     "/css/common.css": "/css/common.css",
     "/css/components.css": "/css/components.css",

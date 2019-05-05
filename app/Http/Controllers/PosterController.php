@@ -2,25 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\OldFile;
+use App\Http\Controllers\Helpers\ImageHelper;
 use App\Poster;
 use App\TempPoster;
 use Illuminate\Support\Str;
 use Whoops\Exception\ErrorException;
 
 class PosterController extends Controller {
+    private $image = [];
+
     public function newImage($url, $owner, $folderRoot) {
-        $allowedExtensions = ['jpg', 'jpeg', 'JPG', 'JPEG'];
-        $image = $this->downloadImage($url, $folderRoot);
-        if ($image == 0) {
+        $result = $this->downloadImage($url);
+        if ($result == 0) {
             return 2;                       // Folder creation error
         }
 
-        if ($image['response_code'] == 0) {
+        if ($result['response_code'] == 0) {
             return 1;                       // Network Error
         }
-        if (!in_array($image['extension'], $allowedExtensions)) {
-            // TODO Convert file from other format to jpg
+        if (!in_array($this->image['extension'], ImageHelper::ALLOWED_EXTENSIONS)) {
+            $newImagePath = $folderRoot . $this->image['name'] . '.jpg';
+            $imageConverter = new ImageHelper();
+            $conversionResult = $imageConverter->convertImage($this->image['path'], $newImagePath);
+
+            if ($conversionResult == TRUE) {
+                $this->image['path'] = $newImagePath;
+                $this->image['extension'] = 'jpg';
+            } else {
+                return 3;                   // Failed to convert the image
+            }
         }
 
         if ($owner->id != NULL) {
@@ -33,26 +43,46 @@ class PosterController extends Controller {
         }
 
         if ($latestPoster == NULL) {
-            $poster = $this->saveNewPoster($image['name']);
+            $poster = $this->saveNewPoster($this->image['name']);
+
+            $newImagePath = $folderRoot . $this->image['name'] . '.jpg';
+            rename($this->image['path'], $newImagePath);
         } else {
             $oldFileName = $folderRoot . $latestPoster->name . '.jpg';
-            if (md5_file($image['path']) != md5_file($oldFileName)) {
-                $poster = $this->saveNewPoster($image['name']);
+
+            if (!file_exists($oldFileName)) {
+                $latestPoster->delete();
+                $poster = $this->saveNewPoster($this->image['name']);
+
+                $newImagePath = $folderRoot . $this->image['name'] . '.jpg';
+                rename($this->image['path'], $newImagePath);
+            } else if (md5_file($this->image['path']) != md5_file($oldFileName)) {
+                $poster = $this->saveNewPoster($this->image['name']);
+
+                $newImagePath = $folderRoot . $this->image['name'] . '.jpg';
+                rename($this->image['path'], $newImagePath);
             } else {
-                if (file_exists($image['path'])) {
+                // TODO Explore possibility/feasibility of adding a "md5" Poster column to check current file against all files
+                if (file_exists($this->image['path'])) {
+//                    TempPoster::firstOrCreate([
+//                        'path' => $this->image['path'],
+//                        'outcome' => $this->image['path'],
+//                    ]);
                     try {
                         // TODO Solve the unlink issue (Resource temporarily unavailable)
-                        if (!unlink($image['path'])) {               // Delete downloaded image if already exists in database. If delete failed, file added to database to be deleted later
+                        if (!unlink($this->image['path'])) {               // Delete downloaded image if already exists in database. If delete failed, file added to database to be deleted later
                             TempPoster::firstOrCreate([
-                                'path' => $image['path'],
-                                'outcome' => $image['path'],
+                                'path' => $this->image['path'],
+                                'outcome' => $this->image['path'],
                             ]);
+                            throw new \ErrorException('The file counld not be deleted');
                         }
                     } catch (ErrorException $e) {
                         TempPoster::firstOrCreate([
-                            'path' => $image['path'],
-                            'outcome' => $image['path'],
+                            'path' => $this->image['path'],
+                            'outcome' => $this->image['path'],
                         ]);
+                        return 4;
                     }
                 }
                 $poster = 0;
@@ -68,16 +98,17 @@ class PosterController extends Controller {
         return $poster;
     }
 
-    private function downloadImage($url, $path) {
-        $urlExtension = pathinfo($url, PATHINFO_EXTENSION);
-        $name = Str::orderedUuid()->toString();
-        $completePath = $path . $name . '.' . $urlExtension;
+    private function downloadImage($url) {
+        $this->image['extension'] = pathinfo($url, PATHINFO_EXTENSION);
+        $this->image['name'] = Str::orderedUuid()->toString();
+        $this->image['path'] = config('custom.imgTempFolder') . $this->image['name'] . '.' . $this->image['extension'];
 
-        if ($this->makeDirectory($path)) {   // if path existing or created
-            $file = fopen($completePath, 'w');
+        if ($this->makeDirectory(config('custom.imgTempFolder'))) {   // if path existing or created
+            $file = fopen($this->image['path'], 'w');
             $client = new \GuzzleHttp\Client();
             $response = $client->get($url, ['save_to' => $file]);
-            return ['response_code' => $response->getStatusCode(), 'path' => $completePath, 'name' => $name, 'extension' => $urlExtension];
+            fclose($file);
+            return ['response_code' => $response->getStatusCode()];
         } else {                // if path not created or issues
             return 0;
         }

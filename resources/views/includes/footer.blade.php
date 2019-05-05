@@ -9,5 +9,6 @@
     <script src="{{ asset('js/common.js') }}" defer></script>
     <script src="{{ asset('js/specific.js') }}" defer></script>
     <script src="{{ asset('js/plugins.js') }}" defer></script>
+    <script src="{{ asset('js/torrentClient.js') }}" defer></script>
     @stack('pagespecificscripts')
 </footer>

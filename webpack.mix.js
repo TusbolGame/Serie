@@ -38,6 +38,10 @@ mix.js('resources/js/app.js', 'public/js')
             'resources/js/plugins/*.js'
         ],
         'public/js/plugins.js')
+    .scripts([
+            'resources/js/torrentClient.js'
+        ],
+        'public/js/torrentClient.js')
     .sass('resources/sass/app.scss', 'public/css')
     // .less('resources/less/*.less', 'resources/css/*.less')
     // .styles('resources/css/generic/*.css', 'public/css/generic.css')
@@ -60,7 +64,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/css/generic/cmn-styles.css',
     ], 'public/css/generic.css')
     .styles([
-        'public/css/common/vue-transitions',
+        'public/css/common/vue-transitions.css',
         'public/css/common/base.css'
     ], 'public/css/common.css')
     .styles([
@@ -70,5 +74,5 @@ mix.js('resources/js/app.js', 'public/js')
         'public/css/plugins/Stream.css'
     ], 'public/css/plugins.css')
     .styles(['resources/less/plugins/Stream.css'], 'public/css/plugins.css')
-    .browserSync('newserie.local')
+    .browserSync('serie.local')
     .disableNotifications();
