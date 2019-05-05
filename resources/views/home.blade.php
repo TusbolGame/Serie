@@ -129,11 +129,18 @@
                                         <button type="button" class="btn btn-md btn-primary" data-group="0" data-type="6">Show</button>
                                     </div>
                                 </div>
-                                <div class="row no-gutters mt-3">
+                                <div v-if="active" class="row no-gutters mt-3">
                                     <div class="col-12 cmn-admin-result">
                                         <h4 class="row no-gutters mb-2">Results</h4>
                                         <div class="row no-gutters results">
-                                            <show-download-result-component v-for="downloadResult in downloadResults" v-bind:data="downloadResult">
+                                            <show-download-result-component v-for="downloadResult in downloadResults" v-bind:data="downloadResult"
+                                                                            v-bind:key="downloadResult.infohash"
+                                                                            v-bind:infohash="downloadResult.infohash"
+                                                                            v-bind:show.name="downloadResult.show.name"
+                                                                            v-bind:show.uuid="downloadResult.show.uuid"
+                                                                            v-bind:episode.uuid="downloadResult.episode.uuid"
+                                                                            v-bind:episode.episode_code="downloadResult.episode.episode_code"
+                                                                            v-bind:episode.fetched="downloadResult.fetched">
                                             </show-download-result-component>
                                         </div>
                                     </div>
@@ -174,11 +181,3 @@
     <div class="row justify-content-center">
     </div>
 @endsection
-
-
-<script>
-    import ProgressBarComponent from "../js/components/ProgressBarComponent";
-    export default {
-        components: {ProgressBarComponent}
-    }
-</script>

@@ -2,21 +2,21 @@
     <div class="col-12">
         <div class="row no-gutters mb-1 d-flex justify-content-between">
             <div class="col-10 d-flex align-items-center">
-                <div v-if="!data.fetched" class="row no-gutters w-100 d-flex justify-content-between">
+                <div v-if="!fetched" class="row no-gutters w-100 d-flex justify-content-between">
                     Fetching download data...
                 </div>
-                <div v-if="data.fetched" class="row no-gutters w-100 d-flex justify-content-between">
-                    <div class="col-9 d-inline-block text-truncate">{{data.show}}</div>
-                    <div>{{data.episode_code}}</div>
+                <div v-if="fetched" class="row no-gutters w-100 d-flex justify-content-between">
+                    <div class="col-9 d-inline-block text-truncate">{{show.name}}</div>
+                    <div>{{episode.episode_code}}</div>
                 </div>
             </div>
-            <div v-if="data.fetched">
+            <div v-if="fetched">
                 <button v-if="!details.visible" @click="toggleDetails" type="button" class="btn btn-md btn-link pr-0" data-group="0" data-type="7">Details</button>
                 <button v-if="details.visible" @click="toggleDetails" type="button" class="btn btn-md btn-link pr-0" data-group="0" data-type="8">Hide</button>
             </div>
             <div v-if="details.visible" class="col-12 my-2 pl-4">
                 <div class="row no-gutters d-flex justify-content-between">
-                    <div class="col-7 d-inline-block text-truncate text-black-50">{{data.name}}</div>
+                    <div class="col-7 d-inline-block text-truncate text-black-50">{{show.name}}</div>
                     <div class="col-3" v-if="progress.visible">
                         <progress-bar-component v-bind:width="progress.percentage">
                         </progress-bar-component>
@@ -60,15 +60,18 @@
                     default: '',
                 },
             },
-            infoHash: {
+            infohash: {
                 type: String,
                 default: '',
+            },
+            fetched: {
+                type: Boolean,
+                default: false,
             },
         },
         data: function() {
             return {
                 data: {
-                    fetched: false,
                 },
                 details: {
                     visible: false,

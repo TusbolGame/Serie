@@ -105,7 +105,7 @@ $(document).ready(function() {
                             url = '/episode/bookmark/add/' + episode_id + '/' + matches[0];
                             break;
                         case 1:
-                            url = 'http://localhost:5000/torrent/add/' + input;
+                            url = 'http://localhost:5000/torrent/add/' + episode_id + '/' + encodeURIComponent(input);
                             break;
                         default:
                             break;
@@ -116,26 +116,23 @@ $(document).ready(function() {
                         crossDomain: true,
                         contentType: 'text/plain',
                     };
-                    // console.log('test');
-                    // window.axios.get(url, {
-                    //         headers: {
-                    //             'Access-Control-Allow-Origin': '*',
-                    //         }
-                    //     })
-                    //     .then(({data}) => {
-                    //     }).catch((error) => {
-                    //     console.log(error.response);
-                    // });
-                    ajaxHandler(args,
-                        function (data) {
-                            console.log(data);
-                            // window.axios.get('/torrent/add/' + data.infoHash.trim())
-                            //     .then(({data}) => {
-                            //     }).catch((error) => {
-                            //     console.log(error.response);
-                            // });
-                        }, null
-                    );
+
+                    window.axios.get(url)
+                        .then(({data}) => {
+                            // console.log(data);
+                        }).catch((error) => {
+                        console.log(error.response);
+                    });
+                    // ajaxHandler(args,
+                    //     function (data) {
+                    //         console.log(data);
+                    //         // window.axios.get('/torrent/add/' + data.infoHash.trim())
+                    //         //     .then(({data}) => {
+                    //         //     }).catch((error) => {
+                    //         //     console.log(error.response);
+                    //         // });
+                    //     }, null
+                    // );
                 }
             }
         }

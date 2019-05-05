@@ -11,22 +11,6 @@ window.torrentSocket.on('socketToMe', function(data) {
     console.log(data);
 });
 
-window.torrentSocket.on('torrentAdded', function(data) {
-    var pattern = /([a-fA-F0-9]{40})/g;
-    var matches = data.infoHash.trim().match(pattern);
-    if (matches == null || matches.length < 1) {
-        errorManager('The string provided is not a valid infoHash.');
-        console.log('The string provided is not a valid infoHash.');
-    }
-    // window.axios.get('/torrent/add/' + data.infoHash.trim())
-    //     .then(({data}) => {
-    //         console.log(true);
-    //     }).catch((error) => {
-    //     console.log(error.response);
-    // });
-    console.log(data);
-});
-
 window.torrentSocket.on('torrentReady', function(data) {
     console.log(data);
 });

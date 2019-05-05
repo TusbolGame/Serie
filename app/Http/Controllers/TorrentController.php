@@ -25,8 +25,11 @@ class TorrentController extends Controller {
         if (!empty($torrentCheck)) {
             if ($torrentCheck->episode_id !== $episodeCheck->id) {
                 return AjaxErrorController::response("Wrong association between torrent and episode. The same torrent is already linked to an other episode", 409, 4);
+            } else {
+                $episode = Episode::where('uuid', $episode)->with('show', 'torrent')->first();
+
+                return AjaxSuccessController::response("Torrent already present and returned.", $episode);
             }
-            $torrent = $torrentCheck;
         }
 
         $torrent = new Torrent();

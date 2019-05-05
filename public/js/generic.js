@@ -175,6 +175,17 @@ function createPlaceHolder(type, colorClass) {
     return container;
 }
 
+function magnetURIChecker(uri) {
+    let pattern = /([a-fA-F0-9]{40})/g;
+    let matches = uri.match(pattern);
+    if (matches == null || matches.length < 1) {
+        errorManager('The string provided is not a valid infoHash.');
+        console.log('The string provided is not a valid infoHash.');
+        return false;
+    }
+    return true;
+}
+
 hideLoader = function() {
     let parent = $(this);
     parent.find(".cmn-loader-container").remove();

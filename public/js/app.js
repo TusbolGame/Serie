@@ -177,16 +177,18 @@ __webpack_require__.r(__webpack_exports__);
         "default": ''
       }
     },
-    infoHash: {
+    infohash: {
       type: String,
       "default": ''
+    },
+    fetched: {
+      type: Boolean,
+      "default": false
     }
   },
   data: function data() {
     return {
-      data: {
-        fetched: false
-      },
+      data: {},
       details: {
         visible: false
       },
@@ -11646,7 +11648,7 @@ var render = function() {
       { staticClass: "row no-gutters mb-1 d-flex justify-content-between" },
       [
         _c("div", { staticClass: "col-10 d-flex align-items-center" }, [
-          !_vm.data.fetched
+          !_vm.fetched
             ? _c(
                 "div",
                 {
@@ -11661,7 +11663,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.data.fetched
+          _vm.fetched
             ? _c(
                 "div",
                 {
@@ -11672,16 +11674,16 @@ var render = function() {
                   _c(
                     "div",
                     { staticClass: "col-9 d-inline-block text-truncate" },
-                    [_vm._v(_vm._s(_vm.data.show))]
+                    [_vm._v(_vm._s(_vm.show.name))]
                   ),
                   _vm._v(" "),
-                  _c("div", [_vm._v(_vm._s(_vm.data.episode_code))])
+                  _c("div", [_vm._v(_vm._s(_vm.episode.episode_code))])
                 ]
               )
             : _vm._e()
         ]),
         _vm._v(" "),
-        _vm.data.fetched
+        _vm.fetched
           ? _c("div", [
               !_vm.details.visible
                 ? _c(
@@ -11731,7 +11733,7 @@ var render = function() {
                       staticClass:
                         "col-7 d-inline-block text-truncate text-black-50"
                     },
-                    [_vm._v(_vm._s(_vm.data.name))]
+                    [_vm._v(_vm._s(_vm.show.name))]
                   ),
                   _vm._v(" "),
                   _vm.progress.visible
@@ -12485,36 +12487,34 @@ var ShowDownloads = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   methods: {
     showDownloads: function showDownloads() {},
     listenTorrentAdded: function listenTorrentAdded() {
+      var _this5 = this;
+
       window.torrentSocket.on('torrentAdded', function (data) {
-        var pattern = /([a-fA-F0-9]{40})/g;
-        var matches = data.infoHash.trim().match(pattern);
+        if (!magnetURIChecker(data.infohash)) {
+          return false;
+        }
 
-        if (matches == null || matches.length < 1) {
-          errorManager('The string provided is not a valid infoHash.');
-          console.log('The string provided is not a valid infoHash.');
-        } // window.axios.get('/torrent/add/' + data.infoHash.trim())
-        //     .then(({data}) => {
-        //         var downloadNew = {
-        //             fileName: '',
-        //             show: {
-        //                 uuid: data.episode.show.uuid,
-        //                 name:  data.episode.show.name,
-        //             },
-        //             episode: {
-        //                 uuid: data.episode.uuid,
-        //                 episode_code: data.episode.episode_code,
-        //             },
-        //             infoHash: data.infoHash.trim(),
-        //         };
-        //
-        //         this.downloadResults.push(downloadNew);
-        //         console.log(this.downloadResults);
-        //     }).catch((error) => {
-        //     console.log(error.response);
-        // });
+        _this5.active = true;
+        window.axios.get('/torrent/add/' + data.episode_id + '/' + data.infohash.trim()).then(function (_ref3) {
+          var data = _ref3.data;
+          var downloadNew = {
+            fileName: '',
+            show: {
+              uuid: data.data.show.uuid,
+              name: data.data.show.name
+            },
+            episode: {
+              uuid: data.data.uuid,
+              episode_code: data.data.episode_code
+            },
+            infohash: data.data.torrent[0].hash,
+            fetched: true
+          };
 
-
-        console.log(data);
+          _this5.downloadResults.push(downloadNew);
+        })["catch"](function (error) {
+          console.log(error.response);
+        });
       });
     }
   },

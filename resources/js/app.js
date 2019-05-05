@@ -163,34 +163,31 @@ var ShowDownloads = new Vue({
 
         },
         listenTorrentAdded: function() {
-            window.torrentSocket.on('torrentAdded', function(data) {
-                var pattern = /([a-fA-F0-9]{40})/g;
-                var matches = data.infoHash.trim().match(pattern);
-                if (matches == null || matches.length < 1) {
-                    errorManager('The string provided is not a valid infoHash.');
-                    console.log('The string provided is not a valid infoHash.');
+            window.torrentSocket.on('torrentAdded', (data) => {
+                if (!magnetURIChecker(data.infohash)) {
+                    return false;
                 }
-                // window.axios.get('/torrent/add/' + data.infoHash.trim())
-                //     .then(({data}) => {
-                //         var downloadNew = {
-                //             fileName: '',
-                //             show: {
-                //                 uuid: data.episode.show.uuid,
-                //                 name:  data.episode.show.name,
-                //             },
-                //             episode: {
-                //                 uuid: data.episode.uuid,
-                //                 episode_code: data.episode.episode_code,
-                //             },
-                //             infoHash: data.infoHash.trim(),
-                //         };
-                //
-                //         this.downloadResults.push(downloadNew);
-                //         console.log(this.downloadResults);
-                //     }).catch((error) => {
-                //     console.log(error.response);
-                // });
-                console.log(data);
+                this.active = true;
+                window.axios.get('/torrent/add/' + data.episode_id + '/' + data.infohash.trim())
+                    .then(({data}) => {
+                        let downloadNew = {
+                            fileName: '',
+                            show: {
+                                uuid: data.data.show.uuid,
+                                name:  data.data.show.name,
+                            },
+                            episode: {
+                                uuid: data.data.uuid,
+                                episode_code: data.data.episode_code,
+                            },
+                            infohash: data.data.torrent[0].hash,
+                            fetched: true,
+                        };
+
+                        this.downloadResults.push(downloadNew);
+                    }).catch((error) => {
+                    console.log(error.response);
+                });
             });
         },
     },
