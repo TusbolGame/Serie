@@ -12454,18 +12454,18 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-variables.less */"./resources/less/generic/cmn-variables.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-fonts.less */"./resources/less/generic/cmn-fonts.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-animations.less */"./resources/less/generic/cmn-animations.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-loaders.less */"./resources/less/generic/cmn-loaders.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-inputs.less */"./resources/less/generic/cmn-inputs.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\generic\cmn-styles.less */"./resources/less/generic/cmn-styles.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\common\vue-transitions.less */"./resources/less/common/vue-transitions.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\common\base.less */"./resources/less/common/base.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\components\card-episode.less */"./resources/less/components/card-episode.less");
-__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\less\plugins\Stream.less */"./resources/less/plugins/Stream.less");
-module.exports = __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\newSerie\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-variables.less */"./resources/less/generic/cmn-variables.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-fonts.less */"./resources/less/generic/cmn-fonts.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-animations.less */"./resources/less/generic/cmn-animations.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-loaders.less */"./resources/less/generic/cmn-loaders.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-inputs.less */"./resources/less/generic/cmn-inputs.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\generic\cmn-styles.less */"./resources/less/generic/cmn-styles.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\common\vue-transitions.less */"./resources/less/common/vue-transitions.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\common\base.less */"./resources/less/common/base.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\components\card-episode.less */"./resources/less/components/card-episode.less");
+__webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\less\plugins\Stream.less */"./resources/less/plugins/Stream.less");
+module.exports = __webpack_require__(/*! C:\Users\Ivan\Dropbox\Code\Web\serie\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),
