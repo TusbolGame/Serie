@@ -74,5 +74,5 @@ mix.js('resources/js/app.js', 'public/js')
         'public/css/plugins/Stream.css'
     ], 'public/css/plugins.css')
     .styles(['resources/less/plugins/Stream.css'], 'public/css/plugins.css')
-    .browserSync('newserie.local')
+    .browserSync('serie.local')
     .disableNotifications();

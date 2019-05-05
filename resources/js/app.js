@@ -25,8 +25,12 @@ import Vue from 'vue'
 Vue.filter('truncate', function (text, stop, suffix) {
     return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '');
 });
+// Common components
+Vue.component('progress-bar-component', require('./components/ProgressBarComponent.vue').default);
 
+// Specific components
 Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
+
 var ShowSearch = new Vue({
     el: '#ShowSearch',
     data: {
@@ -144,5 +148,55 @@ var ShowUpdate = new Vue({
                     "s left";
             }
         },
+    },
+});
+
+Vue.component('show-download-result-component', require('./components/ShowDownloadResultComponent.vue').default);
+var ShowDownloads = new Vue({
+    el: '#ShowDownloads',
+    data: {
+        active: false,
+        downloadResults: [],
+    },
+    methods: {
+        showDownloads: function() {
+
+        },
+        listenTorrentAdded: function() {
+            window.torrentSocket.on('torrentAdded', function(data) {
+                var pattern = /([a-fA-F0-9]{40})/g;
+                var matches = data.infoHash.trim().match(pattern);
+                if (matches == null || matches.length < 1) {
+                    errorManager('The string provided is not a valid infoHash.');
+                    console.log('The string provided is not a valid infoHash.');
+                }
+                window.axios.get('/torrent/add/' + data.infoHash.trim())
+                    .then(({data}) => {
+                        var downloadNew = {
+                            fileName: '',
+                            show: {
+                                uuid: data.episode.show.uuid,
+                                name:  data.episode.show.name,
+                            },
+                            episode: {
+                                uuid: data.episode.uuid,
+                                episode_code: data.episode.episode_code,
+                            },
+                            infoHash: data.infoHash.trim(),
+                        };
+
+                        this.downloadResults.push(downloadNew);
+                        console.log(this.downloadResults);
+                    }).catch((error) => {
+                    console.log(error.response);
+                });
+                console.log(data);
+            });
+        },
+    },
+    mounted: function() {
+        this.listenTorrentAdded();
+    },
+    computed: {
     },
 });

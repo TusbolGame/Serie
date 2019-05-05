@@ -38,12 +38,11 @@
                                     </div>
                                 </div>
                                 <div class="row no-gutters" v-if="active">
-                                    <div class="col-12 mt-2">
-                                        <div class="cmn-progress c2">
-                                            <span :style="{width: updateProgress.percentage + '%'}"></span>
-                                        </div>
+                                    <div class="col-12">
+                                        <progress-bar-component v-bind:width="updateProgress.percentage">
+                                        </progress-bar-component>
                                     </div>
-                                    <div class="col-12 my-2" v-if="active">
+                                    <div class="col-12 mb-2" v-if="active">
                                         <div class="row no-gutters">
                                             <span class="col-12 text-center" v-if="active && !updating && !completed">Starting...</span>
                                             <span class="col-12 text-center" v-if="active && updating">
@@ -121,6 +120,25 @@
                                     <span class="col-12 text-center">Searching...</span>
                                 </div>
                             </li>
+                            <li id="ShowDownloads" class="list-group-item p-2">
+                                <div class="row no-gutters form-inline cmn-admin-action">
+                                    <div class="col-xl-8 col-sm-12 form-group pr-1">
+                                        <span>Downloads</span>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-12 d-flex justify-content-end">
+                                        <button type="button" class="btn btn-md btn-primary" data-group="0" data-type="6">Show</button>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters mt-3">
+                                    <div class="col-12 cmn-admin-result">
+                                        <h4 class="row no-gutters mb-2">Results</h4>
+                                        <div class="row no-gutters results">
+                                            <show-download-result-component v-for="downloadResult in downloadResults" v-bind:data="downloadResult">
+                                            </show-download-result-component>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -158,3 +176,9 @@
 @endsection
 
 
+<script>
+    import ProgressBarComponent from "../js/components/ProgressBarComponent";
+    export default {
+        components: {ProgressBarComponent}
+    }
+</script>

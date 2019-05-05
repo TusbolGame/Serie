@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'newserie.local'),
+    'url' => env('APP_URL', 'serie.local'),
 
     'asset_url' => env('ASSET_URL', null),
 

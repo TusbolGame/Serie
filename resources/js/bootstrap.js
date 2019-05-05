@@ -68,3 +68,16 @@ if (typeof io !== 'undefined') {
 //     baseURL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
 //     return baseURL;
 // }
+
+// Torrent settings
+window.torrentServer = 'http://localhost:5000/';
+var connectionOptions = {
+    'force new connection': true,
+    'reconnectionAttempts': 'Infinity',
+    'timeout': 4000,
+    'transports': ['websocket'],
+};
+
+
+window.torrentSocket = window.io(window.torrentServer, connectionOptions);
+

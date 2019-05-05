@@ -24,10 +24,11 @@ Route::get('/data/search/show/{show_name}', 'DataUpdateController@searchShowCont
 Route::get('/data/update/{type}/{api_id?}', 'DataUpdateController@updateManager')->middleware('auth');
 
 Route::get('/episode/{episode}', 'EpisodeController@episode')->middleware('auth');
-Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');
 Route::get('/episode/torrent/check/{magnetlink}', 'EpisodeController@torrentCheck')->middleware('auth');
 Route::get('/episode/view/mark/{episode}/{state}', 'EpisodeController@viewMark')->middleware('auth');
 Route::get('/episode/action/add/{buttonType}', 'EpisodeController@actionAdd')->middleware('auth');
+
+Route::get('/torrent/add/{episode}/{magnetlink}', 'TorrentController@torrentAdd')->middleware('auth');
 
 Route::get('/show/{show}', 'ShowController@show')->middleware('auth');
 Route::get('/show/remove/{show}', 'ShowController@removeUserShow')->middleware('auth');

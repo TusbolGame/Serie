@@ -12,7 +12,7 @@ window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
     window.Echo = new Echo({
         broadcaster: 'socket.io',
-        host: 'newserie.local:6001',
+        host: 'serie.local:6001',
         authEndpoint: '/broadcasting/auth',
     });
 }

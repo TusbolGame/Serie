@@ -2,18 +2,21 @@ function ajaxCaller(args) {
     let ajaxOptions = setDefaultOptions(args);
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'x-auth': $('meta[name="csrf-token"]').attr('content'),
         }
     });
     return $.ajax({
         url: ajaxOptions.url,
-        headers: ajaxOptions.headers,
         method: ajaxOptions.method,
         data: ajaxOptions.data,
         accepts: ajaxOptions.accepts,
+        contentType: ajaxOptions.contentType,
         dataType: ajaxOptions.dataType,
         async: ajaxOptions.async,
-        success: ajaxOptions.success
+        success: ajaxOptions.success,
+        crossDomain: ajaxOptions.crossDomain,
+        xhrFields: ajaxOptions.xhrFields,
     });
 
     function setDefaultOptions(args) {
@@ -22,13 +25,16 @@ function ajaxCaller(args) {
             url: '/ajax',
             method: 'POST',
             dataType: 'json',
+            contentType: 'text/plain',
             accepts: {
                 xml: 'text/xml',
                 text: 'text/plain'
             },
             async: true,
             cache: false,
-            data: data
+            data: data,
+            crossDomain: false,
+            xhrFields: {},
         };
         return $.extend({}, defaultAjaxOptions, args);
     }

@@ -103,34 +103,41 @@ $(document).ready(function() {
                     switch (type) {
                         case 0:
                             url = '/episode/bookmark/add/' + episode_id + '/' + matches[0];
-
-                            var args = {
-                                url: url,
-                                method: 'GET'
-                            };
-                            ajaxHandler(args,
-                                function () {
-
-                                }, null
-                            );
                             break;
                         case 1:
-                            url = '/episode/torrent/add/' + episode_id + '/' + matches[0];
-
-                            var args = {
-                                url: url,
-                                method: 'GET'
-                            };
-                            ajaxHandler(args,
-                                function () {
-
-                                }, null
-                            );
+                            url = 'http://localhost:5000/torrent/add/' + input;
                             break;
                         default:
-
                             break;
                     }
+                    var args = {
+                        url: url,
+                        method: 'GET',
+                        crossDomain: true,
+                        contentType: '',
+                        dataType: 'jsonp',
+                        accepts: {},
+                    };
+                    // console.log('test');
+                    // window.axios.get(url, {
+                    //         headers: {
+                    //             'Access-Control-Allow-Origin': '*',
+                    //         }
+                    //     })
+                    //     .then(({data}) => {
+                    //     }).catch((error) => {
+                    //     console.log(error.response);
+                    // });
+                    ajaxHandler(args,
+                        function (data) {
+                            console.log(data);
+                            window.axios.get('/torrent/add/' + data.infoHash.trim())
+                                .then(({data}) => {
+                                }).catch((error) => {
+                                console.log(error.response);
+                            });
+                        }, null
+                    );
                 }
             }
         }

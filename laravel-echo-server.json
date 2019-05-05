@@ -1,5 +1,5 @@
 {
-	"authHost": "newserie.local",
+	"authHost": "serie.local",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{
