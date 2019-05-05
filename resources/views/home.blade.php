@@ -38,12 +38,11 @@
                                     </div>
                                 </div>
                                 <div class="row no-gutters" v-if="active">
-                                    <div class="col-12 mt-2">
-                                        <div class="cmn-progress c2">
-                                            <span :style="{width: updateProgress.percentage + '%'}"></span>
-                                        </div>
+                                    <div class="col-12">
+                                        <progress-bar-component v-bind:width="updateProgress.percentage">
+                                        </progress-bar-component>
                                     </div>
-                                    <div class="col-12 my-2" v-if="active">
+                                    <div class="col-12 mb-2" v-if="active">
                                         <div class="row no-gutters">
                                             <span class="col-12 text-center" v-if="active && !updating && !completed">Starting...</span>
                                             <span class="col-12 text-center" v-if="active && updating">
@@ -68,7 +67,7 @@
                                             <span class="h4">@{{updateProgress.counter}}</span>
                                         </div>
                                         <div class="row no-gutters results">
-                                            {{--<transition-group name="updated-episodes-fade" tag="div">--}}
+                                            <transition-group name="fade" tag="div" appear class="row no-gutters results w-100">
                                             <show-update-result-component v-for="updateResult in updateResults" v-bind:data="updateResult"
                                                                           v-bind:key="updateResult.id"
                                                                           v-bind:id="updateResult.id"
@@ -78,7 +77,7 @@
                                                                           v-bind:airing_at="updateResult.airing_at"
                                                                           v-bind:episode_code="updateResult.episode_code">
                                             </show-update-result-component>
-                                            {{--</transition-group>--}}
+                                            </transition-group>
                                         </div>
                                     </div>
                                 </div>

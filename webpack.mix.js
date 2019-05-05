@@ -64,7 +64,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/css/generic/cmn-styles.css',
     ], 'public/css/generic.css')
     .styles([
-        'public/css/common/vue-transitions',
+        'public/css/common/vue-transitions.css',
         'public/css/common/base.css'
     ], 'public/css/common.css')
     .styles([
