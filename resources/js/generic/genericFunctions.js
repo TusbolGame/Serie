@@ -77,11 +77,11 @@ function defaultAjaxSuccessCallback(serverData, successCallbackFunction) {
                 successCallbackFunction(serverData);
             }
         } else {
-            console.log('ServerData data is null');
-            console.log(serverData.data);
+            // console.log('ServerData data is null');
+            // console.log(serverData.data);
         }
-        console.log('ServerData is null');
-        console.log(serverData);
+        // console.log('ServerData is null');
+        // console.log(serverData);
     }
 }
 

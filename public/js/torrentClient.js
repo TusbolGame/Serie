@@ -18,12 +18,12 @@ window.torrentSocket.on('torrentAdded', function(data) {
         errorManager('The string provided is not a valid infoHash.');
         console.log('The string provided is not a valid infoHash.');
     }
-    window.axios.get('/torrent/add/' + data.infoHash.trim())
-        .then(({data}) => {
-            console.log(true);
-        }).catch((error) => {
-        console.log(error.response);
-    });
+    // window.axios.get('/torrent/add/' + data.infoHash.trim())
+    //     .then(({data}) => {
+    //         console.log(true);
+    //     }).catch((error) => {
+    //     console.log(error.response);
+    // });
     console.log(data);
 });
 

@@ -114,9 +114,7 @@ $(document).ready(function() {
                         url: url,
                         method: 'GET',
                         crossDomain: true,
-                        contentType: '',
-                        dataType: 'jsonp',
-                        accepts: {},
+                        contentType: 'text/plain',
                     };
                     // console.log('test');
                     // window.axios.get(url, {
@@ -131,11 +129,11 @@ $(document).ready(function() {
                     ajaxHandler(args,
                         function (data) {
                             console.log(data);
-                            window.axios.get('/torrent/add/' + data.infoHash.trim())
-                                .then(({data}) => {
-                                }).catch((error) => {
-                                console.log(error.response);
-                            });
+                            // window.axios.get('/torrent/add/' + data.infoHash.trim())
+                            //     .then(({data}) => {
+                            //     }).catch((error) => {
+                            //     console.log(error.response);
+                            // });
                         }, null
                     );
                 }

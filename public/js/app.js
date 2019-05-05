@@ -12486,37 +12486,34 @@ var ShowDownloads = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     showDownloads: function showDownloads() {},
     listenTorrentAdded: function listenTorrentAdded() {
       window.torrentSocket.on('torrentAdded', function (data) {
-        var _this5 = this;
-
         var pattern = /([a-fA-F0-9]{40})/g;
         var matches = data.infoHash.trim().match(pattern);
 
         if (matches == null || matches.length < 1) {
           errorManager('The string provided is not a valid infoHash.');
           console.log('The string provided is not a valid infoHash.');
-        }
+        } // window.axios.get('/torrent/add/' + data.infoHash.trim())
+        //     .then(({data}) => {
+        //         var downloadNew = {
+        //             fileName: '',
+        //             show: {
+        //                 uuid: data.episode.show.uuid,
+        //                 name:  data.episode.show.name,
+        //             },
+        //             episode: {
+        //                 uuid: data.episode.uuid,
+        //                 episode_code: data.episode.episode_code,
+        //             },
+        //             infoHash: data.infoHash.trim(),
+        //         };
+        //
+        //         this.downloadResults.push(downloadNew);
+        //         console.log(this.downloadResults);
+        //     }).catch((error) => {
+        //     console.log(error.response);
+        // });
 
-        window.axios.get('/torrent/add/' + data.infoHash.trim()).then(function (_ref3) {
-          var data = _ref3.data;
-          var downloadNew = {
-            fileName: '',
-            show: {
-              uuid: data.episode.show.uuid,
-              name: data.episode.show.name
-            },
-            episode: {
-              uuid: data.episode.uuid,
-              episode_code: data.episode.episode_code
-            },
-            infoHash: data.infoHash.trim()
-          };
 
-          _this5.downloadResults.push(downloadNew);
-
-          console.log(_this5.downloadResults);
-        })["catch"](function (error) {
-          console.log(error.response);
-        });
         console.log(data);
       });
     }

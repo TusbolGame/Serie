@@ -170,26 +170,26 @@ var ShowDownloads = new Vue({
                     errorManager('The string provided is not a valid infoHash.');
                     console.log('The string provided is not a valid infoHash.');
                 }
-                window.axios.get('/torrent/add/' + data.infoHash.trim())
-                    .then(({data}) => {
-                        var downloadNew = {
-                            fileName: '',
-                            show: {
-                                uuid: data.episode.show.uuid,
-                                name:  data.episode.show.name,
-                            },
-                            episode: {
-                                uuid: data.episode.uuid,
-                                episode_code: data.episode.episode_code,
-                            },
-                            infoHash: data.infoHash.trim(),
-                        };
-
-                        this.downloadResults.push(downloadNew);
-                        console.log(this.downloadResults);
-                    }).catch((error) => {
-                    console.log(error.response);
-                });
+                // window.axios.get('/torrent/add/' + data.infoHash.trim())
+                //     .then(({data}) => {
+                //         var downloadNew = {
+                //             fileName: '',
+                //             show: {
+                //                 uuid: data.episode.show.uuid,
+                //                 name:  data.episode.show.name,
+                //             },
+                //             episode: {
+                //                 uuid: data.episode.uuid,
+                //                 episode_code: data.episode.episode_code,
+                //             },
+                //             infoHash: data.infoHash.trim(),
+                //         };
+                //
+                //         this.downloadResults.push(downloadNew);
+                //         console.log(this.downloadResults);
+                //     }).catch((error) => {
+                //     console.log(error.response);
+                // });
                 console.log(data);
             });
         },
