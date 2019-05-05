@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                                 <div class="row no-gutters" v-if="active">
-                                    <div class="col-12">
+                                    <div class="col-12 progress-bar-container">
                                         <progress-bar-component v-bind:width="updateProgress.percentage">
                                         </progress-bar-component>
                                     </div>

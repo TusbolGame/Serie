@@ -149,4 +149,6 @@ var ShowUpdate = new Vue({
             }
         },
     },
+    watch: {
+    }
 });
