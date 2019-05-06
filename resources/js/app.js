@@ -30,6 +30,14 @@ Vue.component('progress-bar-component', require('./components/ProgressBarCompone
 
 // Specific components
 Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
+Vue.component('episode-component', require('./components/EpisodeComponent.vue').default);
+
+var Episode = new Vue({
+    el: '#UnwatchedEpisodes',
+    data: {
+
+    },
+});
 
 var ShowSearch = new Vue({
     el: '#ShowSearch',

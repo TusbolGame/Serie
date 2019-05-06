@@ -1,14 +1,14 @@
 <template>
     <button :class="'cmn-button icon cmn-rippleable ' + buttonClass" :title="title"
             :data-type="type" :data-group="group" type="button"
-            autocomplete="off">
-        <div :class="'cmn-button-content' + icon"></div>
+            autocomplete="off" @click="bubbleClassToCoverSplash">
+        <div :class="'cmn-button-content ' + icon"></div>
         <div class="cmn-button-ripple"></div>
     </button>
-
 </template>
 
 <script>
+    import VueEventBus from '../VueEventBus'
     export default {
         name: "IconButtonComponent",
         props: {
@@ -35,12 +35,10 @@
         },
         methods: {
             bubbleClassToCoverSplash: function() {
-                this.$emit('button-class-to-cover-splash', this.buttonClass);
+                VueEventBus.$emit('buttonClassToCoverSplash', this.buttonClass);
             }
         },
     }
 </script>
-
 <style scoped>
-
 </style>

@@ -79,6 +79,333 @@ module.exports = function(arraybuffer, start, end) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _buttons_IconButtonComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buttons/IconButtonComponent */ "./resources/js/components/buttons/IconButtonComponent.vue");
+/* harmony import */ var _loaders_SquareGridLoaderComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./loaders/SquareGridLoaderComponent.vue */ "./resources/js/components/loaders/SquareGridLoaderComponent.vue");
+/* harmony import */ var _VueEventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./VueEventBus */ "./resources/js/components/VueEventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "EpisodeComponent",
+  data: function data() {
+    return {
+      cardExpanded: false,
+      cover: {
+        active: false,
+        closerActive: false,
+        loading: false,
+        splashing: false,
+        types: {
+          markAsWatched: false,
+          renewing: false,
+          deleting: false
+        },
+        splashColor: '',
+        error: {
+          state: false,
+          message: ''
+        }
+      }
+    };
+  },
+  props: {
+    uuid: {
+      type: String
+    },
+    show_name: {
+      type: String
+    },
+    show_uuid: {
+      type: String
+    },
+    show_posters: {
+      type: Array
+    },
+    episode_code: {
+      type: String
+    },
+    airing_at: {
+      type: String
+    },
+    summary: {
+      type: String
+    },
+    torrent_count: {
+      type: Number
+    },
+    torrent: {
+      type: Array
+    }
+  },
+  computed: {
+    torrentHREF: function torrentHREF() {
+      return 'https://rarbgway.org/torrents.php?search=' + this.show_name + ' ' + this.episode_code + '&category[]=18&category[]=41&category[]=49';
+    }
+  },
+  components: {
+    IconButtonComponent: _buttons_IconButtonComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SquareGridLoaderComponent: _loaders_SquareGridLoaderComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  methods: {
+    displayDate: function displayDate(date, format) {
+      return moment(date).format(format);
+    },
+    displayDateFromNow: function displayDateFromNow(date) {
+      return moment(date).fromNow();
+    },
+    episodeMarkWatched: function episodeMarkWatched(seen) {
+      var _this = this;
+
+      if (seen !== true && seen !== false) {
+        return false;
+      }
+
+      this.active = true;
+      this.cover.loading = true;
+      window.axios.get( true ? '1' : undefined).then(function (_ref) {
+        var data = _ref.data;
+        _this.cover.loading = false;
+        _this.cover.splashing = true;
+        _this.cover.types.markAsWatched = true;
+
+        if (data.data.length !== 0) {
+          _this.cover.types.renewing = true;
+          _this.episode = data.data;
+        }
+      })["catch"](function (error) {
+        _this.cover.loading = false;
+        _this.cover.splashing = false;
+        _this.error.state = true;
+        _this.error.message = 'Mark as watched unsuccessful. See the console for more details.';
+        console.log(error.response);
+      });
+    },
+    removeUserShow: function removeUserShow() {
+      var _this2 = this;
+
+      this.cover.loading = true;
+      window.axios.get('/show/remove/' + this.show_uuid).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.cover.loading = false;
+        _this2.cover.splashing = true;
+        _this2.cover.types.deleting = true;
+      })["catch"](function (error) {
+        _this2.cover.loading = false;
+        _this2.cover.splashing = false;
+        _this2.error.state = true;
+        _this2.error.message = 'Show removal unsuccessful. See the console for more details.';
+        console.log(error.response);
+      });
+    },
+    addMagnetLink: function addMagnetLink(magnetLink) {
+      bootbox.prompt({
+        title: "Insert the magnet link",
+        backdrop: true,
+        callback: function callback(magnetlink) {
+          if (magnetLink === null || magnetLink.trim().length === 0) {
+            console.log('The string provided is empty.');
+            return null;
+          }
+
+          var url = 'http://localhost:5000/torrent/add/' + episode_id + '/' + encodeURIComponent(magnetLink);
+          window.axios.get(url).then(function (_ref3) {
+            var data = _ref3.data;
+          })["catch"](function (error) {
+            console.log(error.response);
+          });
+        }
+      });
+    },
+    closeCover: function closeCover() {
+      this.cover.active = false;
+      this.cover.closerActive = false;
+      this.cover.loading = false;
+      this.cover.splashing = false;
+      this.error.state = false;
+    }
+  },
+  mounted: function mounted() {
+    var _this3 = this;
+
+    _VueEventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('buttonClassToCoverSplash', function (buttonColor) {
+      _this3.cover.splashColor = ' '.buttonClass;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProgressBarComponent.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProgressBarComponent.vue?vue&type=script&lang=js& ***!
@@ -282,6 +609,59 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     displayDate: function displayDate(date, format) {
       return moment(date).format(format);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _VueEventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../VueEventBus */ "./resources/js/components/VueEventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "IconButtonComponent",
+  props: {
+    buttonClass: {
+      type: String,
+      "default": ''
+    },
+    title: {
+      type: String,
+      "default": ''
+    },
+    type: {
+      type: Number,
+      "default": null
+    },
+    group: {
+      type: Number,
+      "default": null
+    },
+    icon: {
+      type: String,
+      "default": ''
+    }
+  },
+  methods: {
+    bubbleClassToCoverSplash: function bubbleClassToCoverSplash() {
+      _VueEventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('buttonClassToCoverSplash', this.buttonClass);
     }
   }
 });
@@ -11502,6 +11882,420 @@ function toArray(list, index) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      class:
+        "card-episode col-xl-2 col-lg-3 col-md-4 col-sm-12 px-1 mb-2" +
+        (_vm.cardExpanded ? " expanded" : ""),
+      attrs: {
+        "data-airdate": _vm.airing_at,
+        "data-episode": _vm.uuid,
+        "data-filter": _vm.show_name,
+        "data-show": _vm.show_uuid
+      }
+    },
+    [
+      _c("div", { staticClass: "card d-flex" }, [
+        _c("div", { staticClass: "episode-poster-container card-img-top" }, [
+          _c("img", {
+            staticClass: "episode-poster",
+            attrs: {
+              src: "/img/posters/" + _vm.show_posters[0].name + ".jpg",
+              alt: ""
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "card-body d-flex flex-column justify-content-between no-gutters p-1 bg-light"
+          },
+          [
+            _c("div", { staticClass: "card-info" }, [
+              _c("div", { staticClass: "card-info-default" }, [
+                _c(
+                  "div",
+                  { staticClass: "row no-gutters card-info-default-container" },
+                  [
+                    _c("div", { staticClass: "col-12 episode-show-name" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "card-title h4 text-dark",
+                          attrs: { href: "/show/" + _vm.show_uuid }
+                        },
+                        [_vm._v(_vm._s(_vm.show_name))]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-12 episode-code" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "card-title h4 font-weight-light cmn-light",
+                          attrs: { href: "/episode/" + _vm.uuid }
+                        },
+                        [_vm._v(_vm._s(_vm.episode_code))]
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "episode-date font-weight-light cmn-lighter",
+                    attrs: { "data-date": _vm.airing_at }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(_vm.displayDateFromNow(_vm.airing_at)) +
+                        "\n                    "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.summary !== null
+                ? _c(
+                    "div",
+                    { staticClass: "card-info-extra pt-2 font-weight-light" },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm._f("truncate")(_vm.summary, 100)) +
+                          "\n                "
+                      )
+                    ]
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-actions" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "actions-extra d-flex justify-content-between align-items-end"
+                },
+                [
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "c12",
+                      type: 7,
+                      group: 1,
+                      title: "Remove show",
+                      icon: "default-clear"
+                    },
+                    on: { click: _vm.removeUserShow }
+                  }),
+                  _vm._v(" "),
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "c3",
+                      type: 8,
+                      group: 1,
+                      title: "Add bookmark",
+                      icon: "default-bookmark"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "c1",
+                      type: 9,
+                      group: 1,
+                      title: "Show more details",
+                      icon: "default-list"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "c5",
+                      type: 10,
+                      group: 1,
+                      title: "Rate this episode",
+                      icon: "default-star"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "actions-basic" },
+                [
+                  _vm.torrent_count == 0 || _vm.torrent[0].status == 5
+                    ? [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: _vm.torrentHREF, target: "_blank" }
+                          },
+                          [
+                            _c("icon-button-component", {
+                              attrs: {
+                                "button-class": "c6",
+                                type: 1,
+                                group: 1,
+                                title: "Search for torrents",
+                                icon: "default-search"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("icon-button-component", {
+                          attrs: {
+                            "button-class": "c9",
+                            type: 2,
+                            group: 1,
+                            title: "Add magnet link",
+                            icon: "default-torrent"
+                          },
+                          on: { click: _vm.addMagnetLink }
+                        })
+                      ]
+                    : [
+                        _vm.torrent[0].status == 0 || _vm.torrent[0].status == 1
+                          ? [
+                              _c("icon-button-component", {
+                                attrs: {
+                                  "button-class": "c9",
+                                  type: 2,
+                                  group: 1,
+                                  title: "Add magnet link",
+                                  icon: "default-torrent"
+                                },
+                                on: { click: _vm.addMagnetLink }
+                              }),
+                              _vm._v(" "),
+                              _c("icon-button-component", {
+                                attrs: {
+                                  "button-class": "c11",
+                                  type: 6,
+                                  group: 1,
+                                  title: "Check torrent status",
+                                  icon: "default-torrent"
+                                }
+                              })
+                            ]
+                          : _vm.torrent[0].status == 2
+                          ? [
+                              _c("icon-button-component", {
+                                attrs: {
+                                  "button-class": "c1",
+                                  type: 3,
+                                  group: 1,
+                                  title: "Convert Video",
+                                  icon: "default-convert"
+                                }
+                              })
+                            ]
+                          : _vm.torrent[0].status == 3
+                          ? [
+                              _c("icon-button-component", {
+                                attrs: {
+                                  "button-class": "c2",
+                                  type: 4,
+                                  group: 1,
+                                  title: "Play episode",
+                                  icon: "default-play"
+                                }
+                              })
+                            ]
+                          : _vm._e()
+                      ],
+                  _vm._v(" "),
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "c4",
+                      type: 5,
+                      group: 1,
+                      title: "Mark this episode as watched",
+                      icon: "default-mark"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.episodeMarkWatched(true)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("icon-button-component", {
+                    attrs: {
+                      "button-class": "neu",
+                      type: 0,
+                      group: 1,
+                      title: "Show more information",
+                      icon: "default-expand-up"
+                    },
+                    on: {
+                      click: function($event) {
+                        !_vm.cardExpanded
+                      }
+                    }
+                  })
+                ],
+                2
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.cover.active,
+                expression: "cover.active"
+              }
+            ],
+            staticClass: "card-cover"
+          },
+          [
+            _c("button", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.cover.closerActive,
+                  expression: "cover.closerActive"
+                }
+              ],
+              staticClass: "card-cover-closer",
+              on: { click: _vm.closeCover }
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.cover.loading,
+                    expression: "cover.loading"
+                  }
+                ],
+                staticClass:
+                  "card-cover-loader d-flex justify-content-center align-items-center"
+              },
+              [
+                _c("square-grid-loader-component", {
+                  attrs: { loading: _vm.cover.loading }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.cover.splashing,
+                    expression: "cover.splashing"
+                  }
+                ],
+                class:
+                  "card-cover-splash d-flex justify-content-center align-items-center" +
+                  _vm.cover.splashColor
+              },
+              [
+                _c(
+                  "transition",
+                  { attrs: { name: "fade", tag: "div", appear: "" } },
+                  [
+                    _vm.cover.types.markAsWatched
+                      ? _c("div", {
+                          key: "markAsWatched",
+                          staticClass: "card-cover-item default-mark"
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.cover.types.renewing
+                      ? _c("div", {
+                          key: "renewing",
+                          staticClass: "card-cover-item default-autorenew"
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.cover.types.deleting
+                      ? _c("div", {
+                          key: "deleting",
+                          staticClass: "card-cover-item default-delete"
+                        })
+                      : _vm._e()
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.cover.error.state,
+                    expression: "cover.error.state"
+                  }
+                ],
+                staticClass:
+                  "card-cover-error d-flex flex-column justify-content-center align-items-center neg"
+              },
+              [
+                _c("div", { staticClass: "card-cover-item default-error" }),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-cover-error-message p-3" }, [
+                  _vm._v(_vm._s(_vm.cover.error.message))
+                ])
+              ]
+            )
+          ]
+        )
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProgressBarComponent.vue?vue&type=template&id=5aeefe62&scoped=true&":
 /*!***********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProgressBarComponent.vue?vue&type=template&id=5aeefe62&scoped=true& ***!
@@ -11739,6 +12533,48 @@ var render = function() {
       ]
     )
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "button",
+    {
+      class: "cmn-button icon cmn-rippleable " + _vm.buttonClass,
+      attrs: {
+        title: _vm.title,
+        "data-type": _vm.type,
+        "data-group": _vm.group,
+        type: "button",
+        autocomplete: "off"
+      },
+      on: { click: _vm.bubbleClassToCoverSplash }
+    },
+    [
+      _c("div", { class: "cmn-button-content " + _vm.icon }),
+      _vm._v(" "),
+      _c("div", { staticClass: "cmn-button-ripple" })
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -12111,6 +12947,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('truncate', function (text, st
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('progress-bar-component', __webpack_require__(/*! ./components/ProgressBarComponent.vue */ "./resources/js/components/ProgressBarComponent.vue")["default"]); // Specific components
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('show-search-result-component', __webpack_require__(/*! ./components/ShowSearchResultComponent.vue */ "./resources/js/components/ShowSearchResultComponent.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('episode-component', __webpack_require__(/*! ./components/EpisodeComponent.vue */ "./resources/js/components/EpisodeComponent.vue")["default"]);
+var Episode = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
+  el: '#UnwatchedEpisodes',
+  data: {}
+});
 var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#ShowSearch',
   data: {
@@ -12312,6 +13153,75 @@ if (typeof io !== 'undefined') {
 //     baseURL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
 //     return baseURL;
 // }
+
+/***/ }),
+
+/***/ "./resources/js/components/EpisodeComponent.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/EpisodeComponent.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true& */ "./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true&");
+/* harmony import */ var _EpisodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EpisodeComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EpisodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "14682aad",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/EpisodeComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EpisodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./EpisodeComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EpisodeComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EpisodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EpisodeComponent.vue?vue&type=template&id=14682aad&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EpisodeComponent_vue_vue_type_template_id_14682aad_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
@@ -12535,6 +13445,91 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowUpdateResultComponent_vue_vue_type_template_id_6de3517f_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ShowUpdateResultComponent_vue_vue_type_template_id_6de3517f_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/VueEventBus.js":
+/*!************************************************!*\
+  !*** ./resources/js/components/VueEventBus.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = (new vue__WEBPACK_IMPORTED_MODULE_0___default.a());
+
+/***/ }),
+
+/***/ "./resources/js/components/buttons/IconButtonComponent.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/buttons/IconButtonComponent.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true& */ "./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true&");
+/* harmony import */ var _IconButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IconButtonComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _IconButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "e04c30ee",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/buttons/IconButtonComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IconButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./IconButtonComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IconButtonComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true& ***!
+  \************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/buttons/IconButtonComponent.vue?vue&type=template&id=e04c30ee&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IconButtonComponent_vue_vue_type_template_id_e04c30ee_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -2,19 +2,32 @@
 @section('title', 'S')
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-xl-9 col-sm-12 px-1 text-filter-container">
+        <div id="UnwatchedEpisodes" class="col-xl-9 col-sm-12 px-1 text-filter-container">
             <div class="row pb-3">
                 <h2 class="col-xl-9 col-sm-12 m-0 pt-2">Unwatched Episodes</h2>
                 <div class="col-xl-3 col-sm-12 pt-2 pt-xl-0">
                     <input class="form-control text-filter-input" type="text" placeholder="Filter" autocomplete="off">
                 </div>
             </div>
-            <div class="row episodes text-filter-target">
-                @foreach($episodes as $episode)
-                    @component('components.card-episode', ['episode' => $episode])
-                    @endcomponent
-                @endforeach
-            </div>
+            {{-- TODO Test transition --}}
+                <transition-group name="fade" tag="div" class="row episodes text-filter-target" appear>
+                    <episode-component v-for="unwatchedEpisode in {{$episodes}}" v-bind:data="unwatchedEpisode"
+                                       v-bind:key="unwatchedEpisode.uuid"
+                                       v-bind:uuid="unwatchedEpisode.uuid"
+                                       v-bind:show_name="unwatchedEpisode.show.name"
+                                       v-bind:show_uuid="unwatchedEpisode.show.uuid"
+                                       v-bind:show_posters="unwatchedEpisode.show.posters"
+                                       v-bind:episode_code="unwatchedEpisode.episode_code"
+                                       v-bind:airing_at="unwatchedEpisode.airing_at"
+                                       v-bind:summary="unwatchedEpisode.summary"
+                                       v-bind:torrent_count="unwatchedEpisode.torrent_count"
+                                       v-bind:torrent="unwatchedEpisode.torrent">
+                    </episode-component>
+                </transition-group>
+                {{--@foreach($episodes as $episode)--}}
+                    {{--@component('components.card-episode', ['episode' => $episode])--}}
+                    {{--@endcomponent--}}
+                {{--@endforeach--}}
         </div>
         <div class="col-xl-3 col-md-12">
             <div class="row pb-3">
@@ -155,5 +168,3 @@
     <div class="row justify-content-center">
     </div>
 @endsection
-
-

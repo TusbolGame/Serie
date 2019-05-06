@@ -1,28 +1,28 @@
 <template>
-    <div v-bind:class="'card-episode col-xl-2 col-lg-3 col-md-4 col-sm-12 px-1 mb-2' + cardExpanded ? ' expanded' : ''" v-bind:data-airdate="episode.airing_at"
-         v-bind:data-episode="episode.uuid" v-bind:data-filter="episode.show.name"
-         v-bind:data-show="episode.show.uuid">
+    <div v-bind:class="'card-episode col-xl-2 col-lg-3 col-md-4 col-sm-12 px-1 mb-2' + (cardExpanded ? ' expanded' : '')" v-bind:data-airdate="airing_at"
+         v-bind:data-episode="uuid" v-bind:data-filter="show_name"
+         v-bind:data-show="show_uuid">
     <div class="card d-flex">
             <div class="episode-poster-container card-img-top">
-                <img class="episode-poster" v-bind:src="'/img/posters/original/' + episode.show.posters[0].name.jpg" alt="">
+                <img class="episode-poster" v-bind:src="'/img/posters/' + show_posters[0].name + '.jpg'" alt="">
             </div>
             <div class="card-body d-flex flex-column justify-content-between no-gutters p-1 bg-light">
                 <div class="card-info">
                     <div class="card-info-default">
                         <div class="row no-gutters card-info-default-container">
                             <div class="col-12 episode-show-name">
-                                <a v-bind:href="'/show/' + episode.show.uuid" class="card-title h4 text-dark">{{episode.show.name}}</a>
+                                <a v-bind:href="'/show/' + show_uuid" class="card-title h4 text-dark">{{show_name}}</a>
                             </div>
                             <div class="col-12 episode-code">
-                                <a v-bind:href="'/episode/' + episode.uuid" class="card-title h4 font-weight-light cmn-light">{{episode.episode_code}}</a>
+                                <a v-bind:href="'/episode/' + uuid" class="card-title h4 font-weight-light cmn-light">{{episode_code}}</a>
                             </div>
                         </div>
-                        <div class="episode-date font-weight-light cmn-lighter" v-bind:data-date="episode.airing_at">
-                            {{moment(episode.airing_at).fromNow()}}
+                        <div class="episode-date font-weight-light cmn-lighter" v-bind:data-date="airing_at">
+                            {{displayDateFromNow(airing_at)}}
                         </div>
                     </div>
-                    <div v-if="episode.show.description !== null" class="card-info-extra pt-2 font-weight-light">
-                        {{episode.show.description.length > 100 ? (episode.show.description | truncate(100)) : episode.show.description}}
+                    <div v-if="summary !== null" class="card-info-extra pt-2 font-weight-light">
+                        {{summary | truncate(100)}}
                     </div>
                 </div>
                 <div class="card-actions">
@@ -50,24 +50,23 @@
                                                v-bind:icon="'default-star'"></icon-button-component>
                     </div>
                     <div class="actions-basic">
-                        <template  v-if="episode.torrent_count == 0 || episode.torrent[0].status == 5">
-                            <a v-bind:href="'https://rarbgway.org/torrents.php?search=' + episode.show.name + ' ' + episode.episode_code + '&category[]=18&category[]=41&category[]=49'"
-                               target="_blank">
+                        <template  v-if="torrent_count == 0 || torrent[0].status == 5">
+                            <a v-bind:href="torrentHREF" target="_blank">
                                 <icon-button-component v-bind:button-class="'c6'"
                                                        v-bind:type="1"
                                                        v-bind:group="1"
                                                        v-bind:title="'Search for torrents'"
                                                        v-bind:icon="'default-search'"></icon-button-component>
+                            </a>
                                 <icon-button-component v-bind:button-class="'c9'"
                                                        v-bind:type="2"
                                                        v-bind:group="1"
                                                        v-bind:title="'Add magnet link'"
                                                        v-bind:icon="'default-torrent'"
                                                        v-on:click="addMagnetLink"></icon-button-component>
-                            </a>
                         </template>
                         <template v-else>
-                            <template v-if="episode.torrent[0].status == 0 || episode.torrent[0].status == 1">
+                            <template v-if="torrent[0].status == 0 || torrent[0].status == 1">
                                 <icon-button-component v-bind:button-class="'c9'"
                                                        v-bind:type="2"
                                                        v-bind:group="1"
@@ -80,14 +79,14 @@
                                                        v-bind:title="'Check torrent status'"
                                                        v-bind:icon="'default-torrent'"></icon-button-component>
                             </template>
-                            <template v-else-if="episode.torrent[0].status == 2">
+                            <template v-else-if="torrent[0].status == 2">
                                 <icon-button-component v-bind:button-class="'c1'"
                                                        v-bind:type="3"
                                                        v-bind:group="1"
                                                        v-bind:title="'Convert Video'"
                                                        v-bind:icon="'default-convert'"></icon-button-component>
                             </template>
-                            <template v-else-if="episode.torrent[0].status == 3">
+                            <template v-else-if="torrent[0].status == 3">
                                 <icon-button-component v-bind:button-class="'c2'"
                                                        v-bind:type="4"
                                                        v-bind:group="1"
@@ -111,69 +110,60 @@
                 </div>
             </div>
             <div v-show="cover.active" class="card-cover">
-                <div v-show="cover.closerActive" class="card-cover-closer">
-                </div>
+                <button v-show="cover.closerActive" class="card-cover-closer" @click="closeCover">
+                </button>
                 <div v-show="cover.loading" class="card-cover-loader d-flex justify-content-center align-items-center">
                     <square-grid-loader-component v-bind:loading="cover.loading"></square-grid-loader-component>
                 </div>
                 <div v-show="cover.splashing" v-bind:class="'card-cover-splash d-flex justify-content-center align-items-center' + cover.splashColor">
-                    <!--<transition v-if="cover.types.markAsWatched && cover.renewing">-->
-                        <!--<div v-if="cover.types.markAsWatched" key="markAsWatched" class="card-cover-item default-mark"></div>-->
-                        <!--<div v-if="!cover.types.markAsWatched && cover.renewing" key="renewing" class="card-cover-item default-autorenew"></div>-->
-                        <!--<div v-if="!cover.types.markAsWatched && !cover.renewing" key="renewing" class="card-cover-item default-autorenew"></div>-->
-                    <!--</transition>-->
-                    <div v-if="cover.types.markAsWatched" class="card-cover-item default-mark"></div>
-                    <div v-if="cover.types.renewing" class="card-cover-item default-autorenew"></div>
-                    <div v-if="cover.types.deleting" class="card-cover-item default-delete"></div>
-                    <div v-if="cover.types.renewing" class="card-cover-item default-mark"></div>
+                    <!-- TODO Test transition -->
+                    <transition name="fade" tag="div" appear>
+                        <div v-if="cover.types.markAsWatched" key="markAsWatched" class="card-cover-item default-mark"></div>
+                        <div v-if="cover.types.renewing" key="renewing" class="card-cover-item default-autorenew"></div>
+                        <div v-if="cover.types.deleting" key="deleting" class="card-cover-item default-delete"></div>
+                    </transition>
                 </div>
-                <div v-show="cover.error.state" v-bind:class="'card-cover-error d-flex flex-column justify-content-center align-items-center neg'">
+                <div v-show="cover.error.state" class="card-cover-error d-flex flex-column justify-content-center align-items-center neg">
                     <div class="card-cover-item default-error"></div>
-                    <div class="card-cover-error-message p-3">cover.error.message</div>
+                    <div class="card-cover-error-message p-3">{{cover.error.message}}</div>
                 </div>
             </div>
         </div>
     </div>
-    <transition name="modal">
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
-
-                    <div class="modal-header">
-                        <slot name="header">
-                            default header
-                        </slot>
-                    </div>
-
-                    <div class="modal-body">
-                        <slot name="body">
-                            default body
-                        </slot>
-                    </div>
-
-                    <div class="modal-footer">
-                        <slot name="footer">
-                            default footer
-                            <button class="modal-default-button" @click="$emit('close')">
-                                OK
-                            </button>
-                        </slot>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </transition>
 </template>
+<!--<transition name="modal">-->
+    <!--<div class="modal-mask">-->
+        <!--<div class="modal-wrapper">-->
+            <!--<div class="modal-container">-->
 
+                <!--<div class="modal-header">-->
+                    <!--<slot name="header">-->
+                        <!--default header-->
+                    <!--</slot>-->
+                <!--</div>-->
 
-<!--insert on episode-component!!!
-@button-class-to-cover-splash="buttonClassToCoverSplash"
+                <!--<div class="modal-body">-->
+                    <!--<slot name="body">-->
+                        <!--default body-->
+                    <!--</slot>-->
+                <!--</div>-->
 
--->
-
-
+                <!--<div class="modal-footer">-->
+                    <!--<slot name="footer">-->
+                        <!--default footer-->
+                        <!--<button class="modal-default-button" @click="$emit('close')">-->
+                            <!--OK-->
+                        <!--</button>-->
+                    <!--</slot>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</transition>-->
 <script>
     import IconButtonComponent from "./buttons/IconButtonComponent";
+    import SquareGridLoaderComponent from './loaders/SquareGridLoaderComponent.vue'
+    import VueEventBus from './VueEventBus';
 
     export default {
         name: "EpisodeComponent",
@@ -199,40 +189,50 @@
             }
         },
         props: {
-            episode: {
-                uuid: {
-                    type: String,
-                },
-                show: {
-                    name: {
-                        type: String
-                    },
-                    uuid: {
-                        type: String,
-                    },
-                    posters: {
-                        type: Array,
-                    },
-                    description: {
-                        type: String,
-                    },
-                },
-                episode_code: {
-                    type: String,
-                },
-                airing_at: {
-                    type: String,
-                },
-                torrent_count: {
-                    type: Number,
-                },
-                torrent: {
-                    type: Array,
-                }
+            uuid: {
+                type: String,
+            },
+            show_name: {
+                type: String
+            },
+            show_uuid: {
+                type: String,
+            },
+            show_posters: {
+                type: Array,
+            },
+            episode_code: {
+                type: String,
+            },
+            airing_at: {
+                type: String,
+            },
+            summary: {
+                type: String,
+            },
+            torrent_count: {
+                type: Number,
+            },
+            torrent: {
+                type: Array,
             }
         },
-        components: {IconButtonComponent},
+        computed: {
+            torrentHREF: function() {
+                return 'https://rarbgway.org/torrents.php?search=' + this.show_name + ' ' + this.episode_code + '&category[]=18&category[]=41&category[]=49';
+            },
+        },
+        components: {
+            IconButtonComponent,
+            SquareGridLoaderComponent,
+        },
         methods: {
+            displayDate: function(date, format) {
+                return moment(date).format(format);
+            },
+            displayDateFromNow: function(date) {
+                return moment(date).fromNow();
+            },
             episodeMarkWatched: function(seen) {
                 if (seen !== true && seen !== false) {
                     return false;
@@ -241,7 +241,7 @@
                 this.active = true;
                 this.cover.loading = true;
 
-                window.axios.get('/episode/view/mark/' + this.episode.uuid + '/' + seen ? '1' : '0')
+                window.axios.get('/episode/view/mark/' + this.uuid + '/' + seen ? '1' : '0')
                     .then(({data}) => {
                         this.cover.loading = false;
                         this.cover.splashing = true;
@@ -261,7 +261,7 @@
             },
             removeUserShow: function() {
                 this.cover.loading = true;
-                window.axios.get('/show/remove/' + this.show.uuid)
+                window.axios.get('/show/remove/' + this.show_uuid)
                     .then(({data}) => {
                         this.cover.loading = false;
                         this.cover.splashing = true;
@@ -276,10 +276,23 @@
                 });
             },
             addMagnetLink: function(magnetLink) {
+                bootbox.prompt({
+                    title: "Insert the magnet link",
+                    backdrop: true,
+                    callback:  function(magnetlink) {
+                        if (magnetLink === null || magnetLink.trim().length === 0) {
+                            console.log('The string provided is empty.');
+                            return null;
+                        }
 
-            },
-            buttonClassToCoverSplash: function(buttonClass) {
-                this.cover.splashColor = ' ' . buttonClass;
+                        var url = 'http://localhost:5000/torrent/add/' + episode_id + '/' + encodeURIComponent(magnetLink);
+                        window.axios.get(url)
+                            .then(({data}) => {
+                            }).catch((error) => {
+                            console.log(error.response);
+                        });
+                    }
+                });
             },
             closeCover: function() {
                 this.cover.active = false;
@@ -288,6 +301,11 @@
                 this.cover.splashing = false;
                 this.error.state = false;
             }
+        },
+        mounted () {
+            VueEventBus.$on('buttonClassToCoverSplash', (buttonColor) => {
+                this.cover.splashColor = ' ' . buttonClass;
+            });
         },
     }
 </script>
