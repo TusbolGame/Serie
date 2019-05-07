@@ -51,7 +51,7 @@
                     </div>
                     <div class="actions-basic">
                         <template  v-if="torrent_count == 0 || torrent[0].status == 5">
-                            <a v-bind:href="torrentHREF" target="_blank">
+                            <a v-bind:href="torrentHREF" target="_blank" rel="noreferrer">
                                 <icon-button-component v-bind:button-class="'c6'"
                                                        v-bind:type="1"
                                                        v-bind:group="1"
