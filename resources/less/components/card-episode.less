@@ -121,6 +121,58 @@
         }
     }
 
+    & .card-cover {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+
+        &.active {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        & .card-cover-closer {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+        }
+
+        & .card-cover-loader {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+        }
+
+        & .card-cover-splash,
+        & .card-cover-error {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+
+            & .card-cover-item {
+                    font-family: 'Material Icons';
+                    font-size: 120px;
+
+                &:after {
+                    transform: scale(1.2);
+
+                    transition: transform @transitionTime @transitionType 0s;
+                }
+            }
+
+            & .card-cover-error-message {
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+            }
+        }
+    }
+
     &:hover {
         & .episode-poster-container {
             & .episode-poster {
@@ -250,3 +302,23 @@
         }
     }
 }
+
+
+
+.loop (@colors, @className, @i) when (@i > 0) {
+    @color: extract(@colors, @i);
+    @class: extract(@className, @i);
+
+    // Buttons
+
+    .@{class} {
+        &.card-cover-splash {
+            & .card-cover-item {
+                color: @color;
+            }
+        }
+    }
+
+    .loop(@colors, @className, @i - 1);
+}
+.loop(@colors, @className, @iterations);

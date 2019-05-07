@@ -100,7 +100,7 @@ class EpisodeController extends Controller {
             $torrentCheck = Torrent::where('id', $torrent)->first();
 
             if (empty($torrentCheck)) {
-                return AjaxErrorController::response("The torrent does not exist", 409, 1);
+                return AjaxErrorController::response("The torrent does not exist", 409, 2);
             }
         }
 
@@ -127,7 +127,7 @@ class EpisodeController extends Controller {
                 })->orderBy('airing_at', 'ASC')->first();
 
                 if (!empty($nextEpisode)) {
-                    return AjaxSuccessController::response("Video mark Successful", view('components.card-episode', ['episode' => $nextEpisode])->render());
+                    return AjaxSuccessController::response("Video mark Successful", [$nextEpisode]);
                 } else {
                     return AjaxSuccessController::response("Video mark Successful", []);
                 }

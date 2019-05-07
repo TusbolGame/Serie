@@ -30,6 +30,32 @@ Vue.component('progress-bar-component', require('./components/ProgressBarCompone
 
 // Specific components
 Vue.component('show-search-result-component', require('./components/ShowSearchResultComponent.vue').default);
+Vue.component('episode-component', require('./components/EpisodeComponent.vue').default);
+
+var Episode = new Vue({
+    el: '#UnwatchedEpisodes',
+    data: {
+        test: [],
+    },
+    methods: {
+        // Transition methods
+        beforeEnter: function (el) {
+            el.style.opacity = 0;
+        },
+        enter: function (el, done) {
+            var delay = el.dataset.index * 1500;
+            setTimeout(function() {
+                $(el).animate({ opacity: 1 }, 3000, done);
+            }, delay)
+        },
+        leave: function (el, done) {
+            var delay = el.dataset.index * 1500;
+            setTimeout(function() {
+                $(el).animate({ opacity: 0 }, 3000, done);
+            }, delay)
+        },
+    },
+});
 
 var ShowSearch = new Vue({
     el: '#ShowSearch',
@@ -149,6 +175,8 @@ var ShowUpdate = new Vue({
             }
         },
     },
+    watch: {
+    }
 });
 
 Vue.component('show-download-result-component', require('./components/ShowDownloadResultComponent.vue').default);

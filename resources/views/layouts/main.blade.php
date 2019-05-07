@@ -5,9 +5,9 @@
 </head>
 <body>
 @include('includes.navbar')
-    <div id="main-wrapper" class="container">
-        <div id="main-container">
-            <main class="py-4">
+    <div id="main-wrapper" class="container mt-4">
+        <div id="main-container" class="row">
+            <main class="col-12 px-1">
                 @yield('content')
             </main>
         </div>

@@ -15,14 +15,14 @@
         "browser-sync": "^2.26.5",
         "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.1",
-        "jquery": "^3.4.0",
+        "jquery": "^3.4.1",
         "laravel-mix": "^4.0.15",
         "less": "^3.9.0",
         "less-loader": "^4.1.0",
         "lodash": "^4.17.5",
         "popper.js": "^1.15.0",
         "resolve-url-loader": "^2.3.2",
-        "sass": "^1.19.0",
+        "sass": "^1.20.1",
         "sass-loader": "^7.1.0",
         "vue": "^2.6.10",
         "vue-template-compiler": "^2.6.10"
@@ -32,11 +32,12 @@
         "bootbox": "^5.1.2",
         "ioredis": "^4.9.0",
         "laravel-echo": "^1.5.3",
-        "laravel-echo-server": "^1.5.0",
+        "laravel-echo-server": "^1.5.2",
         "moment": "^2.24.0",
         "popper": "^1.0.1",
         "redis": "^2.8.0",
         "socket.io": "^2.2.0",
-        "socket.io-client": "^2.2.0"
+        "socket.io-client": "^2.2.0",
+        "velocity-animate": "^2.0.5"
     }
 }
