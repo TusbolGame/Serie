@@ -10,25 +10,20 @@
                     <input type="text" class="w-100 form-control form-control-md" id="episodeSearchInput" placeholder="Search new shows">
                 </div>
             </div>
-            {{-- TODO Test transition --}}
-                <transition-group name="fade" tag="div" class="row mx-n1 episodes text-filter-target" appear>
-                    <episode-component v-for="(unwatchedEpisode, index) in {{$episodes}}" v-bind:index="index" v-bind:data="unwatchedEpisode"
-                                       v-bind:key="unwatchedEpisode.uuid"
-                                       v-bind:uuid="unwatchedEpisode.uuid"
-                                       v-bind:show_name="unwatchedEpisode.show.name"
-                                       v-bind:show_uuid="unwatchedEpisode.show.uuid"
-                                       v-bind:show_posters="unwatchedEpisode.show.posters"
-                                       v-bind:episode_code="unwatchedEpisode.episode_code"
-                                       v-bind:airing_at="unwatchedEpisode.airing_at"
-                                       v-bind:summary="unwatchedEpisode.summary"
-                                       v-bind:torrent_count="unwatchedEpisode.torrent_count"
-                                       v-bind:torrent="unwatchedEpisode.torrent">
-                    </episode-component>
-                </transition-group>
-                {{--@foreach($episodes as $episode)--}}
-                    {{--@component('components.card-episode', ['episode' => $episode])--}}
-                    {{--@endcomponent--}}
-                {{--@endforeach--}}
+            <transition-group name="fade" tag="div" class="row mx-n1 episodes text-filter-target" appear>
+                <episode-component v-for="(unwatchedEpisode, index) in {{$episodes}}" v-bind:index="index" v-bind:data="unwatchedEpisode"
+                                   v-bind:key="unwatchedEpisode.uuid"
+                                   v-bind:uuid="unwatchedEpisode.uuid"
+                                   v-bind:show_name="unwatchedEpisode.show.name"
+                                   v-bind:show_uuid="unwatchedEpisode.show.uuid"
+                                   v-bind:show_posters="unwatchedEpisode.show.posters"
+                                   v-bind:episode_code="unwatchedEpisode.episode_code"
+                                   v-bind:airing_at="unwatchedEpisode.airing_at"
+                                   v-bind:summary="unwatchedEpisode.summary"
+                                   v-bind:torrent_count="unwatchedEpisode.torrent_count"
+                                   v-bind:torrent="unwatchedEpisode.torrent">
+                </episode-component>
+            </transition-group>
         </div>
         <div class="col-xl-3 col-md-12 px-1">
             <div id="admin-tools" class="row pb-3 mx-n1">
