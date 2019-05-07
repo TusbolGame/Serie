@@ -42,9 +42,30 @@
 }
 
 .fade-leave-active {
+    transition: @transitionTime @transitionType;
+    transition-property: opacity;
 }
 
 .fade-leave-to {
+    opacity: 0;
+}
+
+.stagger-fade-enter-active,
+.stagger-fade-move {
+    transition: @transitionTime @transitionType;
+    transition-property: opacity;
+    //transition-delay: calc( 1s * var(--inde) );
+}
+
+.stagger-fade-enter-to {
+    opacity: 1;
+}
+
+.stagger-fade-leave-active {
+    //transition-delay: calc( 1s * (var(--total) - var(--inde)) );
+}
+
+.stagger-fade-leave-to {
     opacity: 0;
 }
 

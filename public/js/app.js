@@ -276,10 +276,17 @@ __webpack_require__.r(__webpack_exports__);
           state: false,
           message: ''
         }
+      },
+      animation: {
+        rendered: false
       }
     };
   },
   props: {
+    index: {
+      type: Number,
+      "default": 0
+    },
     uuid: {
       type: String
     },
@@ -401,6 +408,9 @@ __webpack_require__.r(__webpack_exports__);
     _VueEventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('buttonClassToCoverSplash', function (buttonColor) {
       _this3.cover.splashColor = ' '.buttonClass;
     });
+  },
+  beforeUpdate: function beforeUpdate() {
+    this.animation.rendered = true;
   }
 });
 
@@ -11903,11 +11913,15 @@ var render = function() {
       class:
         "card-episode col-xl-2 col-lg-3 col-md-4 col-sm-12 px-1 mb-2" +
         (_vm.cardExpanded ? " expanded" : ""),
+      style: {
+        transitionDelay: _vm.index * (_vm.animation.rendered ? 0 : 0.025) + "s"
+      },
       attrs: {
         "data-airdate": _vm.airing_at,
         "data-episode": _vm.uuid,
         "data-filter": _vm.show_name,
-        "data-show": _vm.show_uuid
+        "data-show": _vm.show_uuid,
+        "data-index": _vm.index
       }
     },
     [
@@ -12052,7 +12066,11 @@ var render = function() {
                         _c(
                           "a",
                           {
-                            attrs: { href: _vm.torrentHREF, target: "_blank" }
+                            attrs: {
+                              href: _vm.torrentHREF,
+                              target: "_blank",
+                              rel: "noreferrer"
+                            }
                           },
                           [
                             _c("icon-button-component", {
@@ -12950,7 +12968,31 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('show-search-result-compone
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('episode-component', __webpack_require__(/*! ./components/EpisodeComponent.vue */ "./resources/js/components/EpisodeComponent.vue")["default"]);
 var Episode = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#UnwatchedEpisodes',
-  data: {}
+  data: {
+    test: []
+  },
+  methods: {
+    // Transition methods
+    beforeEnter: function beforeEnter(el) {
+      el.style.opacity = 0;
+    },
+    enter: function enter(el, done) {
+      var delay = el.dataset.index * 1500;
+      setTimeout(function () {
+        $(el).animate({
+          opacity: 1
+        }, 3000, done);
+      }, delay);
+    },
+    leave: function leave(el, done) {
+      var delay = el.dataset.index * 1500;
+      setTimeout(function () {
+        $(el).animate({
+          opacity: 0
+        }, 3000, done);
+      }, delay);
+    }
+  }
 });
 var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#ShowSearch',

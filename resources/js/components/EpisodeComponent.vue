@@ -1,7 +1,7 @@
 <template>
     <div v-bind:class="'card-episode col-xl-2 col-lg-3 col-md-4 col-sm-12 px-1 mb-2' + (cardExpanded ? ' expanded' : '')" v-bind:data-airdate="airing_at"
          v-bind:data-episode="uuid" v-bind:data-filter="show_name"
-         v-bind:data-show="show_uuid">
+         v-bind:data-show="show_uuid" v-bind:style="{transitionDelay: index * (animation.rendered ? 0 : 0.025) + 's'}" v-bind:data-index="index">
     <div class="card d-flex">
             <div class="episode-poster-container card-img-top">
                 <img class="episode-poster" v-bind:src="'/img/posters/' + show_posters[0].name + '.jpg'" alt="">
@@ -186,9 +186,16 @@
                         message: '',
                     }
                 },
+                animation: {
+                    rendered: false,
+                },
             }
         },
         props: {
+            index: {
+                type: Number,
+                default: 0,
+            },
             uuid: {
                 type: String,
             },
@@ -300,13 +307,16 @@
                 this.cover.loading = false;
                 this.cover.splashing = false;
                 this.error.state = false;
-            }
+            },
         },
-        mounted () {
+        mounted() {
             VueEventBus.$on('buttonClassToCoverSplash', (buttonColor) => {
                 this.cover.splashColor = ' ' . buttonClass;
             });
         },
+        beforeUpdate() {
+            this.animation.rendered = true;
+        }
     }
 </script>
 

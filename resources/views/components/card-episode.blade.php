@@ -97,7 +97,7 @@
                 </div>
                 <div class="actions-basic">
                     @if ($episode->torrent_count == 0 || $episode->torrent->first()->status == 5)
-                        <a class="text-reset" href="https://rarbgway.org/torrents.php?search={{$episode->show->name}} {{$episode->episode_code}}&amp;category[]=18&amp;category[]=41&amp;category[]=49" target="_blank">
+                        <a class="text-reset" href="https://rarbgway.org/torrents.php?search={{$episode->show->name}} {{$episode->episode_code}}&amp;category[]=18&amp;category[]=41&amp;category[]=49" target="_blank" rel="noreferrer">
                             @component('components.cmn-button-icon')
                                 @slot('class')
                                     icon c6

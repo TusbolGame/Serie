@@ -35,7 +35,25 @@ Vue.component('episode-component', require('./components/EpisodeComponent.vue').
 var Episode = new Vue({
     el: '#UnwatchedEpisodes',
     data: {
-
+        test: [],
+    },
+    methods: {
+        // Transition methods
+        beforeEnter: function (el) {
+            el.style.opacity = 0;
+        },
+        enter: function (el, done) {
+            var delay = el.dataset.index * 1500;
+            setTimeout(function() {
+                $(el).animate({ opacity: 1 }, 3000, done);
+            }, delay)
+        },
+        leave: function (el, done) {
+            var delay = el.dataset.index * 1500;
+            setTimeout(function() {
+                $(el).animate({ opacity: 0 }, 3000, done);
+            }, delay)
+        },
     },
 });
 
