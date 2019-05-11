@@ -35,9 +35,19 @@ Vue.component('episode-component', require('./components/EpisodeComponent.vue').
 var Episode = new Vue({
     el: '#UnwatchedEpisodes',
     data: {
-        test: [],
+        episodeSearchQuery: '',
+        component: {
+            filtered: false
+        }
     },
     methods: {
+        // filterShows: function() {
+        //     if (this.episodeSearchQuery.trim() === '') return find({name: 'EpisodeComponent'});
+        //
+        //     return find({name: 'EpisodeComponent'}).filter(episode => {
+        //         return episode.show_name.toLowerCase().includes(this.episodeSearchQuery.toLowerCase());
+        //     }, this.episodeSearchQuery);
+        // },
         // Transition methods
         beforeEnter: function (el) {
             el.style.opacity = 0;
@@ -110,6 +120,7 @@ var ShowUpdate = new Vue({
         updating: false,
         updated: false,
         completed: false,
+        error: false,
         updateResults: [],
         updateProgress: {
             counter: 0,
@@ -119,6 +130,7 @@ var ShowUpdate = new Vue({
             currentShow: '',
             timeStarted: 0,
             timeRemaining: 0,
+            showEnded: false,
         }
     },
     methods: {
@@ -131,7 +143,22 @@ var ShowUpdate = new Vue({
                     this.completed = true;
                     this.updating = false;
                 }).catch((error) => {
-                console.log(error.response);
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        this.error = true;
+
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
             });
         },
         listenEpisodeUpdated: function() {
@@ -149,10 +176,12 @@ var ShowUpdate = new Vue({
                     this.updateProgress.total = data.totalShowNumber;
                     this.updateProgress.percentage = (this.updateProgress.current / this.updateProgress.total) * 100;
                     this.updateProgress.currentShow = data.show.name;
-                    if (this.updateProgress.current != 0) {
+                    if (this.updateProgress.current !== 0) {
                         this.updateProgress.timeRemaining = (((100 - ((this.updateProgress.current / this.updateProgress.total) * 100))
                             * (window.performance.now() - this.updateProgress.timeStarted))
                             / ((this.updateProgress.current / this.updateProgress.total) * 100)) / 1000;
+
+                        this.updateProgress.showEnded = data.show.status === 1 ? true : false;
                     } else {
                         this.updateProgress.timeRemaining = 0;
                     }

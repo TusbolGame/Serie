@@ -1,11 +1,23 @@
 <template>
     <div class="col-12">
         <div class="result row no-gutters mb-3">
-            <div class="col-3">
-                <img class="w-100" v-bind:src="poster" >
+            <div class="col-12 mb-2">
+                <div class="row no-gutters d-flex justify-content-between">
+                    <h5 class="col-8">
+                        {{show_name}}
+                    </h5>
+                    <div class="">
+                        {{api_rating}}
+                    </div>
+                </div>
             </div>
-            <div class="col-9">
-                <div class="col-12 show-description">{{description}}</div>
+            <div class="row no-gutters">
+                <div class="col-3">
+                    <img class="w-100" v-bind:src="poster" >
+                </div>
+                <div class="col-9">
+                    <div class="col-12 show-description">{{description}}</div>
+                </div>
             </div>
             <div class="col-12 pt-3">
                 <div class="row no-gutters text-center">

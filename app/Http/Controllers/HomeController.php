@@ -60,7 +60,7 @@ class HomeController extends Controller {
                     $query->where('ended_at', '!=', NULL);
                 }])
                 ->withCount('torrent')
-                ->orderBy('airing_at', 'asc')
+                ->orderBy('airing_at', 'asc')->orderBy('episode_number', 'asc')
                 ->get();
         }
 

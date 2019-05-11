@@ -4,7 +4,7 @@
          v-bind:data-show="show_uuid" v-bind:style="{transitionDelay: index * (animation.rendered ? 0 : 0.025) + 's'}" v-bind:data-index="index">
     <div class="card d-flex">
             <div class="episode-poster-container card-img-top">
-                <img class="episode-poster" v-bind:src="'/img/posters/' + show_posters[0].name + '.jpg'" alt="">
+                <img class="episode-poster" v-bind:src="'/img/posters/small/' + show_posters[0].name + '.jpg'" alt="">
             </div>
             <div class="card-body d-flex flex-column justify-content-between no-gutters p-1 bg-light">
                 <div class="card-info">

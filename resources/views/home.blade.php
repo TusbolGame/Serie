@@ -7,11 +7,13 @@
                 <h2 class="col-xl-9 col-sm-12 px-1 mb-0">Unwatched Episodes</h2>
                 <div class="col-xl-3 col-sm-12 form-group pt-2 pt-xl-0 px-1 mb-0">
                     <label for="episodeSearchInput" class="sr-only">Search</label>
-                    <input type="text" class="w-100 form-control form-control-md" id="episodeSearchInput" placeholder="Search new shows">
+                    <input type="text" class="w-100 form-control form-control-md text-filter-input" id="episodeSearchInput" name="episodeSearchInput" v-model="episodeSearchQuery" placeholder="Search new shows">
                 </div>
             </div>
             <transition-group name="fade" tag="div" class="row mx-n1 episodes text-filter-target" appear>
-                <episode-component v-for="(unwatchedEpisode, index) in {{$episodes}}" v-bind:index="index" v-bind:data="unwatchedEpisode"
+                <episode-component v-for="(unwatchedEpisode, index) in {{$episodes}}"
+                                   v-bind:index="index"
+                                   v-bind:data="unwatchedEpisode"
                                    v-bind:key="unwatchedEpisode.uuid"
                                    v-bind:uuid="unwatchedEpisode.uuid"
                                    v-bind:show_name="unwatchedEpisode.show.name"
@@ -27,7 +29,7 @@
         </div>
         <div class="col-xl-3 col-md-12 px-1">
             <div id="admin-tools" class="row pb-3 mx-n1">
-                <h2 class="col-12 pb-1 pt-2 px-1">Admin Tools</h2>
+                <h2 class="col-12 pb-1 pt-2 px-1 mb-0">Admin Tools</h2>
                 <div class="col-12 px-1">
                     <div class="card">
                         <ul class="list-group list-group-flush">
@@ -52,11 +54,12 @@
                                     <div class="col-12 mb-2" v-if="active">
                                         <div class="row no-gutters">
                                             <span class="col-12 text-center" v-if="active && !updating && !completed">Starting...</span>
-                                            <span class="col-12 text-center" v-if="active && updating">
-                                            <span>@{{updateProgress.current + ' / ' + updateProgress.total}} - </span>
-                                            <span class="font-weight-bold">@{{updateProgress.currentShow}}</span>
-                                        </span>
+                                            <div class="col-12 text-center" v-if="active && updating">
+                                                <span>@{{updateProgress.current + ' / ' + updateProgress.total}} - </span>
+                                                <span v-bind:class="'font-weight-bold' + (updateProgress.showEnded ? ' text-black-50' : '')">@{{updateProgress.currentShow}}</span>
+                                            </div>
                                             <span class="col-12 text-center" v-if="completed">Complete</span>
+                                            <span class="col-12 text-center" v-if="error">There was an error</span>
                                         </div>
                                         <div class="row no-gutters font-weight-light">
                                             <span class="col-12 text-center" v-if="active && !updating && !completed">-</span>
@@ -95,7 +98,7 @@
                                 <div class="row no-gutters form-inline cmn-admin-action">
                                     <div class="col-xl-8 col-sm-12 form-group pr-1">
                                         <label for="showSearch" class="sr-only">Search</label>
-                                        <input v-model="showSearchQuery" type="text" class="w-100 form-control form-control-md" id="showSearchInput" placeholder="Search new shows">
+                                        <input v-model="showSearchQuery" type="text" class="w-100 form-control form-control-md" id="showSearchInput" name="showSearchInput" placeholder="Search new shows">
                                     </div>
                                     <div class="col-xl-4 col-sm-12 d-flex justify-content-end">
                                         <button v-if="searched" @click="resetSearch" type="button" class="btn btn-md btn-primary mr-2" data-group="0" data-type="4">Reset</button>

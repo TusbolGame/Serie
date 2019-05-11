@@ -249,7 +249,7 @@ class DataUpdateController extends Controller {
 
     private function searchShowHandler($rawData) {
         $show = [
-            'name' => $rawData->show->name,
+            'show_name' => $rawData->show->name,
             'score' => $rawData->score,
             'api_id' => $rawData->show->id,
             'api_link' => $rawData->show->url,

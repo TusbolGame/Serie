@@ -8,7 +8,7 @@
                href="/show/{{$episode->show->uuid}}">{{$episode->show->name}}</a>
         </div>
         <div class="col-xl-3 col-sm-12 d-flex justify-content-end">
-            <a class="text-black-50 font-weight-light" href="/show/{{$episode->uuid}}">{{$episode->episode_code}}</a>
+            <a class="text-black-50 font-weight-light" href="/episode/{{$episode->uuid}}">{{$episode->episode_code}}</a>
         </div>
     </div>
 </li>

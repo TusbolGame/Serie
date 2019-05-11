@@ -484,6 +484,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowSearchResultComponent",
@@ -11930,7 +11942,7 @@ var render = function() {
           _c("img", {
             staticClass: "episode-poster",
             attrs: {
-              src: "/img/posters/" + _vm.show_posters[0].name + ".jpg",
+              src: "/img/posters/small/" + _vm.show_posters[0].name + ".jpg",
               alt: ""
             }
           })
@@ -12357,13 +12369,39 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
     _c("div", { staticClass: "result row no-gutters mb-3" }, [
-      _c("div", { staticClass: "col-3" }, [
-        _c("img", { staticClass: "w-100", attrs: { src: _vm.poster } })
+      _c("div", { staticClass: "col-12 mb-2" }, [
+        _c(
+          "div",
+          { staticClass: "row no-gutters d-flex justify-content-between" },
+          [
+            _c("h5", { staticClass: "col-8" }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.show_name) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", {}, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.api_rating) +
+                  "\n                "
+              )
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-9" }, [
-        _c("div", { staticClass: "col-12 show-description" }, [
-          _vm._v(_vm._s(_vm.description))
+      _c("div", { staticClass: "row no-gutters" }, [
+        _c("div", { staticClass: "col-3" }, [
+          _c("img", { staticClass: "w-100", attrs: { src: _vm.poster } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-9" }, [
+          _c("div", { staticClass: "col-12 show-description" }, [
+            _vm._v(_vm._s(_vm.description))
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -12969,9 +13007,19 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('episode-component', __webp
 var Episode = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#UnwatchedEpisodes',
   data: {
-    test: []
+    episodeSearchQuery: '',
+    component: {
+      filtered: false
+    }
   },
   methods: {
+    // filterShows: function() {
+    //     if (this.episodeSearchQuery.trim() === '') return find({name: 'EpisodeComponent'});
+    //
+    //     return find({name: 'EpisodeComponent'}).filter(episode => {
+    //         return episode.show_name.toLowerCase().includes(this.episodeSearchQuery.toLowerCase());
+    //     }, this.episodeSearchQuery);
+    // },
     // Transition methods
     beforeEnter: function beforeEnter(el) {
       el.style.opacity = 0;
@@ -13050,6 +13098,7 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     updating: false,
     updated: false,
     completed: false,
+    error: false,
     updateResults: [],
     updateProgress: {
       counter: 0,
@@ -13058,7 +13107,8 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       percentage: 0,
       currentShow: '',
       timeStarted: 0,
-      timeRemaining: 0
+      timeRemaining: 0,
+      showEnded: false
     }
   },
   methods: {
@@ -13073,7 +13123,21 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this2.completed = true;
         _this2.updating = false;
       })["catch"](function (error) {
-        console.log(error.response);
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          _this2.error = true;
+          console.log(error.response.data);
+          console.log(error.response.status);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
       });
     },
     listenEpisodeUpdated: function listenEpisodeUpdated() {
@@ -13095,8 +13159,9 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this4.updateProgress.percentage = _this4.updateProgress.current / _this4.updateProgress.total * 100;
         _this4.updateProgress.currentShow = data.show.name;
 
-        if (_this4.updateProgress.current != 0) {
+        if (_this4.updateProgress.current !== 0) {
           _this4.updateProgress.timeRemaining = (100 - _this4.updateProgress.current / _this4.updateProgress.total * 100) * (window.performance.now() - _this4.updateProgress.timeStarted) / (_this4.updateProgress.current / _this4.updateProgress.total * 100) / 1000;
+          _this4.updateProgress.showEnded = data.show.status === 1 ? true : false;
         } else {
           _this4.updateProgress.timeRemaining = 0;
         }
