@@ -1,6 +1,6 @@
 <template>
     <div class="col-12">
-        <div class="result row no-gutters mb-3">
+        <div class="result row no-gutters mt-3">
             <div class="col-12 mb-2">
                 <div class="row no-gutters d-flex justify-content-between">
                     <h5 class="col-8">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="row no-gutters d-flex justify-content-end mt-2">
                     <button v-if="!existing && !adding && !error && !updated && !added" v-on:click="addShow(api_id)" type="button" class="btn btn-md btn-link" data-group="0" data-type="2">Add</button>
-                    <button v-if="(existing || updated) && !owned && !error && !added" v-on:click="addUserShow(uuid)" type="button" class="btn btn-md btn-primary" data-group="0" data-type="3">Add to your shows</button>
+                    <button v-if="(existing || updated) && !owned && !error && !added" v-on:click="addUserShow(api_id)" type="button" class="btn btn-md btn-primary" data-group="0" data-type="3">Add to your shows</button>
                 </div>
             </div>
             <div v-show="adding" v-bind:class="{'cover pb-3 d-flex justify-content-center align-items-center':true, 'active':(adding)}">
@@ -79,6 +79,7 @@
                 return {
                     updated: false,
                     added: false,
+                    localOwned: false,
                     adding: false,
                     uuid: '',
                     errorType: {
@@ -108,7 +109,7 @@
                 window.axios.get('/show/add/' + uuid)
                     .then(({data}) => {
                         this.added = true;
-                        props.owned = true;
+                        this.localOwned = true;
                     }).catch((error) => {
                     console.log(error.response);
                     this.error = true;

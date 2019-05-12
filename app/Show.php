@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Show extends Model {
@@ -41,7 +42,10 @@ class Show extends Model {
     }
 
     public function unwatched() {
-        return $this->episode()->where('airing_at', '<', 'NOW()')->orderBy('airing_at', 'asc');
+        return $this->episode()->where('airing_at', '<', Carbon::now())->orderBy('airing_at', 'asc')
+            ->doesnthave('videoView', 'and', function($query) {
+                $query->where('ended_at', '!=', NULL);
+            });
     }
 
     public function rating() {

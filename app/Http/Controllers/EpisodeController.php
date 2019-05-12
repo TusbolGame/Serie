@@ -120,11 +120,29 @@ class EpisodeController extends Controller {
                 $videoView->save();
 
                 $nextEpisode = Episode::where([
-                    ['show_id', $episodeCheck->show_id],
-                    ['airing_at', '<', Carbon::now()->subMinutes($episodeCheck->show->running_time)],
-                ])->doesnthave('videoView', 'and', function($query) {
-                    $query->where('ended_at', '!=', NULL);
-                })->orderBy('airing_at', 'ASC')->first();
+                        ['show_id', $episodeCheck->show_id],
+                        ['airing_at', '<', Carbon::now()->subMinutes($episodeCheck->show->running_time)],
+                    ])->whereHas('show.users', function($query) {
+                        $query->where('id', Auth::user()->id);
+                    })
+                    ->doesnthave('videoView', 'and', function($query) {
+                        $query->where('ended_at', '!=', NULL);
+                    })
+                    ->with(['show' => function($query) {
+                        $query->withCount('unwatched');
+                    },
+                        'show.posters',
+                        'videoView',
+                        'videoView.bookmark' => function($query) {
+                            $query->orderBy('time', 'desc');
+                        },
+                        'torrent' => function($query) {
+                            $query->orderBy('status', 'asc');
+                        },
+                    ])
+                    ->withCount('torrent')
+                    ->orderBy('airing_at', 'ASC')
+                    ->first();
 
                 if (!empty($nextEpisode)) {
                     return AjaxSuccessController::response("Video mark Successful", [$nextEpisode]);

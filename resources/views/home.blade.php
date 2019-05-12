@@ -19,6 +19,7 @@
                                    v-bind:show_name="unwatchedEpisode.show.name"
                                    v-bind:show_uuid="unwatchedEpisode.show.uuid"
                                    v-bind:show_posters="unwatchedEpisode.show.posters"
+                                   v-bind:unwatched_count="unwatchedEpisode.show.unwatched_count"
                                    v-bind:episode_code="unwatchedEpisode.episode_code"
                                    v-bind:airing_at="unwatchedEpisode.airing_at"
                                    v-bind:summary="unwatchedEpisode.summary"
@@ -56,7 +57,7 @@
                                             <span class="col-12 text-center" v-if="active && !updating && !completed">Starting...</span>
                                             <div class="col-12 text-center" v-if="active && updating">
                                                 <span>@{{updateProgress.current + ' / ' + updateProgress.total}} - </span>
-                                                <span v-bind:class="'font-weight-bold' + (updateProgress.showEnded ? ' text-black-50' : '')">@{{updateProgress.currentShow}}</span>
+                                                <span class="font-weight-bold">@{{updateProgress.currentShow}}</span>
                                             </div>
                                             <span class="col-12 text-center" v-if="completed">Complete</span>
                                             <span class="col-12 text-center" v-if="error">There was an error</span>
@@ -107,7 +108,7 @@
                                 </div>
                                 <div class="row no-gutters mt-3" v-if="active">
                                     <div class="col-12 cmn-admin-result">
-                                        <h4 class="row no-gutters mb-2">Results</h4>
+                                        <h4 class="row no-gutters">Results</h4>
                                         <div class="row no-gutters results">
                                             <show-search-result-component v-for="searchResult in searchResults" v-bind:data="searchResult"
                                                                           v-bind:key="searchResult.api_id"

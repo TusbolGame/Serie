@@ -32,6 +32,9 @@
   transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), -webkit-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.card-episode .card-novelty {
+  color: #2196f3;
+}
 .card-episode .card-body {
   position: absolute;
   bottom: 0px;
@@ -199,6 +202,7 @@
 .card-episode.expanded .card-body .card-info .card-info-extra {
   opacity: 1;
   max-height: 120px;
+  padding-top: 0.5rem;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 .card-episode.expanded .card-body .card-actions {

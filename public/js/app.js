@@ -253,6 +253,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -299,6 +305,9 @@ __webpack_require__.r(__webpack_exports__);
     show_posters: {
       type: Array
     },
+    unwatched_count: {
+      type: Number
+    },
     episode_code: {
       type: String
     },
@@ -330,6 +339,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     displayDateFromNow: function displayDateFromNow(date) {
       return moment(date).fromNow();
+    },
+    cardNew: function cardNew(date) {
+      var dayDifference = 3;
+      return moment().subtract(dayDifference, 'day').diff(moment(date)) < dayDifference;
     },
     episodeMarkWatched: function episodeMarkWatched(seen) {
       var _this = this;
@@ -532,6 +545,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       updated: false,
       added: false,
+      localOwned: false,
       adding: false,
       uuid: '',
       errorType: {
@@ -565,7 +579,7 @@ __webpack_require__.r(__webpack_exports__);
       window.axios.get('/show/add/' + uuid).then(function (_ref2) {
         var data = _ref2.data;
         _this2.added = true;
-        props.owned = true;
+        _this2.localOwned = true;
       })["catch"](function (error) {
         console.log(error.response);
         _this2.error = true;
@@ -11974,13 +11988,44 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "col-12 episode-code" }, [
                       _c(
-                        "a",
+                        "div",
                         {
                           staticClass:
-                            "card-title h4 font-weight-light cmn-light",
-                          attrs: { href: "/episode/" + _vm.uuid }
+                            "row no-gutters d-flex justify-content-between align-items-end"
                         },
-                        [_vm._v(_vm._s(_vm.episode_code))]
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "card-title h4 font-weight-light cmn-light m-0",
+                              attrs: { href: "/episode/" + _vm.uuid }
+                            },
+                            [_vm._v(_vm._s(_vm.episode_code))]
+                          ),
+                          _vm._v(" "),
+                          _vm.unwatched_count > 1
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "card-counter font-weight-light cmn-lighter"
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.unwatched_count - 1) +
+                                      " " +
+                                      _vm._s(
+                                        _vm._f("pluralize")(
+                                          "more episode",
+                                          _vm.unwatched_count - 1
+                                        )
+                                      )
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ]
                       )
                     ])
                   ]
@@ -11989,15 +12034,35 @@ var render = function() {
                 _c(
                   "div",
                   {
-                    staticClass: "episode-date font-weight-light cmn-lighter",
-                    attrs: { "data-date": _vm.airing_at }
+                    staticClass: "row no-gutters d-flex justify-content-between"
                   },
                   [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(_vm.displayDateFromNow(_vm.airing_at)) +
-                        "\n                    "
-                    )
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "episode-date font-weight-light cmn-lighter",
+                        attrs: { "data-date": _vm.airing_at }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.displayDateFromNow(_vm.airing_at)) +
+                            "\n                        "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.cardNew(_vm.airing_at)
+                      ? _c(
+                          "div",
+                          {
+                            staticClass: "card-novelty",
+                            attrs: { "data-test": _vm.cardNew }
+                          },
+                          [_vm._v("new")]
+                        )
+                      : _vm._e()
                   ]
                 )
               ]),
@@ -12005,7 +12070,7 @@ var render = function() {
               _vm.summary !== null
                 ? _c(
                     "div",
-                    { staticClass: "card-info-extra pt-2 font-weight-light" },
+                    { staticClass: "card-info-extra font-weight-light" },
                     [
                       _vm._v(
                         "\n                    " +
@@ -12368,7 +12433,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-12" }, [
-    _c("div", { staticClass: "result row no-gutters mb-3" }, [
+    _c("div", { staticClass: "result row no-gutters mt-3" }, [
       _c("div", { staticClass: "col-12 mb-2" }, [
         _c(
           "div",
@@ -12487,7 +12552,7 @@ var render = function() {
                     },
                     on: {
                       click: function($event) {
-                        return _vm.addUserShow(_vm.uuid)
+                        return _vm.addUserShow(_vm.api_id)
                       }
                     }
                   },
@@ -12998,6 +13063,9 @@ __webpack_require__(/*! ./Echo */ "./resources/js/Echo.js");
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('truncate', function (text, stop, suffix) {
   return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '');
+});
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('pluralize', function (word, amount) {
+  return amount > 1 ? "".concat(word, "s") : word;
 }); // Common components
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('progress-bar-component', __webpack_require__(/*! ./components/ProgressBarComponent.vue */ "./resources/js/components/ProgressBarComponent.vue")["default"]); // Specific components

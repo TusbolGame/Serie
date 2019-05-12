@@ -14,14 +14,20 @@
                                 <a v-bind:href="'/show/' + show_uuid" class="card-title h4 text-dark">{{show_name}}</a>
                             </div>
                             <div class="col-12 episode-code">
-                                <a v-bind:href="'/episode/' + uuid" class="card-title h4 font-weight-light cmn-light">{{episode_code}}</a>
+                                <div class="row no-gutters d-flex justify-content-between align-items-end">
+                                    <a v-bind:href="'/episode/' + uuid" class="card-title h4 font-weight-light cmn-light m-0">{{episode_code}}</a>
+                                    <div class="card-counter font-weight-light cmn-lighter" v-if="unwatched_count > 1">{{unwatched_count - 1}} {{'more episode' | pluralize(unwatched_count - 1)}}</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="episode-date font-weight-light cmn-lighter" v-bind:data-date="airing_at">
-                            {{displayDateFromNow(airing_at)}}
+                        <div class="row no-gutters d-flex justify-content-between">
+                            <div class="episode-date font-weight-light cmn-lighter" v-bind:data-date="airing_at">
+                                {{displayDateFromNow(airing_at)}}
+                            </div>
+                            <div class="card-novelty" v-if="cardNew(airing_at)" v-bind:data-test="cardNew">new</div>
                         </div>
                     </div>
-                    <div v-if="summary !== null" class="card-info-extra pt-2 font-weight-light">
+                    <div v-if="summary !== null" class="card-info-extra font-weight-light">
                         {{summary | truncate(100)}}
                     </div>
                 </div>
@@ -208,6 +214,9 @@
             show_posters: {
                 type: Array,
             },
+            unwatched_count: {
+                type: Number,
+            },
             episode_code: {
                 type: String,
             },
@@ -240,11 +249,14 @@
             displayDateFromNow: function(date) {
                 return moment(date).fromNow();
             },
+            cardNew: function(date) {
+                var dayDifference = 3;
+                return moment().subtract(dayDifference,  'day').diff(moment(date)) < dayDifference;
+            },
             episodeMarkWatched: function(seen) {
                 if (seen !== true && seen !== false) {
                     return false;
                 }
-
                 this.active = true;
                 this.cover.loading = true;
 

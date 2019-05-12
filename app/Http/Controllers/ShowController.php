@@ -38,7 +38,7 @@ class ShowController extends Controller {
     }
 
     public function addUserShow($show) {
-        $showCheck = Show::where('uuid', $show)->first();
+        $showCheck = Show::where('api_id', $show)->first();
 
         if (empty($showCheck)) {
             return AjaxErrorController::response("The show does not exist", 409, 0);

@@ -25,6 +25,8 @@ import Vue from 'vue'
 Vue.filter('truncate', function (text, stop, suffix) {
     return text.slice(0, stop) + (stop < text.length ? suffix || '...' : '');
 });
+Vue.filter('pluralize', (word, amount) => amount > 1 ? `${word}s` : word)
+
 // Common components
 Vue.component('progress-bar-component', require('./components/ProgressBarComponent.vue').default);
 

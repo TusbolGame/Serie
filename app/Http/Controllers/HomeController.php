@@ -35,12 +35,18 @@ class HomeController extends Controller {
         ->doesnthave('videoView', 'and', function($query) {
             $query->where('ended_at', '!=', NULL);
         })->groupBy('show_id')
-        ->with(['show','show.posters', 'videoView'
-            , 'videoView.bookmark' => function($query) {
+        ->with(['show' => function($query) {
+                $query->withCount('unwatched');
+            },
+            'show.posters',
+            'videoView',
+            'videoView.bookmark' => function($query) {
                 $query->orderBy('time', 'desc');
-            }, 'torrent' => function($query) {
+            },
+            'torrent' => function($query) {
                 $query->orderBy('status', 'asc');
-        }])
+            },
+        ])
         ->withCount('torrent')
         ->orderBy('airing_at', 'desc')
         ->get();
