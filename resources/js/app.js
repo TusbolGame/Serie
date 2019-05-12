@@ -9,6 +9,8 @@ require('./bootstrap');
 require('./Echo');
 
 import Vue from 'vue'
+import VueEventBus from './components/VueEventBus';
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -36,10 +38,13 @@ Vue.component('episode-component', require('./components/EpisodeComponent.vue').
 
 var Episode = new Vue({
     el: '#UnwatchedEpisodes',
-    data: {
-        episodeSearchQuery: '',
-        component: {
-            filtered: false
+    data: function() {
+        return {
+            episodeSearchQuery: '',
+            component: {
+                filtered: false,
+            },
+            episodes: [],
         }
     },
     methods: {
@@ -66,6 +71,20 @@ var Episode = new Vue({
                 $(el).animate({ opacity: 0 }, 3000, done);
             }, delay)
         },
+    },
+    mounted() {
+        VueEventBus.$on('removeEpisode', (index) => {
+            console.log(index);
+            this.episodes.splice(index, 1);
+        });
+    },
+    created() {
+        window.axios.get('/episode/getUnwatched')
+            .then(({data}) => {
+                this.episodes = data.data;
+            }).catch((error) => {
+            console.log(error.response);
+        });
     },
 });
 

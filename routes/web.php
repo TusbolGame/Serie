@@ -23,6 +23,7 @@ Route::post('/errors/javascript/add', 'JavascriptErrorController@errorManager')-
 Route::get('/data/search/show/{show_name}', 'DataUpdateController@searchShowController')->middleware('auth');
 Route::get('/data/update/{type}/{api_id?}', 'DataUpdateController@updateManager')->middleware('auth');
 
+Route::get('/episode/getUnwatched', 'EpisodeController@getUnwatched')->middleware('auth');
 Route::get('/episode/{episode}', 'EpisodeController@episode')->middleware('auth');
 Route::get('/episode/torrent/add/{episode}/{magnetlink}', 'EpisodeController@torrentAdd')->middleware('auth');
 Route::get('/episode/torrent/check/{magnetlink}', 'EpisodeController@torrentCheck')->middleware('auth');

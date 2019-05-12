@@ -289,6 +289,8 @@
                             this.episode.summary = data.data.summary;
                             this.episode.torrent_count = data.data.torrent_count;
                             this.episode.torrent = data.data.torrent;
+                        } else {
+                            VueEventBus.$emit('removeEpisode', this.index);
                         }
                         console.log(data);
                     }).catch((error) => {

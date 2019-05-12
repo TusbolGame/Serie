@@ -11,7 +11,7 @@
                 </div>
             </div>
             <transition-group name="fade" tag="div" class="row mx-n1 episodes text-filter-target" appear>
-                <episode-component v-for="(unwatchedEpisode, index) in {{$episodes}}"
+                <episode-component v-for="(unwatchedEpisode, index) in episodes"
                                    v-bind:index="index"
                                    v-bind:data="unwatchedEpisode"
                                    v-bind:key="unwatchedEpisode.uuid"

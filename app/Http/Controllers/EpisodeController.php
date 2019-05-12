@@ -36,6 +36,33 @@ class EpisodeController extends Controller {
         return view('episode', ['episode' => $episodeCheck]);
     }
 
+    public function getUnwatched() {
+        $episodes = Episode::whereRaw('airing_at < CONVERT_TZ(DATE_SUB(NOW(), INTERVAL 60 MINUTE), @@session.time_zone, \'+00:00\')')
+            ->whereHas('show.users', function($query) {
+                $query->where('id', Auth::user()->id);
+            })
+            ->doesnthave('videoView', 'and', function($query) {
+                $query->where('ended_at', '!=', NULL);
+            })->groupBy('show_id')
+            ->with(['show' => function($query) {
+                $query->withCount('unwatched');
+            },
+                'show.posters',
+                'videoView',
+                'videoView.bookmark' => function($query) {
+                    $query->orderBy('time', 'desc');
+                },
+                'torrent' => function($query) {
+                    $query->orderBy('status', 'asc');
+                },
+            ])
+            ->withCount('torrent')
+            ->orderBy('airing_at', 'desc')
+            ->get();
+
+        return AjaxSuccessController::response("Get Unwatched Successful", $episodes);
+    }
+
     public function actionAdd($buttonGroup, $buttonType) {
         $actionTypesCheck = ActionType::where('id', $buttonType)->first();
 

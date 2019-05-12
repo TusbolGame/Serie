@@ -383,6 +383,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.episode.summary = data.data.summary;
           _this.episode.torrent_count = data.data.torrent_count;
           _this.episode.torrent = data.data.torrent;
+        } else {
+          _VueEventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$emit('removeEpisode', _this.index);
         }
 
         console.log(data);
@@ -13119,6 +13121,7 @@ window.Echo.connector.socket.on('reconnecting', function (attemptNumber) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_VueEventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/VueEventBus */ "./resources/js/components/VueEventBus.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -13127,6 +13130,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./Echo */ "./resources/js/Echo.js");
+
 
 
 /**
@@ -13152,11 +13156,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('show-search-result-compone
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('episode-component', __webpack_require__(/*! ./components/EpisodeComponent.vue */ "./resources/js/components/EpisodeComponent.vue")["default"]);
 var Episode = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#UnwatchedEpisodes',
-  data: {
-    episodeSearchQuery: '',
-    component: {
-      filtered: false
-    }
+  data: function data() {
+    return {
+      episodeSearchQuery: '',
+      component: {
+        filtered: false
+      },
+      episodes: []
+    };
   },
   methods: {
     // filterShows: function() {
@@ -13186,6 +13193,25 @@ var Episode = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         }, 3000, done);
       }, delay);
     }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    _components_VueEventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('removeEpisode', function (index) {
+      console.log(index);
+
+      _this.episodes.splice(index, 1);
+    });
+  },
+  created: function created() {
+    var _this2 = this;
+
+    window.axios.get('/episode/getUnwatched').then(function (_ref) {
+      var data = _ref.data;
+      _this2.episodes = data.data;
+    })["catch"](function (error) {
+      console.log(error.response);
+    });
   }
 });
 var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
@@ -13200,7 +13226,7 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   },
   methods: {
     searchShow: function searchShow() {
-      var _this = this;
+      var _this3 = this;
 
       this.searchResults = [];
       this.searched = false;
@@ -13209,19 +13235,19 @@ var ShowSearch = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       if (this.showSearchQuery.trim().length > 0) {
         this.searching = true;
-        window.axios.get('/data/search/show/' + this.showSearchQuery).then(function (_ref) {
-          var data = _ref.data;
-          _this.searched = true;
+        window.axios.get('/data/search/show/' + this.showSearchQuery).then(function (_ref2) {
+          var data = _ref2.data;
+          _this3.searched = true;
 
           if (data.data.length > 0) {
-            _this.active = true;
+            _this3.active = true;
           } else {
-            _this.active = false;
-            _this.noResults = true;
+            _this3.active = false;
+            _this3.noResults = true;
           }
 
-          _this.searching = false;
-          _this.searchResults = data.data;
+          _this3.searching = false;
+          _this3.searchResults = data.data;
         })["catch"](function (error) {
           console.log(error.response);
         });
@@ -13259,20 +13285,20 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   },
   methods: {
     updateAllShows: function updateAllShows() {
-      var _this2 = this;
+      var _this4 = this;
 
       this.active = true;
       this.updateProgress.timeStarted = window.performance.now();
       this.updating = true;
-      window.axios.get('/data/update/0').then(function (_ref2) {
-        var data = _ref2.data;
-        _this2.completed = true;
-        _this2.updating = false;
+      window.axios.get('/data/update/0').then(function (_ref3) {
+        var data = _ref3.data;
+        _this4.completed = true;
+        _this4.updating = false;
       })["catch"](function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          _this2.error = true;
+          _this4.error = true;
           console.log(error.response.data);
           console.log(error.response.status);
         } else if (error.request) {
@@ -13287,29 +13313,29 @@ var ShowUpdate = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       });
     },
     listenEpisodeUpdated: function listenEpisodeUpdated() {
-      var _this3 = this;
+      var _this5 = this;
 
       window.Echo["private"]('data-update.' + window.Laravel.user).listen('EpisodeCreated', function (data) {
-        _this3.updateResults.push(data.episode);
+        _this5.updateResults.push(data.episode);
 
-        _this3.updated = true;
-        _this3.updateProgress.counter++;
+        _this5.updated = true;
+        _this5.updateProgress.counter++;
       });
     },
     listenShowUpdated: function listenShowUpdated() {
-      var _this4 = this;
+      var _this6 = this;
 
       window.Echo["private"]('data-update.' + window.Laravel.user).listen('ShowUpdated', function (data) {
-        _this4.updateProgress.current = data.currentShowNumber;
-        _this4.updateProgress.total = data.totalShowNumber;
-        _this4.updateProgress.percentage = _this4.updateProgress.current / _this4.updateProgress.total * 100;
-        _this4.updateProgress.currentShow = data.show.name;
+        _this6.updateProgress.current = data.currentShowNumber;
+        _this6.updateProgress.total = data.totalShowNumber;
+        _this6.updateProgress.percentage = _this6.updateProgress.current / _this6.updateProgress.total * 100;
+        _this6.updateProgress.currentShow = data.show.name;
 
-        if (_this4.updateProgress.current !== 0) {
-          _this4.updateProgress.timeRemaining = (100 - _this4.updateProgress.current / _this4.updateProgress.total * 100) * (window.performance.now() - _this4.updateProgress.timeStarted) / (_this4.updateProgress.current / _this4.updateProgress.total * 100) / 1000;
-          _this4.updateProgress.showEnded = data.show.status === 1 ? true : false;
+        if (_this6.updateProgress.current !== 0) {
+          _this6.updateProgress.timeRemaining = (100 - _this6.updateProgress.current / _this6.updateProgress.total * 100) * (window.performance.now() - _this6.updateProgress.timeStarted) / (_this6.updateProgress.current / _this6.updateProgress.total * 100) / 1000;
+          _this6.updateProgress.showEnded = data.show.status === 1 ? true : false;
         } else {
-          _this4.updateProgress.timeRemaining = 0;
+          _this6.updateProgress.timeRemaining = 0;
         }
       });
     }
