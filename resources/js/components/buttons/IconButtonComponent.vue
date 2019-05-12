@@ -1,7 +1,12 @@
 <template>
-    <button :class="'cmn-button icon cmn-rippleable ' + buttonClass" :title="title"
-            :data-type="type" :data-group="group" type="button"
-            autocomplete="off" @click="bubbleClassToCoverSplash">
+    <button :class="'cmn-button icon cmn-rippleable ' + buttonClass"
+            :title="title"
+            :data-type="type"
+            :data-group="group"
+            type="button"
+            autocomplete="off"
+            @click="clickHandler"
+    >
         <div :class="'cmn-button-content ' + icon"></div>
         <div class="cmn-button-ripple"></div>
     </button>
@@ -36,6 +41,20 @@
         methods: {
             bubbleClassToCoverSplash: function() {
                 VueEventBus.$emit('buttonClassToCoverSplash', this.buttonClass);
+            },
+            clickedButton: function() {
+                if (this.type !== 0) {
+                    window.axios.get('/episode/action/add/' + this.group + '/' + this.type)
+                        .then(({data}) => {
+                            console.log(data);
+                        }).catch((error) => {
+                        console.log(error.response);
+                    });
+                }
+            },
+            clickHandler: function() {
+                this.bubbleClassToCoverSplash();
+                this.clickedButton();
             }
         },
     }

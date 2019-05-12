@@ -285,6 +285,18 @@ __webpack_require__.r(__webpack_exports__);
       },
       animation: {
         rendered: false
+      },
+      episode: {
+        uuid: '',
+        show_name: '',
+        show_uuid: '',
+        show_posters: '',
+        unwatched_count: '',
+        episode_code: '',
+        airing_at: '',
+        summary: '',
+        torrent_count: '',
+        torrent: ''
       }
     };
   },
@@ -353,7 +365,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.active = true;
       this.cover.loading = true;
-      window.axios.get( true ? '1' : undefined).then(function (_ref) {
+      window.axios.get('/episode/view/mark/' + this.episode.uuid + '/' + (seen ? '1' : '0')).then(function (_ref) {
         var data = _ref.data;
         _this.cover.loading = false;
         _this.cover.splashing = true;
@@ -361,13 +373,24 @@ __webpack_require__.r(__webpack_exports__);
 
         if (data.data.length !== 0) {
           _this.cover.types.renewing = true;
-          _this.episode = data.data;
+          _this.episode.uuid = data.data.uuid;
+          _this.episode.show_name = data.data.show.name;
+          _this.episode.show_uuid = data.data.show.uuid;
+          _this.episode.show_posters = data.data.show.posters;
+          _this.episode.unwatched_count = data.data.show.unwatched_count;
+          _this.episode.episode_code = data.data.episode_code;
+          _this.episode.airing_at = data.data.airing_at;
+          _this.episode.summary = data.data.summary;
+          _this.episode.torrent_count = data.data.torrent_count;
+          _this.episode.torrent = data.data.torrent;
         }
+
+        console.log(data);
       })["catch"](function (error) {
         _this.cover.loading = false;
         _this.cover.splashing = false;
-        _this.error.state = true;
-        _this.error.message = 'Mark as watched unsuccessful. See the console for more details.';
+        _this.cover.error.state = true;
+        _this.cover.error.message = 'Mark as watched unsuccessful. See the console for more details.';
         console.log(error.response);
       });
     },
@@ -375,7 +398,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.cover.loading = true;
-      window.axios.get('/show/remove/' + this.show_uuid).then(function (_ref2) {
+      window.axios.get('/show/remove/' + this.episode.show_uuid).then(function (_ref2) {
         var data = _ref2.data;
         _this2.cover.loading = false;
         _this2.cover.splashing = true;
@@ -383,12 +406,14 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this2.cover.loading = false;
         _this2.cover.splashing = false;
-        _this2.error.state = true;
-        _this2.error.message = 'Show removal unsuccessful. See the console for more details.';
+        _this2.cover.error.state = true;
+        _this2.cover.error.message = 'Show removal unsuccessful. See the console for more details.';
         console.log(error.response);
       });
     },
-    addMagnetLink: function addMagnetLink(magnetLink) {
+    addMagnetLink: function addMagnetLink() {
+      var _this3 = this;
+
       bootbox.prompt({
         title: "Insert the magnet link",
         backdrop: true,
@@ -398,7 +423,7 @@ __webpack_require__.r(__webpack_exports__);
             return null;
           }
 
-          var url = 'http://localhost:5000/torrent/add/' + episode_id + '/' + encodeURIComponent(magnetLink);
+          var url = 'http://localhost:5000/torrent/add/' + _this3.episode.uuid + '/' + encodeURIComponent(magnetLink);
           window.axios.get(url).then(function (_ref3) {
             var data = _ref3.data;
           })["catch"](function (error) {
@@ -412,15 +437,30 @@ __webpack_require__.r(__webpack_exports__);
       this.cover.closerActive = false;
       this.cover.loading = false;
       this.cover.splashing = false;
-      this.error.state = false;
+      this.cover.error.state = false;
+    },
+    expandCard: function expandCard() {
+      this.cardExpanded = !this.cardExpanded;
     }
   },
   mounted: function mounted() {
-    var _this3 = this;
+    var _this4 = this;
 
     _VueEventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('buttonClassToCoverSplash', function (buttonColor) {
-      _this3.cover.splashColor = ' '.buttonClass;
+      _this4.cover.splashColor = ' '.buttonClass;
     });
+  },
+  created: function created() {
+    this.episode.uuid = this.uuid;
+    this.episode.show_name = this.show_name;
+    this.episode.show_uuid = this.show_uuid;
+    this.episode.show_posters = this.show_posters;
+    this.episode.unwatched_count = this.unwatched_count;
+    this.episode.episode_code = this.episode_code;
+    this.episode.airing_at = this.airing_at;
+    this.episode.summary = this.summary;
+    this.episode.torrent_count = this.torrent_count;
+    this.episode.torrent = this.torrent;
   },
   beforeUpdate: function beforeUpdate() {
     this.animation.rendered = true;
@@ -670,6 +710,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "IconButtonComponent",
@@ -698,6 +743,20 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     bubbleClassToCoverSplash: function bubbleClassToCoverSplash() {
       _VueEventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('buttonClassToCoverSplash', this.buttonClass);
+    },
+    clickedButton: function clickedButton() {
+      if (this.type !== 0) {
+        window.axios.get('/episode/action/add/' + this.group + '/' + this.type).then(function (_ref) {
+          var data = _ref.data;
+          console.log(data);
+        })["catch"](function (error) {
+          console.log(error.response);
+        });
+      }
+    },
+    clickHandler: function clickHandler() {
+      this.bubbleClassToCoverSplash();
+      this.clickedButton();
     }
   }
 });
@@ -11943,24 +12002,34 @@ var render = function() {
         transitionDelay: _vm.index * (_vm.animation.rendered ? 0 : 0.025) + "s"
       },
       attrs: {
-        "data-airdate": _vm.airing_at,
-        "data-episode": _vm.uuid,
-        "data-filter": _vm.show_name,
-        "data-show": _vm.show_uuid,
+        "data-airdate": _vm.episode.airing_at,
+        "data-episode": _vm.episode.uuid,
+        "data-filter": _vm.episode.show_name,
+        "data-show": _vm.episode.show_uuid,
         "data-index": _vm.index
       }
     },
     [
       _c("div", { staticClass: "card d-flex" }, [
-        _c("div", { staticClass: "episode-poster-container card-img-top" }, [
-          _c("img", {
-            staticClass: "episode-poster",
-            attrs: {
-              src: "/img/posters/small/" + _vm.show_posters[0].name + ".jpg",
-              alt: ""
-            }
-          })
-        ]),
+        _c(
+          "div",
+          {
+            staticClass: "episode-poster-container card-img-top",
+            on: { click: _vm.expandCard }
+          },
+          [
+            _c("img", {
+              staticClass: "episode-poster",
+              attrs: {
+                src:
+                  "/img/posters/small/" +
+                  _vm.episode.show_posters[0].name +
+                  ".jpg",
+                alt: ""
+              }
+            })
+          ]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -11980,9 +12049,9 @@ var render = function() {
                         "a",
                         {
                           staticClass: "card-title h4 text-dark",
-                          attrs: { href: "/show/" + _vm.show_uuid }
+                          attrs: { href: "/show/" + _vm.episode.show_uuid }
                         },
-                        [_vm._v(_vm._s(_vm.show_name))]
+                        [_vm._v(_vm._s(_vm.episode.show_name))]
                       )
                     ]),
                     _vm._v(" "),
@@ -11999,12 +12068,12 @@ var render = function() {
                             {
                               staticClass:
                                 "card-title h4 font-weight-light cmn-light m-0",
-                              attrs: { href: "/episode/" + _vm.uuid }
+                              attrs: { href: "/episode/" + _vm.episode.uuid }
                             },
-                            [_vm._v(_vm._s(_vm.episode_code))]
+                            [_vm._v(_vm._s(_vm.episode.episode_code))]
                           ),
                           _vm._v(" "),
-                          _vm.unwatched_count > 1
+                          _vm.episode.unwatched_count > 1
                             ? _c(
                                 "div",
                                 {
@@ -12013,12 +12082,12 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    _vm._s(_vm.unwatched_count - 1) +
+                                    _vm._s(_vm.episode.unwatched_count - 1) +
                                       " " +
                                       _vm._s(
                                         _vm._f("pluralize")(
                                           "more episode",
-                                          _vm.unwatched_count - 1
+                                          _vm.episode.unwatched_count - 1
                                         )
                                       )
                                   )
@@ -12042,18 +12111,20 @@ var render = function() {
                       {
                         staticClass:
                           "episode-date font-weight-light cmn-lighter",
-                        attrs: { "data-date": _vm.airing_at }
+                        attrs: { "data-date": _vm.episode.airing_at }
                       },
                       [
                         _vm._v(
                           "\n                            " +
-                            _vm._s(_vm.displayDateFromNow(_vm.airing_at)) +
+                            _vm._s(
+                              _vm.displayDateFromNow(_vm.episode.airing_at)
+                            ) +
                             "\n                        "
                         )
                       ]
                     ),
                     _vm._v(" "),
-                    _vm.cardNew(_vm.airing_at)
+                    _vm.cardNew(_vm.episode.airing_at)
                       ? _c(
                           "div",
                           {
@@ -12067,14 +12138,14 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm.summary !== null
+              _vm.episode.summary !== null
                 ? _c(
                     "div",
                     { staticClass: "card-info-extra font-weight-light" },
                     [
                       _vm._v(
                         "\n                    " +
-                          _vm._s(_vm._f("truncate")(_vm.summary, 100)) +
+                          _vm._s(_vm._f("truncate")(_vm.episode.summary, 100)) +
                           "\n                "
                       )
                     ]
@@ -12093,18 +12164,22 @@ var render = function() {
                   _c("icon-button-component", {
                     attrs: {
                       "button-class": "c12",
-                      type: 7,
+                      type: 21,
                       group: 1,
                       title: "Remove show",
                       icon: "default-clear"
                     },
-                    on: { click: _vm.removeUserShow }
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.removeUserShow($event)
+                      }
+                    }
                   }),
                   _vm._v(" "),
                   _c("icon-button-component", {
                     attrs: {
                       "button-class": "c3",
-                      type: 8,
+                      type: 22,
                       group: 1,
                       title: "Add bookmark",
                       icon: "default-bookmark"
@@ -12114,7 +12189,7 @@ var render = function() {
                   _c("icon-button-component", {
                     attrs: {
                       "button-class": "c1",
-                      type: 9,
+                      type: 23,
                       group: 1,
                       title: "Show more details",
                       icon: "default-list"
@@ -12124,7 +12199,7 @@ var render = function() {
                   _c("icon-button-component", {
                     attrs: {
                       "button-class": "c5",
-                      type: 10,
+                      type: 24,
                       group: 1,
                       title: "Rate this episode",
                       icon: "default-star"
@@ -12138,7 +12213,8 @@ var render = function() {
                 "div",
                 { staticClass: "actions-basic" },
                 [
-                  _vm.torrent_count == 0 || _vm.torrent[0].status == 5
+                  _vm.episode.torrent_count === 0 ||
+                  _vm.episode.torrent[0].status === 5
                     ? [
                         _c(
                           "a",
@@ -12153,7 +12229,7 @@ var render = function() {
                             _c("icon-button-component", {
                               attrs: {
                                 "button-class": "c6",
-                                type: 1,
+                                type: 12,
                                 group: 1,
                                 title: "Search for torrents",
                                 icon: "default-search"
@@ -12166,56 +12242,65 @@ var render = function() {
                         _c("icon-button-component", {
                           attrs: {
                             "button-class": "c9",
-                            type: 2,
+                            type: 17,
                             group: 1,
                             title: "Add magnet link",
                             icon: "default-torrent"
                           },
-                          on: { click: _vm.addMagnetLink }
+                          nativeOn: {
+                            click: function($event) {
+                              return _vm.addMagnetLink($event)
+                            }
+                          }
                         })
                       ]
                     : [
-                        _vm.torrent[0].status == 0 || _vm.torrent[0].status == 1
+                        _vm.episode.torrent[0].status === 0 ||
+                        _vm.episode.torrent[0].status === 1
                           ? [
                               _c("icon-button-component", {
                                 attrs: {
                                   "button-class": "c9",
-                                  type: 2,
+                                  type: 17,
                                   group: 1,
                                   title: "Add magnet link",
                                   icon: "default-torrent"
                                 },
-                                on: { click: _vm.addMagnetLink }
+                                nativeOn: {
+                                  click: function($event) {
+                                    return _vm.addMagnetLink($event)
+                                  }
+                                }
                               }),
                               _vm._v(" "),
                               _c("icon-button-component", {
                                 attrs: {
                                   "button-class": "c11",
-                                  type: 6,
+                                  type: 20,
                                   group: 1,
                                   title: "Check torrent status",
                                   icon: "default-torrent"
                                 }
                               })
                             ]
-                          : _vm.torrent[0].status == 2
+                          : _vm.episode.torrent[0].status === 2
                           ? [
                               _c("icon-button-component", {
                                 attrs: {
                                   "button-class": "c1",
-                                  type: 3,
+                                  type: 18,
                                   group: 1,
                                   title: "Convert Video",
                                   icon: "default-convert"
                                 }
                               })
                             ]
-                          : _vm.torrent[0].status == 3
+                          : _vm.episode.torrent[0].status === 3
                           ? [
                               _c("icon-button-component", {
                                 attrs: {
                                   "button-class": "c2",
-                                  type: 4,
+                                  type: 19,
                                   group: 1,
                                   title: "Play episode",
                                   icon: "default-play"
@@ -12228,12 +12313,12 @@ var render = function() {
                   _c("icon-button-component", {
                     attrs: {
                       "button-class": "c4",
-                      type: 5,
+                      type: 11,
                       group: 1,
                       title: "Mark this episode as watched",
                       icon: "default-mark"
                     },
-                    on: {
+                    nativeOn: {
                       click: function($event) {
                         return _vm.episodeMarkWatched(true)
                       }
@@ -12248,9 +12333,9 @@ var render = function() {
                       title: "Show more information",
                       icon: "default-expand-up"
                     },
-                    on: {
+                    nativeOn: {
                       click: function($event) {
-                        !_vm.cardExpanded
+                        return _vm.expandCard($event)
                       }
                     }
                   })
@@ -12326,34 +12411,27 @@ var render = function() {
                   _vm.cover.splashColor
               },
               [
-                _c(
-                  "transition",
-                  { attrs: { name: "fade", tag: "div", appear: "" } },
-                  [
-                    _vm.cover.types.markAsWatched
-                      ? _c("div", {
-                          key: "markAsWatched",
-                          staticClass: "card-cover-item default-mark"
-                        })
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.cover.types.renewing
-                      ? _c("div", {
-                          key: "renewing",
-                          staticClass: "card-cover-item default-autorenew"
-                        })
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.cover.types.deleting
-                      ? _c("div", {
-                          key: "deleting",
-                          staticClass: "card-cover-item default-delete"
-                        })
-                      : _vm._e()
-                  ]
-                )
-              ],
-              1
+                _vm.cover.types.markAsWatched
+                  ? _c("div", {
+                      key: "markAsWatched",
+                      staticClass: "card-cover-item default-mark"
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.cover.types.renewing
+                  ? _c("div", {
+                      key: "renewing",
+                      staticClass: "card-cover-item default-autorenew"
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.cover.types.deleting
+                  ? _c("div", {
+                      key: "deleting",
+                      staticClass: "card-cover-item default-delete"
+                    })
+                  : _vm._e()
+              ]
             ),
             _vm._v(" "),
             _c(
@@ -12688,7 +12766,7 @@ var render = function() {
         type: "button",
         autocomplete: "off"
       },
-      on: { click: _vm.bubbleClassToCoverSplash }
+      on: { click: _vm.clickHandler }
     },
     [
       _c("div", { class: "cmn-button-content " + _vm.icon }),

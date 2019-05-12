@@ -8,41 +8,41 @@ $(document).ready(function() {
 
         switch (buttonType) {
             case 0:             // Show more actions
-                toggleEpisodeExpanded(container);
+                // toggleEpisodeExpanded(container);
                 break;
             case 1:             // Search for torrents
                 break;
             case 2:             // Add magnet link
-                bootbox.prompt({
-                    title: "Insert the magnet link",
-                    backdrop: true,
-                    callback:  function(magnetlink) {
-                        var pattern = /([a-fA-F0-9]{40})/g;
-                        episodeCardMessageCallback(magnetlink, 1, pattern);
-                    }
-                });
+                // bootbox.prompt({
+                //     title: "Insert the magnet link",
+                //     backdrop: true,
+                //     callback:  function(magnetlink) {
+                //         var pattern = /([a-fA-F0-9]{40})/g;
+                //         episodeCardMessageCallback(magnetlink, 1, pattern);
+                //     }
+                // });
                 break;
             case 3:             // Convert Torrent
                 break;
             case 4:             // Play Episode
                 break;
             case 5:             // Mark as watched
-                episodeMarkView(container, episode_id, 1);
+                // episodeMarkView(container, episode_id, 1);
                 break;
             case 6:             // Check Torrent Status
                 break;
             case 7:             // Remove Show
-                removeUserShow(container, show_id);
+                // removeUserShow(container, show_id);
                 break;
             case 8:             // Add bookmark
-                bootbox.prompt({
-                    title: "Insert the bookmark: [(HH:)ii:ss]",
-                    backdrop: true,
-                    callback: function(bookmarkTime) {
-                        var pattern = /([0-9]{2}:)?[0-9]{2}:[0-9]{2}/g;
-                        episodeCardMessageCallback(bookmarkTime, 0, pattern);
-                    }
-                });
+                // bootbox.prompt({
+                //     title: "Insert the bookmark: [(HH:)ii:ss]",
+                //     backdrop: true,
+                //     callback: function(bookmarkTime) {
+                //         var pattern = /([0-9]{2}:)?[0-9]{2}:[0-9]{2}/g;
+                //         episodeCardMessageCallback(bookmarkTime, 0, pattern);
+                //     }
+                // });
                 break;
             case 9:             // Show more details
                 break;
@@ -53,16 +53,16 @@ $(document).ready(function() {
         }
 
 
-        var args = {
-            url: '/episode/action/add/' + buttonType,
-            method: 'GET'
-        };
-
-        ajaxHandler(args,
-            function() {
-
-            }, null
-        );
+        // var args = {
+        //     url: '/episode/action/add/' + buttonType,
+        //     method: 'GET'
+        // };
+        //
+        // ajaxHandler(args,
+        //     function() {
+        //
+        //     }, null
+        // );
 
         // Footer
         function removeUserShow(container, show_id) {
@@ -139,7 +139,7 @@ $(document).ready(function() {
     $('.episodes').on('click', '.card-episode .episode-poster-container', function(e) {
         let episodeContainer = $(this).parents('.card-episode');
 
-        toggleEpisodeExpanded(episodeContainer);
+        // toggleEpisodeExpanded(episodeContainer);
     });
 
     function toggleEpisodeExpanded(episodeContainer) {

@@ -36,57 +36,20 @@ class EpisodeController extends Controller {
         return view('episode', ['episode' => $episodeCheck]);
     }
 
-    public function actionAdd($buttonType) {
-        $actionType = '';
-        switch ($buttonType) {
-            case 1:             // Search for torrents
-                $newAction = 'searchTorrent';
-                break;
-            case 2:             // Add magnet link
-                $newAction = 'addMagnetlink';
-                break;
-            case 3:             // Convert Torrent
-                $newAction = 'convertTorrent';
-                break;
-            case 4:             // Play Episode
-                $newAction = 'playEpisode';
-                break;
-            case 5:             // Mark as watched
-                $newAction = 'markView';
-                break;
-            case 6:             // Check Torrent Status
-                $newAction = 'checkTorrentStatus';
-                break;
-            case 7:             // Remove show
-                $newAction = 'removeShow';
-                break;
-            case 8:             // Add bookmark
-                $newAction = 'bookmarkAdd';
-                break;
-            case 9:             // Show more details
-                $newAction = 'episodeDetails';
-                break;
-            case 10:             // Rate this episode
-                $newAction = 'episodeRate';
-                break;
-            default:
-                return AjaxErrorController::response("The button type does not exist", 409, 0);
-                break;
+    public function actionAdd($buttonGroup, $buttonType) {
+        $actionTypesCheck = ActionType::where('id', $buttonType)->first();
+
+        if ($actionTypesCheck !== NULL) {
+            $action = new Action([
+                'action_type_id' => $actionTypesCheck->id,
+            ]);
+
+            $action->save();
+
+            return AjaxSuccessController::response("Action add Successful", []);
+        } else {
+            return AjaxErrorController::response("The button type does not exist", 409, 0);
         }
-
-        $actionType = ActionType::where('name', $newAction)->first();
-
-        if (empty($actionType)) {
-            return AjaxErrorController::response("Backend error, the action type does not exist", 409, 1);
-        }
-
-        $action = new Action([
-            'action_type_id' => $actionType->id,
-        ]);
-
-        $action->save();
-
-        return AjaxSuccessController::response("Action add Successful", []);
     }
 
     public function viewMark($episode, $state, $torrent = NULL) {
@@ -145,7 +108,7 @@ class EpisodeController extends Controller {
                     ->first();
 
                 if (!empty($nextEpisode)) {
-                    return AjaxSuccessController::response("Video mark Successful", [$nextEpisode]);
+                    return AjaxSuccessController::response("Video mark Successful", $nextEpisode);
                 } else {
                     return AjaxSuccessController::response("Video mark Successful", []);
                 }
